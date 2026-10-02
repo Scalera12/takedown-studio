@@ -212,6 +212,14 @@ def hesite():
   </div>
 </section>'''
 
+def photo(n, alt, cls='', style='', pos='50% 50%', eager=False):
+    """Vraie photo de l'atelier (statique/img/photos/atelier-n), en webp avec repli jpg."""
+    charge = 'fetchpriority="high"' if eager else 'loading="lazy"'
+    return (f'<div class="ph {cls}" style="{style}"><picture>'
+            f'<source srcset="/assets/img/photos/atelier-{n}.webp" type="image/webp">'
+            f'<img src="/assets/img/photos/atelier-{n}.jpg" alt="{e(alt)}" width="1086" height="1448" {charge} decoding="async" style="object-position:{pos}">'
+            f'</picture></div>')
+
 def ph(tag, ton, cls='', style=''):
     return f'<div class="ph {cls}" style="--t:{ton};{style}"><span class="tag">{e(tag)}</span></div>'
 
@@ -349,8 +357,7 @@ def accueil():
   </section>
 
   <section class="mission" aria-labelledby="t-presentation">
-    {ph('Photo pleine largeur · l’atelier, les mains, le fil', '#2a2723')}
-    <img class="fig" src="/assets/img/illustration-pinceau-blanc.png" alt="" aria-hidden="true" loading="lazy" width="340" height="285">
+    {photo(4, 'L’atelier de Takedown Studio à Bromont, avec les presses à chaleur et le séchoir de sérigraphie', pos='50% 62%')}
     <div class="wrap in">
       <h2 class="sr" id="t-presentation">L’agence</h2>
       <p class="big rv">On t’aide à mettre ta marque sur des vêtements et des produits que les gens vont aimer utiliser.</p>
@@ -397,7 +404,11 @@ def agence():
          '<a class="btn btn-w" href="/contact">Parle-nous de ton projet</a><a class="btn btn-g" href="/services">Nos services</a>',
          'logo-complet-lutteurs')}
   <section class="sec wrap">
-    {ph('Photo · l’équipe ou l’atelier', '#26241f', 'rv', 'aspect-ratio:16/7')}
+    <div class="trio">
+      {photo(1, 'Étagères de vêtements vierges et presse de sérigraphie dans l’atelier Takedown', 'rv')}
+      {photo(2, 'Espace de travail de l’atelier avec machine à coudre, presse à chaleur et planches de skate au mur', 'rv')}
+      {photo(3, 'Comptoir d’accueil de Takedown Studio avec casquettes et vêtements personnalisés', 'rv')}
+    </div>
   </section>
   <section class="sec wrap">
     {plus_prevoir('Un même contact pour ton projet, des conseils concrets et des produits qui vont bien ensemble.',
@@ -561,7 +572,7 @@ def contact():
       <div class="bloc"><h3>Pour aller plus vite</h3><ol><li>Ton logo ou ton visuel</li><li>La quantité que tu as en tête</li><li>La date où tu en as besoin</li></ol></div>
       <div class="bloc"><h3>Nous joindre</h3><a href="mailto:{ENTREPRISE['courriel']}">{ENTREPRISE['courriel']}</a><a href="tel:{ENTREPRISE['tel_intl']}">{ENTREPRISE['tel']}</a></div>
       <div class="bloc"><h3>Le studio</h3><p>{ENTREPRISE['rue']}<br>{ENTREPRISE['ville']} (Québec) {ENTREPRISE['cp']}</p></div>
-      <img src="/assets/img/illustration-encre-blanc.png" alt="" aria-hidden="true" loading="lazy" width="280" height="215">
+      {photo(3, 'Le comptoir d’accueil de Takedown Studio, 50 chemin de Gaspé à Bromont', 'studio')}
     </aside>
   </section>
 </main>
