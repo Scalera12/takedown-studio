@@ -254,7 +254,7 @@ a:hover .arr{transform:translateX(5px)}
 
 /* ---------- pied de page géant ---------- */
 .foot{padding-block:clamp(70px,9vw,110px) 36px}
-.foot .grid-f{display:grid;grid-template-columns:1fr 300px;gap:40px}
+.foot .grid-f{display:grid;grid-template-columns:1fr;gap:40px}
 .foot h2{font-size:clamp(34px,4.6vw,80px);margin-top:18px}
 .foot h2 .ind{padding-left:12%}
 .foot .lead{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:56px;padding-top:28px;border-top:1px solid var(--line)}
@@ -264,8 +264,6 @@ a:hover .arr{transform:translateX(5px)}
 .foot .cols{display:grid;grid-template-columns:1fr 1fr;gap:24px;font-size:15px}
 .foot .cols h4{font-family:"IBM Plex Mono",monospace;font-weight:500;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute);margin-bottom:12px}
 .foot .cols a,.foot .cols span{display:block;padding:3px 0;color:#d6d6d9}.foot .cols a:hover{color:#fff}
-.foot .art{display:flex;flex-direction:column;gap:16px}
-.foot .art div{background:var(--s1);border:1px solid var(--line);aspect-ratio:1/1;display:grid;place-items:center;padding:24px}
 .foot .legal{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-top:70px;font-size:12px;color:var(--mute)}
 .foot .legal img{height:16px;width:auto}
 
@@ -294,7 +292,6 @@ a:hover .arr{transform:translateX(5px)}
   .steps{grid-template-columns:1fr 1fr;row-gap:36px}
   .steps div:nth-child(2){border-right:0}
   .foot .grid-f,.foot .lead{grid-template-columns:1fr}
-  .foot .art{flex-direction:row}.foot .art div{flex:1}
   .foot h2 .ind{padding-left:0}
   .words .line small{display:none}
   .phead .fig{position:static;margin-top:40px;width:180px}

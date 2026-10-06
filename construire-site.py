@@ -190,10 +190,6 @@ def pied(court=False):
           </div>
         </div>
       </div>
-      <div class="art" aria-hidden="true">
-        <div><img src="/assets/img/illustration-pinceau-blanc.png" alt="" loading="lazy" width="300" height="252"></div>
-        <div><img src="/assets/img/illustration-encre-blanc.png" alt="" loading="lazy" width="300" height="230"></div>
-      </div>
     </div>
     <div class="legal">
       <img src="/assets/img/logo-texte-blanc.png" alt="Takedown Studio" width="122" height="16" loading="lazy">
