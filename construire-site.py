@@ -616,7 +616,7 @@ CHEMIN_BASE = os.environ.get('CHEMIN_BASE', '').rstrip('/')
 def prefixer(html):
     if not CHEMIN_BASE:
         return html
-    for attr in ('href="/', 'src="/', 'action="/'):
+    for attr in ('href="/', 'src="/', 'srcset="/', 'action="/'):
         html = html.replace(attr, attr[:-1] + CHEMIN_BASE + '/')
     return html.replace('<meta charset="utf-8">', '<meta charset="utf-8">\n<meta name="robots" content="noindex, nofollow">', 1)
 
