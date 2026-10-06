@@ -148,7 +148,7 @@ a:hover .arr{transform:translateX(5px)}
 .mission .ph{position:absolute;inset:0;padding:0}
 .mission .ph .tag{position:absolute;top:20px;right:20px}
 .mission .fig{position:absolute;right:6%;top:12%;width:clamp(180px,24vw,340px);z-index:1}
-.mission::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.9) 8%,rgba(0,0,0,.45) 55%,rgba(0,0,0,.25));pointer-events:none}
+.mission::after{content:"";position:absolute;inset:0;background:linear-gradient(to right,rgba(0,0,0,.7),rgba(0,0,0,.25) 60%,transparent),linear-gradient(to top,rgba(0,0,0,.9) 8%,rgba(0,0,0,.4) 55%,rgba(0,0,0,.2));pointer-events:none}
 .mission .in{position:relative;z-index:2;padding-bottom:clamp(40px,6vw,80px);width:100%}
 .mission p.big{font-size:clamp(28px,3.4vw,50px);line-height:1.12;letter-spacing:-.025em;font-weight:500;max-width:22ch}
 .mission p.small{color:#d0d0d3;max-width:52ch;margin-top:18px}
