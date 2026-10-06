@@ -53,6 +53,8 @@ a:hover .arr{transform:translateX(5px)}
   background:radial-gradient(60% 50% at 50% 42%,#1c1c1e 0%,#000 70%)}
 .hero .mark{width:min(88vw,760px,calc((100svh - 400px) * 1.25));min-width:min(88vw,360px);clip-path:inset(0 100% 0 0);animation:draw 1.8s .2s var(--ease) forwards}
 @keyframes draw{to{clip-path:inset(0 0 0 0)}}
+/* le logo flotte après s'être dessiné (inspiré de lqqkstudio.com), piloté par site.js */
+.hero .flotte{will-change:transform;transform-origin:50% 55%}
 .hero h1{font-size:clamp(40px,8.4vw,120px);margin-top:34px}
 .hero .sub{font-size:clamp(18px,2.2vw,26px);color:#d1d1d6;margin-top:40px;font-weight:500}
 .hero .pos{color:var(--mute);margin-top:6px;font-size:15px}

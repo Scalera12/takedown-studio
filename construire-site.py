@@ -338,7 +338,7 @@ def accueil():
     corps = f'''{nav('/')}
 <main id="contenu">
   <section class="hero">
-    <img class="mark" src="/assets/img/logo-complet-lutteurs-blanc.png" alt="Takedown Studio" width="1000" height="799" fetchpriority="high">
+    <div class="flotte"><img class="mark" src="/assets/img/logo-complet-lutteurs-blanc.png" alt="Takedown Studio" width="1000" height="799" fetchpriority="high"></div>
     <h1 class="sr">Takedown Studio, agence de branding à Bromont</h1>
     <p class="sub fade" style="animation-delay:1.3s">Vêtements et produits personnalisés à Bromont</p>
     <p class="pos fade" style="animation-delay:1.4s">Agence de branding spécialisée en vêtements et produits personnalisés.</p>

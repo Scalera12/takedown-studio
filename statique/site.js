@@ -2,6 +2,29 @@
 (function(){
   var d=document, qsa=function(s,r){return Array.prototype.slice.call((r||d).querySelectorAll(s))};
 
+  /* logo du hero : une fois dessiné, il dérive et tourne doucement, comme s'il flottait.
+     Somme de sinus à fréquences différentes = mouvement organique qui ne se répète pas.
+     Rien pour ceux qui demandent moins d'animation, et pause quand le hero est hors écran. */
+  var flotte=d.querySelector('.hero .flotte');
+  if(flotte&&!matchMedia('(prefers-reduced-motion: reduce)').matches){
+    var visible=true, depart=null, A=1;
+    if(innerWidth<600) A=.6;
+    new IntersectionObserver(function(es){visible=es[0].isIntersecting}).observe(flotte);
+    var bouge=function(now){
+      if(depart===null) depart=now;
+      var t0=(now-depart)/1000, t=t0*1.5, monte=Math.min(1,t0/1.6), k=A*monte*monte*(3-2*monte);
+      if(visible){
+        var x=k*(22*Math.sin(t*.42)+11*Math.sin(t*1.07+1.3)),
+            y=k*(16*Math.sin(t*.33+2)+8*Math.sin(t*.91+.4)),
+            r=k*(7*Math.sin(t*.27+.6)+3.5*Math.sin(t*.79+2.1)),
+            s=1+k*.025*Math.sin(t*.53+1);
+        flotte.style.transform='translate3d('+x.toFixed(1)+'px,'+y.toFixed(1)+'px,0) rotate('+r.toFixed(2)+'deg) scale('+s.toFixed(4)+')';
+      }
+      requestAnimationFrame(bouge);
+    };
+    setTimeout(function(){requestAnimationFrame(bouge)},1900);
+  }
+
   /* apparition au défilement */
   if('IntersectionObserver' in window){
     var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.12,rootMargin:'0px 0px -40px 0px'});
