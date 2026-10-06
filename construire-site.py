@@ -208,13 +208,16 @@ def hesite():
   </div>
 </section>'''
 
-def photo(n, alt, cls='', style='', pos='50% 50%', eager=False):
-    """Vraie photo de l'atelier (statique/img/photos/atelier-n), en webp avec repli jpg."""
+def photo(n, alt, cls='', style='', pos='50% 50%', eager=False, sizes='100vw'):
+    """Vraie photo de l'atelier, en WebP 600 et 1086 px (générés par optimiser_images)."""
     charge = 'fetchpriority="high"' if eager else 'loading="lazy"'
-    return (f'<div class="ph {cls}" style="{style}"><picture>'
-            f'<source srcset="/assets/img/photos/atelier-{n}.webp" type="image/webp">'
-            f'<img src="/assets/img/photos/atelier-{n}.jpg" alt="{e(alt)}" width="1086" height="1448" {charge} decoding="async" style="object-position:{pos}">'
-            f'</picture></div>')
+    base = f'/assets/img/photos/atelier-{n}'
+    return (f'<div class="ph {cls}" style="{style}">'
+            f'<img src="{base}-1086.webp" srcset="{base}-600.webp 600w, {base}-1086.webp 1086w" sizes="{sizes}" '
+            f'alt="{e(alt)}" width="1086" height="1448" {charge} decoding="async" style="object-position:{pos}">'
+            f'</div>')
+
+TRIO = '(max-width:980px) 50vw, 33vw'
 
 def ph(tag, ton, cls='', style=''):
     return f'<div class="ph {cls}" style="--t:{ton};{style}"><span class="tag">{e(tag)}</span></div>'
@@ -317,10 +320,8 @@ def page(chemin_url, titre_seo, desc, corps, fil=None, extra_ld=None, js=True):
 <link rel="icon" href="/favicon.ico" sizes="48x48">
 <link rel="icon" href="/assets/img/icone-192.png" type="image/png" sizes="192x192">
 <link rel="apple-touch-icon" href="/assets/img/icone-180.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..900&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/site.css?v={V}">
+<link rel="preload" href="/assets/polices/archivo-400-800.woff2" as="font" type="font/woff2" crossorigin>
+<style>{CSS}</style>
 <script>if(!location.search.includes('apercu'))document.documentElement.classList.add('js')</script>
 <script type="application/ld+json">{ld}</script>
 </head>
@@ -388,9 +389,9 @@ def agence():
          'logo-complet-lutteurs')}
   <section class="sec wrap">
     <div class="trio">
-      {photo(1, 'Étagères de vêtements vierges et presse de sérigraphie dans l’atelier Takedown', 'rv')}
-      {photo(2, 'Espace de travail de l’atelier avec machine à coudre, presse à chaleur et planches de skate au mur', 'rv')}
-      {photo(3, 'Comptoir d’accueil de Takedown Studio avec casquettes et vêtements personnalisés', 'rv')}
+      {photo(1, 'Étagères de vêtements vierges et presse de sérigraphie dans l’atelier Takedown', 'rv', sizes=TRIO)}
+      {photo(2, 'Espace de travail de l’atelier avec machine à coudre, presse à chaleur et planches de skate au mur', 'rv', sizes=TRIO)}
+      {photo(3, 'Comptoir d’accueil de Takedown Studio avec casquettes et vêtements personnalisés', 'rv', sizes=TRIO)}
     </div>
   </section>
   <section class="sec wrap">
@@ -555,7 +556,7 @@ def contact():
       <div class="bloc"><h3>Pour aller plus vite</h3><ol><li>Ton logo ou ton visuel</li><li>La quantité que tu as en tête</li><li>La date où tu en as besoin</li></ol></div>
       <div class="bloc"><h3>Nous joindre</h3><a href="mailto:{ENTREPRISE['courriel']}">{ENTREPRISE['courriel']}</a><a href="tel:{ENTREPRISE['tel_intl']}">{ENTREPRISE['tel']}</a></div>
       <div class="bloc"><h3>Le studio</h3><p>{ENTREPRISE['rue']}<br>{ENTREPRISE['ville']} (Québec) {ENTREPRISE['cp']}</p></div>
-      {photo(3, 'Le comptoir d’accueil de Takedown Studio, 50 chemin de Gaspé à Bromont', 'studio')}
+      {photo(3, 'Le comptoir d’accueil de Takedown Studio, 50 chemin de Gaspé à Bromont', 'studio', sizes='(max-width:980px) 90vw, 420px')}
     </aside>
   </section>
 </main>
@@ -591,6 +592,68 @@ def images():
         ic.convert('RGB').save(os.path.join(img, f'icone-{taille}.png'), optimize=True)
     Image.open(os.path.join(img, 'icone-192.png')).save(os.path.join(SORTIE, 'favicon.ico'), sizes=[(48, 48)])
 
+# ---------------------------------------------------------------- vitesse
+# Les polices sont hébergées sur le site (statique/polices/, sous-ensemble latin) et
+# le CSS est mis directement dans chaque page : plus aucune ressource qui bloque l'affichage.
+POLICES = """@font-face{font-family:"Archivo";src:url(/assets/polices/archivo-400-800.woff2) format("woff2");font-weight:400 800;font-stretch:100% 125%;font-display:swap}
+@font-face{font-family:"IBM Plex Mono";src:url(/assets/polices/ibm-plex-mono-400.woff2) format("woff2");font-weight:400;font-display:swap}
+@font-face{font-family:"IBM Plex Mono";src:url(/assets/polices/ibm-plex-mono-500.woff2) format("woff2");font-weight:500;font-display:swap}
+"""
+
+def css_minifie():
+    import re
+    t = io.open(os.path.join(ICI, 'statique', 'site.css'), encoding='utf-8').read()
+    t = re.sub(r'/\*.*?\*/', '', t, flags=re.S)
+    t = re.sub(r'\s*\n\s*', '', t)
+    t = re.sub(r'\s*([{};,>])\s*', r'\1', t)
+    return POLICES.replace('\n', '') + t
+
+CSS = ''
+
+# Chaque PNG devient du WebP en 2 largeurs ; le HTML est réécrit avec srcset et sizes.
+LARGEURS = {'logo-complet-lutteurs': (520, 1000), 'logo-texte': (260,), 'illustration': (400, 800), 'services/': (800,)}
+TAILLES = {'logo-complet-lutteurs': '(max-width:600px) 88vw, 760px', 'illustration': '(max-width:980px) 180px, 300px',
+           'services/': '(max-width:980px) 62vw, 31vw'}
+
+def largeurs(nom):
+    return next((v for k, v in LARGEURS.items() if nom.startswith(k)), (400, 800))
+
+def optimiser_images():
+    racine = os.path.join(SORTIE, 'assets', 'img')
+    for dossier, _, fichiers in os.walk(racine):
+        for fi in fichiers:
+            chemin = os.path.join(dossier, fi)
+            rel = os.path.relpath(chemin, racine).replace(os.sep, '/')
+            base, ext = os.path.splitext(chemin)
+            if rel.startswith('photos/') and ext == '.jpg':
+                im = Image.open(chemin).convert('RGB')
+                for w in (600, 1086):
+                    c = im.copy(); c.thumbnail((w, w * 2), Image.LANCZOS)
+                    c.save(f'{base}-{w}.webp', quality=74, method=4)
+                os.remove(chemin)
+            elif rel.startswith('photos/') and ext == '.webp' and '-' not in os.path.basename(base).replace('atelier-', '', 1):
+                os.remove(chemin)   # ancienne version sans largeur
+            elif ext == '.png' and not rel.startswith(('icone', 'partage')):
+                im = Image.open(chemin).convert('RGBA')
+                for w in largeurs(rel):
+                    c = im.copy()
+                    if c.width > w:
+                        c = c.resize((w, round(c.height * w / c.width)), Image.LANCZOS)
+                    c.save(f'{base}-{w}.webp', quality=82, method=4)
+                os.remove(chemin)   # le PNG n'est plus servi
+
+def images_srcset(html):
+    import re
+    def un(m):
+        nom = m.group(1)
+        ws = largeurs(nom)
+        if len(ws) == 1:
+            return f'src="/assets/img/{nom}-{ws[0]}.webp"'
+        sizes = next((v for k, v in TAILLES.items() if nom.startswith(k)), '50vw')
+        jeu = ', '.join(f'/assets/img/{nom}-{w}.webp {w}w' for w in ws)
+        return f'src="/assets/img/{nom}-{ws[-1]}.webp" srcset="{jeu}" sizes="{sizes}"'
+    return re.sub(r'src="/assets/img/((?:services/)?[\w-]+)\.png"', un, html)
+
 # ---------------------------------------------------------------- construction
 # Aperçu GitHub Pages : le site vit sous /takedown-studio/, donc on préfixe les adresses
 # absolues et on bloque l'indexation (le vrai domaine reste l'URL canonique).
@@ -599,12 +662,16 @@ CHEMIN_BASE = os.environ.get('CHEMIN_BASE', '').rstrip('/')
 def prefixer(html):
     if not CHEMIN_BASE:
         return html
-    for attr in ('href="/', 'src="/', 'srcset="/', 'action="/'):
+    import re
+    for attr in ('href="/', 'src="/', 'action="/', 'url(/'):
         html = html.replace(attr, attr[:-1] + CHEMIN_BASE + '/')
+    html = re.sub(r'(srcset="|imagesrcset=")([^"]*)',
+                  lambda m: m.group(1) + re.sub(r'(^|,\s*)/', lambda n: n.group(1) + CHEMIN_BASE + '/', m.group(2)), html)
     return html.replace('<meta charset="utf-8">', '<meta charset="utf-8">\n<meta name="robots" content="noindex, nofollow">', 1)
 
 def ecrire(rel, contenu):
     if rel.endswith('.html'):
+        contenu = images_srcset(contenu)
         contenu = prefixer(contenu)
     f = os.path.join(SORTIE, rel)
     os.makedirs(os.path.dirname(f), exist_ok=True)
@@ -614,10 +681,13 @@ def construire():
     if os.path.isdir(SORTIE):
         shutil.rmtree(SORTIE)
     os.makedirs(os.path.join(SORTIE, 'assets'))
+    global CSS
+    CSS = css_minifie()
     shutil.copytree(os.path.join(ICI, 'statique', 'img'), os.path.join(SORTIE, 'assets', 'img'))
-    for f in ('site.css', 'site.js'):
-        shutil.copy(os.path.join(ICI, 'statique', f), os.path.join(SORTIE, 'assets', f))
+    shutil.copytree(os.path.join(ICI, 'statique', 'polices'), os.path.join(SORTIE, 'assets', 'polices'))
+    shutil.copy(os.path.join(ICI, 'statique', 'site.js'), os.path.join(SORTIE, 'assets', 'site.js'))
     images()
+    optimiser_images()
 
     # Fichiers « page.html » : Cloudflare les sert à /page, sans barre oblique finale,
     # comme les adresses du plan de contenu (/services/broderie).
