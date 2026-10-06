@@ -347,7 +347,7 @@ def accueil():
 <main id="contenu">
   <section class="hero">
     <img class="mark" src="/assets/img/logo-complet-lutteurs-blanc.png" alt="Takedown Studio" width="1000" height="799" fetchpriority="high">
-    <h1 class="x fade" style="animation-delay:1.1s">Agence de branding<span class="sr"> à Bromont</span></h1>
+    <h1 class="sr">Takedown Studio, agence de branding à Bromont</h1>
     <p class="sub fade" style="animation-delay:1.3s">Vêtements et produits personnalisés à Bromont</p>
     <p class="pos fade" style="animation-delay:1.4s">Agence de branding spécialisée en vêtements et produits personnalisés.</p>
     <div class="ctas fade" style="animation-delay:1.55s">
