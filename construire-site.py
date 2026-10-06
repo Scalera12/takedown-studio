@@ -20,7 +20,8 @@ ICI = os.path.dirname(os.path.abspath(__file__))
 SORTIE = os.path.join(ICI, 'site')
 BASE = 'https://takedownstudio.com'   # À CONFIRMER : domaine final du site
 AUJ = datetime.date.today().isoformat()
-V = AUJ.replace('-', '')               # casse le cache du CSS et du JS à chaque construction
+import hashlib
+V = hashlib.sha1(open(os.path.join(ICI, 'statique', 'site.js'), 'rb').read()).hexdigest()[:8]   # change dès que le JS change
 
 # Les 3 services de l'étape 15 doivent être validés par Takedown avant la mise en ligne.
 AFFICHER_EXTRAS = True
