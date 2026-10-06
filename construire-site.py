@@ -333,11 +333,6 @@ def page(chemin_url, titre_seo, desc, corps, fil=None, extra_ld=None, js=True):
 
 # ---------------------------------------------------------------- pages
 def accueil():
-    rail = ''.join(
-        f'<a class="item" href="/realisations?f={r["c"].split()[0]}">'
-        f'<div class="ph" style="--t:{r["ton"]}"><span class="tech">{r["tech"]}</span><span class="tag">Photo à venir</span></div>'
-        f'<div class="cap"><b>{r["titre"]}</b><span>{r["produit"]}</span></div></a>'
-        for r in REALISATIONS[:6])
     tuiles = ''.join(tuile(s) for s in SERVICES) + tuile_aide()
     corps = f'''{nav('/')}
 <main id="contenu">
@@ -362,14 +357,7 @@ def accueil():
     </div>
   </section>
 
-  <section class="words wrap" aria-label="Nos techniques">
-    <div class="line x"><span>Du fil.</span><small>Broderie<br>Casquettes, polos</small></div>
-    <div class="line x"><span>De l’encre.</span><small>Sérigraphie<br>En quantité</small></div>
-    <div class="line x"><span>De la chaleur.</span><small>Impression DTF<br>Petits lots</small></div>
-    <div class="line x"><span>Ta marque.</span><small>Takedown Studio<br>Bromont</small></div>
-  </section>
-
-  <section class="wrap" id="services" aria-labelledby="t-services">
+  <section class="sec wrap" id="services" aria-labelledby="t-services">
     <div class="head">
       <h2 class="h2 rv" id="t-services">Nos services</h2>
       <div class="links rv"><a href="/services">Tous les services <span class="arr">→</span></a></div>
@@ -377,15 +365,14 @@ def accueil():
     <div class="grid">{tuiles}</div>
   </section>
 
-  <section class="sec wrap" data-rail aria-labelledby="t-real">
-    <div class="head">
-      <h2 class="h2 rv" id="t-real">Dernières réalisations</h2>
-      <div class="links rv"><a href="/realisations">Voir toutes les réalisations <span class="arr">→</span></a><div class="railnav"><button data-d="-1" aria-label="Précédent">←</button><button data-d="1" aria-label="Suivant">→</button></div></div>
-    </div>
-    <div class="rail">{rail}</div>
-  </section>
-
   {etapes()}
+
+  <section class="words wrap" aria-label="Nos techniques">
+    <div class="line x"><span>Du fil.</span><small>Broderie<br>Casquettes, polos</small></div>
+    <div class="line x"><span>De l’encre.</span><small>Sérigraphie<br>En quantité</small></div>
+    <div class="line x"><span>De la chaleur.</span><small>Impression DTF<br>Petits lots</small></div>
+    <div class="line x"><span>Ta marque.</span><small>Takedown Studio<br>Bromont</small></div>
+  </section>
 </main>
 {pied()}'''
     return page('/', 'Takedown Studio | Vêtements et produits personnalisés à Bromont',
