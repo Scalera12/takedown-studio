@@ -2,80 +2,63 @@
 (function(){
   var d=document, qsa=function(s,r){return Array.prototype.slice.call((r||d).querySelectorAll(s))};
 
-  /* intro officielle de l'accueil : « part vidéo de skate », avec les vrais dessins de Takedown.
-     Tout avance image par image à 12 images/s (coupes sèches, caméra qui tremble), pas d'easing lisse.
-     Une fois par visite (sessionStorage), ?intro pour la revoir, ?apercu pour la sauter.
-     Un clic, une touche, la molette ou un toucher la passe. Rien si l'utilisateur demande moins d'animation. */
-  var marque=d.querySelector('.hero .mark');
+  var calme=matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* logo qui flotte : une fois dessiné, il dérive et tourne lentement, comme s'il flottait.
+     Somme de sinus à fréquences différentes = mouvement organique qui ne se répète pas. */
+  var flotter=function(el,attente){
+    if(!el||calme) return;
+    var visible=true, depart=null, A=innerWidth<600?.6:1, actif=true;
+    new IntersectionObserver(function(es){visible=es[0].isIntersecting}).observe(el);
+    var bouge=function(now){
+      if(!actif) return;
+      if(depart===null) depart=now;
+      var t0=(now-depart)/1000, t=t0*1.5, monte=Math.min(1,t0/1.6), k=A*monte*monte*(3-2*monte);
+      if(visible){
+        var x=k*(22*Math.sin(t*.42)+11*Math.sin(t*1.07+1.3)),
+            y=k*(16*Math.sin(t*.33+2)+8*Math.sin(t*.91+.4)),
+            r=k*(7*Math.sin(t*.27+.6)+3.5*Math.sin(t*.79+2.1)),
+            s=1+k*.025*Math.sin(t*.53+1);
+        el.style.transform='translate3d('+x.toFixed(1)+'px,'+y.toFixed(1)+'px,0) rotate('+r.toFixed(2)+'deg) scale('+s.toFixed(4)+')';
+      }
+      requestAnimationFrame(bouge);
+    };
+    setTimeout(function(){requestAnimationFrame(bouge)},attente||1900);
+    return function(){actif=false};
+  };
+  flotter(d.querySelector('.hero.bientot .flotte'));
+
+  /* page d'entrée de l'accueil : logo qui flotte + « Entrer ». Une fois par visite (sessionStorage),
+     ?intro pour la revoir, ?apercu pour la sauter. Le contenu de l'accueil est déjà dans la page. */
+  var marque=d.querySelector('.hero:not(.bientot) .mark');
   var q=new URLSearchParams(location.search), stock=null;
   try{stock=sessionStorage}catch(e){}
-  var deja=false; try{deja=stock&&stock.getItem('td-intro')==='vue'}catch(e){}
-  var jouer=marque&&!q.has('apercu')&&(q.has('intro')||!deja)&&scrollY<10&&!matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if(jouer){
-    try{stock&&stock.setItem('td-intro','vue')}catch(e){}
-    var racine=marque.currentSrc||marque.src, base=racine.slice(0,racine.indexOf('assets/img/'));
-    var im=function(nom){return base+'assets/img/'+nom};
-    var html=d.documentElement; html.classList.add('intro-on','intro-vue');
-    var cible=marque.getBoundingClientRect();
-    var hasard=function(a,b){return a+Math.random()*(b-a)};
-    var ov=d.createElement('div'); ov.className='intro'; ov.setAttribute('aria-hidden','true');
-    var portrait=innerHeight>innerWidth;
-    /* les plans : [début, fin] en secondes, contenu, cadrage */
-    var plans=[
-      {de:.17,a:.6,  h:'<div class="b" data-j="3" style="left:'+(portrait?'-18':'4')+'%;top:12%;height:'+(portrait?'70':'98')+'vh;transform:rotate(5deg)"><img style="height:100%;width:auto" src="'+im('illustration-encre-blanc-800.webp')+'" alt=""></div>', zoom:.08},
-      {de:.68,a:1.06,h:'<div class="b" data-j="4" style="right:'+(portrait?'-30':'-4')+'%;top:-14%;height:'+(portrait?'72':'104')+'vh;transform:rotate(-11deg)"><img style="height:100%;width:auto" src="'+im('illustration-pinceau-blanc-800.webp')+'" alt=""></div>', pan:16},
-      {de:1.06,a:1.2,inv:1,h:'<div class="b" data-j="6" style="right:'+(portrait?'-26':'2')+'%;top:-8%;height:'+(portrait?'72':'104')+'vh;transform:rotate(-8deg)"><img style="height:100%;width:auto" src="'+im('illustration-pinceau-noir-800.webp')+'" alt=""></div>'},
-      {de:1.2,a:1.82,h:'<div class="b" data-j="3" style="left:'+(portrait?'0':'3')+'vw;top:50%;width:'+(portrait?'190':'112')+'vw;transform:translateY(-50%) rotate(-7deg)"><img src="'+im('logo-texte-blanc-1000.webp')+'" alt=""><img class="fantome" src="'+im('logo-texte-blanc-1000.webp')+'" alt=""></div>', panDe:portrait?40:16, panA:portrait?-92:-4},
-      {de:1.9,a:9,h:'<div class="b logo" data-j="2" style="left:'+cible.left+'px;top:'+cible.top+'px;width:'+cible.width+'px"><img src="'+racine+'" alt=""></div>', calme:2.45}
-    ];
-    var html2='';
-    plans.forEach(function(p,n){html2+='<div class="plan'+(p.inv?' inv':'')+'" data-n="'+n+'">'+p.h+'</div>'});
-    for(var r=0;r<3;r++) html2+='<span class="rayure"></span>';
-    html2+='<div class="vignette"></div><div class="grain"></div>'+
-      '<span class="hud rec"><i></i>Rec</span><span class="hud tc">00:00:00:00</span>'+
-      '<span class="hud sp">SP · Takedown Studio · Bromont QC</span><button class="passer" type="button">Passer ›</button>';
-    ov.innerHTML=html2;
-    d.body.appendChild(ov);
-
-    var elPlans=Array.prototype.slice.call(ov.querySelectorAll('.plan'));
-    var rayures=Array.prototype.slice.call(ov.querySelectorAll('.rayure'));
-    var grain=ov.querySelector('.grain'), tc=ov.querySelector('.tc'), rec=ov.querySelector('.rec i');
-    var bandeDepart=Math.floor(hasard(11,47))*1800+Math.floor(hasard(0,1800));   // compteur de cassette pris au milieu d'une bande
-    var pad=function(x){return (x<10?'0':'')+x};
-    var gel=q.has('gel')?parseFloat(q.get('gel')):null;
-    var t0=performance.now(), fini=false, image=0, evts=['click','keydown','wheel','touchstart'];
-    var tic=function(){
-      var t=gel!==null?gel:(performance.now()-t0)/1000; image++;   // ?gel=1.3 fige l'intro à 1,3 s (réglages)
-      /* plan actif : coupe sèche, aucun fondu */
-      plans.forEach(function(p,n){
-        var on=t>=p.de&&t<p.a; elPlans[n].classList.toggle('on',on);
-        if(!on) return;
-        var b=elPlans[n].querySelector('.b'), j=+b.dataset.j, prog=(t-p.de)/(Math.min(p.a,3)-p.de);
-        if(p.calme&&t>p.calme) j=0;   // le logo finit immobile, à sa place dans le hero
-        var bouge='translate('+(j?hasard(-j,j):0).toFixed(1)+'px,'+(j?hasard(-j,j):0).toFixed(1)+'px)';
-        if(p.zoom) bouge+=' scale('+(1+p.zoom*Math.floor(prog*5)/5).toFixed(3)+')';
-        if(p.pan) bouge+=' translateX('+(p.pan*(1-Math.floor(prog*4)/4)).toFixed(1)+'vw)';
-        if(p.panDe!==undefined) bouge+=' translateX('+(p.panDe+(p.panA-p.panDe)*Math.floor(prog*7)/7).toFixed(1)+'vw)';   // panoramique saccadé
-        b.querySelectorAll('img').forEach(function(i){i.style.transform=bouge});
-      });
-      /* grain qui saute, rayures de pellicule, compteur, REC qui clignote */
-      grain.style.transform='translate('+hasard(-20,20).toFixed(0)+'%,'+hasard(-20,20).toFixed(0)+'%)';
-      rayures.forEach(function(s){var v=Math.random()<.35;s.style.display=v?'block':'none';if(v)s.style.left=hasard(3,97).toFixed(1)+'%'});
-      var f=bandeDepart+Math.floor(t*30);
-      tc.textContent=pad(Math.floor(f/108000))+':'+pad(Math.floor(f/1800)%60)+':'+pad(Math.floor(f/30)%60)+':'+pad(f%30);
-      rec.style.opacity=(Math.floor(t*2)%2)?'0':'1';
-      if(t>=3.05&&gel===null) fin();
+  var deja=false; try{deja=stock&&stock.getItem('td-entree')==='vue'}catch(e){}
+  if(marque&&!q.has('apercu')&&(q.has('intro')||!deja)&&scrollY<10){
+    var html=d.documentElement; html.classList.add('splash-on','splash-vu');
+    var sp=d.createElement('div'); sp.className='splash'; sp.setAttribute('role','dialog'); sp.setAttribute('aria-label','Bienvenue chez Takedown Studio');
+    sp.innerHTML='<div class="haut mono"><span>Takedown Studio</span><span>Bromont, QC</span></div>'+
+      '<div class="flotte"><img src="'+(marque.currentSrc||marque.src)+'" alt="Takedown Studio"></div>'+
+      '<button class="entrer" type="button">Entrer <span aria-hidden="true">→</span></button>'+
+      '<div class="bas mono"><span>Agence de branding</span><span>Vêtements et produits personnalisés</span></div>';
+    d.body.appendChild(sp);
+    var stop=flotter(sp.querySelector('.flotte'),1700);
+    var bouton=sp.querySelector('.entrer'), parti=false;
+    try{bouton.focus({preventScroll:true})}catch(e){}
+    var entrer=function(){
+      if(parti) return; parti=true;
+      try{stock&&stock.setItem('td-entree','vue')}catch(e){}
+      removeEventListener('keydown',touche); removeEventListener('wheel',roule);
+      sp.classList.add('sort'); html.classList.remove('splash-on');
+      setTimeout(function(){stop&&stop();sp.remove()},1100);
     };
-    var horloge=setInterval(tic,1000/12); tic();
-    var fin=function(){
-      if(fini)return; fini=true; clearInterval(horloge);
-      evts.forEach(function(ev){removeEventListener(ev,fin)});
-      elPlans.forEach(function(p,n){p.classList.toggle('on',n===elPlans.length-1)});
-      var l=elPlans[elPlans.length-1].querySelector('img'); l.style.transform='none';
-      ov.classList.add('sort'); html.classList.remove('intro-on');
-      setTimeout(function(){ov.remove()},650);
-    };
-    if(gel===null) evts.forEach(function(ev){addEventListener(ev,fin,{passive:true})});
+    var touche=function(e){if(e.key==='Enter'||e.key==='Escape'||e.key===' '||e.key==='ArrowDown'){e.preventDefault();entrer()}};
+    var roule=function(e){if(e.deltaY>8) entrer()};
+    var y0=null;
+    sp.addEventListener('touchstart',function(e){y0=e.touches[0].clientY},{passive:true});
+    sp.addEventListener('touchmove',function(e){if(y0!==null&&y0-e.touches[0].clientY>50) entrer()},{passive:true});
+    bouton.addEventListener('click',entrer);
+    addEventListener('keydown',touche); addEventListener('wheel',roule,{passive:true});
   }
 
   /* apparition au défilement */

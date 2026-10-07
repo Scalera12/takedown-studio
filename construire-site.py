@@ -571,7 +571,7 @@ def construction():
     Même header que l'accueil (et la même intro), plus les coordonnées. Pas de menu."""
     corps = f'''<main id="contenu">
   <section class="hero bientot">
-    <img class="mark" src="/assets/img/logo-complet-lutteurs-blanc.png" alt="Takedown Studio" width="1000" height="799" fetchpriority="high">
+    <div class="flotte"><img class="mark" src="/assets/img/logo-complet-lutteurs-blanc.png" alt="Takedown Studio" width="1000" height="799" fetchpriority="high"></div>
     <h1 class="sr">Takedown Studio, agence de branding à Bromont</h1>
     <p class="mono etiquette fade" style="animation-delay:1.25s">Site en construction</p>
     <p class="sub fade" style="animation-delay:1.3s">Notre nouveau site s’en vient.</p>

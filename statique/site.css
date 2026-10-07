@@ -284,32 +284,26 @@ a:hover .arr{transform:translateX(5px)}
   html{scroll-behavior:auto}
 }
 
-/* ---------- intro officielle de l'accueil : « part vidéo de skate » ----------
-   Coupes sèches à 12 images/s, caméra à l'épaule, grain, rayures, REC et compteur de cassette.
-   Les vrais dessins de Takedown, énormes et coupés par le cadre. Rien de lisse : tout est piloté
-   image par image dans site.js. */
-.intro-on,.intro-on body{overflow:hidden}
-.intro-on .hero .fade{animation-play-state:paused}
-.intro-vue .hero .mark{animation:none;clip-path:none}
-.intro{position:fixed;inset:0;z-index:400;background:#000;overflow:hidden;-webkit-user-select:none;user-select:none;transition:background .45s steps(4)}
-.intro .plan{position:absolute;inset:0;display:none}
-.intro .plan.on{display:block}
-.intro .plan.inv{background:#F4F4F2}
-.intro .b{position:absolute}
-.intro .b img{display:block;width:100%;height:auto;max-width:none}
-.intro .fantome{position:absolute;left:.8%;top:-5%;width:100%;opacity:.3}
-.intro .grain{position:absolute;inset:-50%;pointer-events:none;opacity:.2;mix-blend-mode:screen;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
-.intro .vignette{position:absolute;inset:0;pointer-events:none;background:radial-gradient(120% 95% at 50% 50%,transparent 55%,rgba(0,0,0,.85) 100%)}
-.intro .rayure{position:absolute;top:0;bottom:0;width:1px;background:rgba(255,255,255,.55);display:none}
-.intro .hud{position:absolute;font-family:"IBM Plex Mono",monospace;font-size:clamp(11px,1.1vw,14px);letter-spacing:.08em;text-transform:uppercase;color:#fff;text-shadow:0 0 6px rgba(0,0,0,.8);mix-blend-mode:difference}
-.intro .rec{left:var(--pad);top:22px}
-.intro .rec i{display:inline-block;width:.7em;height:.7em;border-radius:50%;background:#ff2a2a;margin-right:.6em;vertical-align:-.05em}
-.intro .tc{right:var(--pad);top:22px}
-.intro .sp{left:var(--pad);bottom:22px;opacity:.7}
-.intro .passer{position:absolute;right:var(--pad);bottom:16px;color:#bbb;font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:8px 0}
-.intro .passer:hover{color:#fff}
-.intro.sort{background:transparent}
-.intro.sort .grain,.intro.sort .vignette,.intro.sort .hud,.intro.sort .passer,.intro.sort .rayure{opacity:0;transition:opacity .35s steps(3)}
+/* ---------- page d'entrée de l'accueil (comme demandé par Alexandre, inspirée de lqqkstudio.com) ----------
+   On arrive sur le logo qui flotte lentement et un bouton « Entrer ». Le contenu de l'accueil est déjà
+   dans la page derrière (bon pour Google). Une fois par visite. Pilotée par site.js. */
+.splash-on,.splash-on body{overflow:hidden}
+.splash-on .hero .fade{animation-play-state:paused}
+.splash-vu .hero .mark{animation:none;clip-path:none}
+.splash{position:fixed;inset:0;z-index:400;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(30px,6vh,60px);padding:90px var(--pad);
+  background:radial-gradient(60% 55% at 50% 45%,#1b1b1d 0%,#000 72%);transition:transform 1s cubic-bezier(.75,0,.2,1)}
+.splash .flotte{width:min(84vw,660px,calc((100svh - 320px) * 1.25));will-change:transform;transform-origin:50% 55%}
+.splash .flotte img{width:100%;clip-path:inset(0 100% 0 0);animation:draw 1.8s .2s var(--ease) forwards}
+.splash .entrer{display:inline-flex;align-items:center;gap:14px;background:#fff;color:#000;padding:18px 44px;font-weight:700;font-size:15px;letter-spacing:.22em;text-transform:uppercase;opacity:0;animation:up .9s 1.4s var(--ease) forwards;transition:background .3s,color .3s,gap .3s}
+.splash .entrer:hover{background:#000;color:#fff;box-shadow:inset 0 0 0 1px #fff;gap:20px}
+.splash .entrer:focus-visible{outline:2px solid #fff;outline-offset:5px}
+.splash .haut,.splash .bas{position:absolute;left:var(--pad);right:var(--pad);display:flex;justify-content:space-between;gap:20px;color:var(--mute);opacity:0;animation:up .9s 1.7s var(--ease) forwards}
+.splash .haut{top:22px}.splash .bas{bottom:22px}
+.splash .haut a:hover{color:#fff}
+.splash.sort{transform:translateY(-101%)}
+@media (max-width:600px){.splash .bas span:last-child,.splash .haut span:last-child{display:none}}
+/* le logo de la page « en construction » flotte aussi */
+.hero .flotte{will-change:transform;transform-origin:50% 55%}
 
 /* ---------- tablette ---------- */
 @media (max-width:980px){
