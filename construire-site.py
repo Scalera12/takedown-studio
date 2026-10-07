@@ -339,7 +339,7 @@ def accueil():
     corps = f'''{nav('/')}
 <main id="contenu">
   <section class="hero">
-    <div class="flotte"><img class="mark" src="/assets/img/logo-complet-lutteurs-blanc.png" alt="Takedown Studio" width="1000" height="799" fetchpriority="high"></div>
+    <img class="mark" src="/assets/img/logo-complet-lutteurs-blanc.png" alt="Takedown Studio" width="1000" height="799" fetchpriority="high">
     <h1 class="sr">Takedown Studio, agence de branding à Bromont</h1>
     <p class="sub fade" style="animation-delay:1.3s">Vêtements et produits personnalisés à Bromont</p>
     <p class="pos fade" style="animation-delay:1.4s">Agence de branding spécialisée en vêtements et produits personnalisés.</p>
@@ -612,8 +612,8 @@ def css_minifie():
 CSS = ''
 
 # Chaque PNG devient du WebP en 2 largeurs ; le HTML est réécrit avec srcset et sizes.
-LARGEURS = {'logo-complet-lutteurs': (520, 1000), 'logo-texte': (260,), 'illustration': (400, 800), 'services/': (800,)}
-TAILLES = {'logo-complet-lutteurs': '(max-width:600px) 88vw, 760px', 'illustration': '(max-width:980px) 180px, 300px',
+LARGEURS = {'logo-complet-lutteurs': (520, 1000), 'logo-texte': (260, 1000), 'illustration': (400, 800), 'services/': (800,)}
+TAILLES = {'logo-texte': '130px', 'logo-complet-lutteurs': '(max-width:600px) 88vw, 760px', 'illustration': '(max-width:980px) 180px, 300px',
            'services/': '(max-width:980px) 62vw, 31vw'}
 
 def largeurs(nom):

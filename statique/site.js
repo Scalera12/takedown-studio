@@ -2,27 +2,53 @@
 (function(){
   var d=document, qsa=function(s,r){return Array.prototype.slice.call((r||d).querySelectorAll(s))};
 
-  /* logo du hero : une fois dessiné, il dérive et tourne doucement, comme s'il flottait.
-     Somme de sinus à fréquences différentes = mouvement organique qui ne se répète pas.
-     Rien pour ceux qui demandent moins d'animation, et pause quand le hero est hors écran. */
-  var flotte=d.querySelector('.hero .flotte');
-  if(flotte&&!matchMedia('(prefers-reduced-motion: reduce)').matches){
-    var visible=true, depart=null, A=1;
-    if(innerWidth<600) A=.6;
-    new IntersectionObserver(function(es){visible=es[0].isIntersecting}).observe(flotte);
-    var bouge=function(now){
-      if(depart===null) depart=now;
-      var t0=(now-depart)/1000, t=t0*1.5, monte=Math.min(1,t0/1.6), k=A*monte*monte*(3-2*monte);
-      if(visible){
-        var x=k*(22*Math.sin(t*.42)+11*Math.sin(t*1.07+1.3)),
-            y=k*(16*Math.sin(t*.33+2)+8*Math.sin(t*.91+.4)),
-            r=k*(7*Math.sin(t*.27+.6)+3.5*Math.sin(t*.79+2.1)),
-            s=1+k*.025*Math.sin(t*.53+1);
-        flotte.style.transform='translate3d('+x.toFixed(1)+'px,'+y.toFixed(1)+'px,0) rotate('+r.toFixed(2)+'deg) scale('+s.toFixed(4)+')';
-      }
-      requestAnimationFrame(bouge);
+  /* intro officielle de l'accueil, faite avec les vrais dessins de Takedown.
+     Une fois par visite (sessionStorage), ?intro pour la revoir, ?apercu pour la sauter.
+     Un clic, une touche, la molette ou un toucher la passe. Rien si l'utilisateur demande moins d'animation. */
+  var marque=d.querySelector('.hero .mark');
+  var q=new URLSearchParams(location.search), stock=null;
+  try{stock=sessionStorage}catch(e){}
+  var deja=false; try{deja=stock&&stock.getItem('td-intro')==='vue'}catch(e){}
+  var jouer=marque&&!q.has('apercu')&&(q.has('intro')||!deja)&&scrollY<10&&!matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(jouer){
+    try{stock&&stock.setItem('td-intro','vue')}catch(e){}
+    var racine=marque.currentSrc||marque.src, base=racine.slice(0,racine.indexOf('assets/img/'));
+    var im=function(nom){return base+'assets/img/'+nom};
+    var html=d.documentElement; html.classList.add('intro-on','intro-vue');
+    var cible=marque.getBoundingClientRect();
+    var ov=d.createElement('div'); ov.className='intro'; ov.setAttribute('aria-hidden','true');
+    var hasard=function(a,b){return a+Math.random()*(b-a)};
+    var eclats='';
+    for(var e2=0;e2<18;e2++){var ang=e2/18*Math.PI*2+hasard(-.25,.25), dist=hasard(26,50);
+      eclats+='<span class="eclat" style="--t:'+hasard(6,24).toFixed(0)+'px;--ex:'+(Math.cos(ang)*dist).toFixed(1)+'vmin;--ey:'+(Math.sin(ang)*dist).toFixed(1)+'vmin"></span>'}
+    ov.innerHTML=
+      '<div class="b mot"><img src="'+im('logo-texte-blanc-1000.webp')+'" alt=""></div>'+
+      '<div class="b encre"><img src="'+im('illustration-encre-blanc-800.webp')+'" alt=""></div>'+
+      '<div class="b pinceau"><img src="'+im('illustration-pinceau-blanc-800.webp')+'" alt=""></div>'+
+      eclats+
+      '<div class="b logo" style="left:'+cible.left+'px;top:'+cible.top+'px;width:'+cible.width+'px"><img src="'+racine+'" alt=""></div>'+
+      '<span class="leg mono">Takedown Studio · Bromont</span><button class="passer" type="button">Passer ›</button>';
+    d.body.appendChild(ov);
+
+    /* « line boil » : chaque dessin tremble un peu, comme un dessin animé fait à la main */
+    var traits=Array.prototype.slice.call(ov.querySelectorAll('.b img'));
+    var boil=setInterval(function(){traits.forEach(function(i){
+      i.style.transform='translate('+hasard(-1.6,1.6).toFixed(1)+'px,'+hasard(-1.6,1.6).toFixed(1)+'px) rotate('+hasard(-.7,.7).toFixed(2)+'deg)'})},110);
+
+    var minuteries=[], fini=false, evts=['click','keydown','wheel','touchstart'];
+    var plus=function(f,ms){minuteries.push(setTimeout(f,ms))};
+    var choc=function(){ov.classList.remove('choc');void ov.offsetWidth;ov.classList.add('choc')};
+    var fin=function(){
+      if(fini)return; fini=true; minuteries.forEach(clearTimeout); clearInterval(boil);
+      evts.forEach(function(ev){removeEventListener(ev,fin)});
+      traits.forEach(function(i){i.style.transform='none'});
+      var l=ov.querySelector('.logo'); l.style.animation='none'; l.style.opacity='1';
+      ov.classList.add('sort'); html.classList.remove('intro-on');
+      setTimeout(function(){ov.remove()},700);
     };
-    setTimeout(function(){requestAnimationFrame(bouge)},1900);
+    plus(choc,1560);
+    plus(fin,2950);
+    evts.forEach(function(ev){addEventListener(ev,fin,{passive:true})});
   }
 
   /* apparition au défilement */

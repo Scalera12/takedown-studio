@@ -53,8 +53,6 @@ a:hover .arr{transform:translateX(5px)}
   background:radial-gradient(60% 50% at 50% 42%,#1c1c1e 0%,#000 70%)}
 .hero .mark{width:min(88vw,760px,calc((100svh - 400px) * 1.25));min-width:min(88vw,360px);clip-path:inset(0 100% 0 0);animation:draw 1.8s .2s var(--ease) forwards}
 @keyframes draw{to{clip-path:inset(0 0 0 0)}}
-/* le logo flotte après s'être dessiné (inspiré de lqqkstudio.com), piloté par site.js */
-.hero .flotte{will-change:transform;transform-origin:50% 55%}
 .hero h1{font-size:clamp(40px,8.4vw,120px);margin-top:34px}
 .hero .sub{font-size:clamp(18px,2.2vw,26px);color:#d1d1d6;margin-top:40px;font-weight:500}
 .hero .pos{color:var(--mute);margin-top:6px;font-size:15px}
@@ -277,6 +275,40 @@ a:hover .arr{transform:translateX(5px)}
   .hero .mark{animation:none;clip-path:none}.fade{animation:none;opacity:1}
   html{scroll-behavior:auto}
 }
+
+/* ---------- intro officielle de l'accueil ----------
+   Les vrais dessins de Takedown : le mot TAKEDOWN STUDIO s'écrit, le gars à l'encre surgit,
+   le gars au pinceau tombe, ils se rentrent dedans, ça éclabousse, le logo tombe au tapis
+   exactement à sa place dans le hero, puis le noir s'efface. Pilotée par site.js. */
+.intro-on,.intro-on body{overflow:hidden}
+.intro-on .hero .fade{animation-play-state:paused}
+.intro-vue .hero .mark{animation:none;clip-path:none}
+.intro{position:fixed;inset:0;z-index:400;background:#000;overflow:hidden;-webkit-user-select:none;user-select:none;transition:background .6s ease}
+.intro .b{position:absolute}
+.intro .b img{display:block;width:100%;height:auto;max-width:none}
+.intro .leg{position:absolute;left:var(--pad);bottom:22px;color:var(--mute);transition:opacity .3s}
+.intro .passer{position:absolute;right:var(--pad);bottom:16px;color:var(--mute);font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:8px 0;transition:opacity .3s}
+.intro .passer:hover{color:#fff}
+.intro .mot{left:50%;top:50%;width:min(86vw,1080px);transform:translate(-50%,-50%);clip-path:inset(0 100% 0 0);
+  animation:t-ecrit .55s .15s cubic-bezier(.5,0,.2,1) forwards,t-avale .32s 1.22s cubic-bezier(.6,0,.9,.3) forwards}
+.intro .encre{left:21%;top:70%;width:clamp(160px,28vw,420px);--dx:28vw;--dy:-18vh;--r0:-14deg;opacity:0;
+  animation:t-pop .45s .55s cubic-bezier(.2,.9,.3,1.3) forwards,t-fonce .3s 1.2s cubic-bezier(.6,0,.9,.4) forwards}
+.intro .pinceau{left:78%;top:30%;width:clamp(160px,28vw,420px);--dx:-27vw;--dy:17vh;opacity:0;
+  animation:t-chute .62s .62s cubic-bezier(.35,0,.25,1) forwards,t-fonce .3s 1.2s cubic-bezier(.6,0,.9,.4) forwards}
+.intro .eclat{position:absolute;left:50%;top:50%;width:var(--t);height:var(--t);background:#fff;border-radius:50%;opacity:0;
+  animation:t-eclat .75s 1.48s cubic-bezier(.15,.8,.3,1) forwards}
+.intro .logo{opacity:0;animation:t-slam .55s 1.55s cubic-bezier(.2,.9,.25,1.15) forwards}
+.intro.choc{animation:t-choc .3s}
+.intro.sort{background:transparent}
+.intro.sort .b:not(.logo),.intro.sort .eclat,.intro.sort .leg,.intro.sort .passer{opacity:0;transition:opacity .25s}
+@keyframes t-ecrit{to{clip-path:inset(0 0 0 0)}}
+@keyframes t-avale{to{transform:translate(-50%,-50%) scale(.55);opacity:0}}
+@keyframes t-pop{0%{opacity:0;transform:translate(-50%,-50%) scale(.35) rotate(var(--r0))}100%{opacity:1;transform:translate(-50%,-50%) scale(1) rotate(0)}}
+@keyframes t-chute{0%{opacity:1;transform:translate(-50%,calc(-50% - 85vh)) rotate(-200deg)}78%{opacity:1;transform:translate(-50%,-50%) rotate(10deg)}100%{opacity:1;transform:translate(-50%,-50%) rotate(0)}}
+@keyframes t-fonce{from{opacity:1;transform:translate(-50%,-50%)}to{opacity:0;transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) scale(.35)}}
+@keyframes t-eclat{0%{opacity:1;transform:translate(-50%,-50%) scale(1)}100%{opacity:0;transform:translate(calc(-50% + var(--ex)),calc(-50% + var(--ey))) scale(.25)}}
+@keyframes t-slam{0%{opacity:0;transform:scale(1.8) rotate(-7deg);filter:blur(10px)}55%{opacity:1;transform:scale(.96) rotate(1deg);filter:blur(0)}100%{opacity:1;transform:none;filter:none}}
+@keyframes t-choc{0%,100%{transform:none}20%{transform:translate(-10px,7px)}40%{transform:translate(9px,-8px)}60%{transform:translate(-6px,-4px)}80%{transform:translate(5px,5px)}}
 
 /* ---------- tablette ---------- */
 @media (max-width:980px){
