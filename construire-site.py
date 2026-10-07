@@ -736,7 +736,7 @@ def construire_construction():
     dest = os.path.join(os.path.dirname(ICI), 'site-construction')
     os.makedirs(dest, exist_ok=True)
     for n in os.listdir(dest):
-        if n in ('.git', 'CNAME', 'README.md'):
+        if n in ('.git', '.github', 'CNAME', 'README.md'):
             continue
         p = os.path.join(dest, n)
         shutil.rmtree(p) if os.path.isdir(p) else os.remove(p)
