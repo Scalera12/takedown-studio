@@ -153,6 +153,7 @@ a:hover .arr{transform:translateX(5px)}
 
 /* ---------- mission pleine largeur ---------- */
 .mission{position:relative;margin-top:clamp(110px,13vw,180px);min-height:min(92svh,860px);display:flex;align-items:flex-end}
+.words + .mission{margin-top:0}
 .mission .ph{position:absolute;inset:0;padding:0}
 .mission .ph .tag{position:absolute;top:20px;right:20px}
 .mission .fig{position:absolute;right:6%;top:12%;width:clamp(180px,24vw,340px);z-index:1}

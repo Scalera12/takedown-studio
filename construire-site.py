@@ -349,16 +349,6 @@ def accueil():
     </div>
   </section>
 
-  <section class="mission" aria-labelledby="t-presentation">
-    {photo(4, 'L’atelier de Takedown Studio à Bromont, avec les presses à chaleur et le séchoir de sérigraphie', pos='50% 62%')}
-    <div class="wrap in">
-      <h2 class="sr" id="t-presentation">L’agence</h2>
-      <p class="big rv">On t’aide à mettre ta marque sur des vêtements et des produits que les gens vont aimer utiliser.</p>
-      <p class="small rv">Du choix du modèle au placement de ton logo, on te conseille selon ton idée, ton budget et la quantité dont tu as besoin. Broderie, sérigraphie ou impression numérique : on trouve la bonne option pour ton projet.</p>
-      <a class="lien rv" href="/agence-branding">Découvrir l’agence <span class="arr">→</span></a>
-    </div>
-  </section>
-
   <section class="sec wrap" id="services" aria-labelledby="t-services">
     <div class="head">
       <h2 class="h2 rv" id="t-services">Nos services</h2>
@@ -374,6 +364,16 @@ def accueil():
     <div class="line x"><span>De l’encre.</span><small>Sérigraphie<br>En quantité</small></div>
     <div class="line x"><span>De la chaleur.</span><small>Impression DTF<br>Petits lots</small></div>
     <div class="line x"><span>Ta marque.</span><small>Takedown Studio<br>Bromont</small></div>
+  </section>
+
+  <section class="mission" aria-labelledby="t-presentation">
+    {photo(4, 'L’atelier de Takedown Studio à Bromont, avec les presses à chaleur et le séchoir de sérigraphie', pos='50% 62%')}
+    <div class="wrap in">
+      <h2 class="sr" id="t-presentation">L’agence</h2>
+      <p class="big rv">On t’aide à mettre ta marque sur des vêtements et des produits que les gens vont aimer utiliser.</p>
+      <p class="small rv">Du choix du modèle au placement de ton logo, on te conseille selon ton idée, ton budget et la quantité dont tu as besoin. Broderie, sérigraphie ou impression numérique : on trouve la bonne option pour ton projet.</p>
+      <a class="lien rv" href="/agence-branding">Découvrir l’agence <span class="arr">→</span></a>
+    </div>
   </section>
 </main>
 {pied()}'''
