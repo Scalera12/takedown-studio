@@ -566,6 +566,28 @@ def contact():
                 'Envoie ton idée, ton logo et la quantité que tu as en tête. Takedown Studio te guide vers les bons produits et la bonne technique. Bromont.',
                 corps, fil=[('/contact', 'Contact')])
 
+def construction():
+    """Page « site en construction » pour www.takedownstudio.com, en attendant le vrai site.
+    Même header que l'accueil (et la même intro), plus les coordonnées. Pas de menu."""
+    corps = f'''<main id="contenu">
+  <section class="hero bientot">
+    <img class="mark" src="/assets/img/logo-complet-lutteurs-blanc.png" alt="Takedown Studio" width="1000" height="799" fetchpriority="high">
+    <h1 class="sr">Takedown Studio, agence de branding à Bromont</h1>
+    <p class="mono etiquette fade" style="animation-delay:1.25s">Site en construction</p>
+    <p class="sub fade" style="animation-delay:1.3s">Notre nouveau site s’en vient.</p>
+    <p class="pos fade" style="animation-delay:1.4s">Agence de branding spécialisée en vêtements et produits personnalisés, à Bromont. Broderie, sérigraphie, impression DTF, casquettes, patches et autocollants.</p>
+    <div class="ctas fade" style="animation-delay:1.55s">
+      <a class="btn btn-w" href="mailto:{ENTREPRISE['courriel']}?subject=Mon%20projet%20avec%20Takedown">Écris-nous ton projet</a>
+      <a class="btn btn-g" href="tel:{ENTREPRISE['tel_intl']}">{ENTREPRISE['tel']}</a>
+    </div>
+    <p class="mono adresse fade" style="animation-delay:1.7s">{ENTREPRISE['rue']} · {ENTREPRISE['ville']} (Québec) {ENTREPRISE['cp']}</p>
+  </section>
+</main>'''
+    html = page('/', 'Takedown Studio | Vêtements et produits personnalisés à Bromont',
+                'Takedown Studio, agence de branding à Bromont : vêtements et produits personnalisés. Notre nouveau site s’en vient, écris-nous pour ton projet.',
+                corps)
+    return html
+
 def introuvable():
     corps = f'''{nav('')}
 <main id="contenu">
@@ -705,6 +727,38 @@ def construire():
            ''.join(f'  <url><loc>{BASE}{u}</loc><lastmod>{AUJ}</lastmod></url>\n' for u in urls) + '</urlset>\n')
     ecrire('robots.txt', f'User-agent: *\nAllow: /\nDisallow: /api/\n\nSitemap: {BASE}/sitemap.xml\n')
     print(f'✓ {len(pages)} fichiers HTML, {len(urls)} pages dans le sitemap → {SORTIE}')
+    construire_construction()
+
+def construire_construction():
+    """Copie autonome de la page « en construction » dans ../site-construction/ (son propre dépôt GitHub).
+    Adresses relatives pour marcher autant sur l'aperçu GitHub que sur www.takedownstudio.com."""
+    import re
+    dest = os.path.join(os.path.dirname(ICI), 'site-construction')
+    os.makedirs(dest, exist_ok=True)
+    for n in os.listdir(dest):
+        if n in ('.git', 'CNAME', 'README.md'):
+            continue
+        p = os.path.join(dest, n)
+        shutil.rmtree(p) if os.path.isdir(p) else os.remove(p)
+    html = images_srcset(construction())
+    for attr in ('href="/', 'src="/', 'url(/'):
+        html = html.replace(attr, attr[:-1])
+    html = re.sub(r'(srcset=")([^"]*)', lambda m: m.group(1) + re.sub(r'(^|,\s*)/', r'\1', m.group(2)), html)
+    html = html.replace('href="">', 'href="./">')
+    html = html.replace('https://takedownstudio.com', 'https://www.takedownstudio.com')   # le client utilise www
+    assert '—' not in html
+    io.open(os.path.join(dest, 'index.html'), 'w', encoding='utf-8').write(html)
+    io.open(os.path.join(dest, '404.html'), 'w', encoding='utf-8').write(
+        '<!doctype html><meta charset="utf-8"><title>Takedown Studio</title><meta http-equiv="refresh" content="0;url=/"><a href="/">Takedown Studio</a>')
+    os.makedirs(os.path.join(dest, 'assets', 'img'))
+    for n in os.listdir(os.path.join(SORTIE, 'assets', 'img')):
+        if n.startswith(('logo-', 'illustration-', 'icone-', 'partage')):
+            shutil.copy(os.path.join(SORTIE, 'assets', 'img', n), os.path.join(dest, 'assets', 'img', n))
+    shutil.copytree(os.path.join(SORTIE, 'assets', 'polices'), os.path.join(dest, 'assets', 'polices'))
+    shutil.copy(os.path.join(SORTIE, 'assets', 'site.js'), os.path.join(dest, 'assets', 'site.js'))
+    shutil.copy(os.path.join(SORTIE, 'favicon.ico'), os.path.join(dest, 'favicon.ico'))
+    io.open(os.path.join(dest, 'robots.txt'), 'w').write('User-agent: *\nAllow: /\n')
+    print(f'✓ page en construction → {dest}')
 
 if __name__ == '__main__':
     construire()

@@ -60,6 +60,14 @@ a:hover .arr{transform:translateX(5px)}
 .fade{opacity:0;animation:up 1s var(--ease) forwards}
 @keyframes up{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
 
+/* ---------- page « site en construction » ---------- */
+.hero.bientot{min-height:100svh}
+.hero.bientot .mark{width:min(88vw,700px,calc((100svh - 520px) * 1.25))}
+.hero.bientot .etiquette{margin-top:34px;color:var(--mute);border:1px solid var(--line);padding:7px 12px}
+.hero.bientot .sub{margin-top:18px}
+.hero.bientot .pos{max-width:52ch;line-height:1.5}
+.hero.bientot .adresse{margin-top:30px;color:var(--mute)}
+
 /* ---------- header des pages intérieures ---------- */
 .phead{position:relative;padding:clamp(56px,8vw,110px) 0 clamp(48px,6vw,80px);border-bottom:1px solid var(--line);
   background:radial-gradient(50% 70% at 85% 30%,#18181a 0%,#000 70%)}
