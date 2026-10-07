@@ -344,3 +344,23 @@ a:hover .arr{transform:translateX(5px)}
   .nav .btn,.chip{width:auto}
   .head .links{gap:18px}
 }
+
+/* ---------- entête de l'accueil : le bonhomme à la goutte (demande de Takedown, 2026-10-07) ----------
+   Environ 2 fois plus petit que l'ancien logo des lutteurs. Au survol, il fait un tour complet
+   comme le logo de store.lqqkstudio.com (piloté par site.js : la classe .tourne se retire à la fin). */
+.hero .mark.bonhomme{width:min(52vw,380px,calc((100svh - 400px) * .8));min-width:min(60vw,200px);cursor:pointer;transform-origin:50% 55%}
+.hero .mark.bonhomme.tourne{animation:tour .95s cubic-bezier(.45,0,.2,1)}
+@keyframes tour{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}
+@media (prefers-reduced-motion: reduce){.hero .mark.bonhomme.tourne{animation:none}}
+
+/* ---------- page Patches : les types (brodé, tissé, caoutchouc) ---------- */
+.types-patches{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.type-patch{border:1px solid var(--line);display:flex;flex-direction:column}
+.type-patch .ph{aspect-ratio:16/10}
+.type-patch .ph.patch{background:#fff}
+.type-patch .ph.patch img{width:100%;height:100%;object-fit:contain;padding:6%}
+.type-patch .txt{padding:22px 22px 26px;display:flex;flex-direction:column;gap:10px}
+.type-patch h3{font-size:22px;font-weight:600;letter-spacing:-.01em;display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.type-patch h3 .mono{color:var(--mute);font-size:11px}
+.type-patch p{color:#c9c9cc}
+@media (max-width:980px){.types-patches{grid-template-columns:1fr}}

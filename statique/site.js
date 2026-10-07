@@ -38,7 +38,7 @@
     var html=d.documentElement; html.classList.add('splash-on','splash-vu');
     var sp=d.createElement('div'); sp.className='splash'; sp.setAttribute('role','dialog'); sp.setAttribute('aria-label','Bienvenue chez Takedown Studio');
     sp.innerHTML='<div class="haut mono"><span>Takedown Studio</span><span>Bromont, QC</span></div>'+
-      '<div class="flotte"><img src="'+(marque.currentSrc||marque.src)+'" alt="Takedown Studio"></div>'+
+      '<div class="flotte"><img src="'+(marque.getAttribute('data-intro')||marque.currentSrc||marque.src)+'" alt="Takedown Studio"></div>'+
       '<button class="entrer" type="button">Entrer <span aria-hidden="true">→</span></button>'+
       '<div class="bas mono"><span>Agence de branding</span><span>Vêtements et produits personnalisés</span></div>';
     d.body.appendChild(sp);
@@ -59,6 +59,15 @@
     sp.addEventListener('touchmove',function(e){if(y0!==null&&y0-e.touches[0].clientY>50) entrer()},{passive:true});
     bouton.addEventListener('click',entrer);
     addEventListener('keydown',touche); addEventListener('wheel',roule,{passive:true});
+  }
+
+  /* le bonhomme de l'entête fait un tour complet au survol (comme le logo de store.lqqkstudio.com) */
+  var bonhomme=d.querySelector('.hero .mark.bonhomme');
+  if(bonhomme&&!calme){
+    var tourner=function(){if(bonhomme.classList.contains('tourne')) return; bonhomme.classList.add('tourne')};
+    bonhomme.addEventListener('mouseenter',tourner);
+    bonhomme.addEventListener('click',tourner);
+    bonhomme.addEventListener('animationend',function(e){if(e.animationName==='tour') bonhomme.classList.remove('tourne')});
   }
 
   /* apparition au défilement */

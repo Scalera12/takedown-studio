@@ -339,7 +339,7 @@ def accueil():
     corps = f'''{nav('/')}
 <main id="contenu">
   <section class="hero">
-    <img class="mark" src="/assets/img/logo-complet-lutteurs-blanc.png" alt="Takedown Studio" width="1000" height="799" fetchpriority="high">
+    <img class="mark bonhomme" src="/assets/img/bonhomme-goutte-blanc.png" data-intro="/assets/img/logo-complet-lutteurs-blanc-1000.webp" alt="Takedown Studio" width="642" height="497" fetchpriority="high">
     <h1 class="sr">Takedown Studio, agence de branding à Bromont</h1>
     <p class="sub fade" style="animation-delay:1.3s">Vêtements et produits personnalisés à Bromont</p>
     <p class="pos fade" style="animation-delay:1.4s">Agence de branding spécialisée en vêtements et produits personnalisés.</p>
@@ -443,6 +443,33 @@ def services_index():
                 'Vêtements personnalisés, broderie, sérigraphie, impression DTF, casquettes et tuques, patches et autocollants. Découvre nos services à Bromont.',
                 corps, fil=[('/services', 'Nos services')], extra_ld=ld)
 
+# Types de patches (demande de Takedown, 2026-10-07) : brodé, tissé (woven), caoutchouc (rubber / PVC).
+# Photos d'exemple envoyées par le client (marque/client-2026-10-07/).
+TYPES_PATCHES = [
+    dict(nom='Brodé', en='Embroidered', photos=['patch-brode-rose', 'patch-brode-bleu'],
+         texte='Ton logo cousu en fil sur une base de tissu. Du relief, des couleurs vives et un contour net. Le classique pour les casquettes et les vestes.'),
+    dict(nom='Tissé', en='Woven', photos=['patch-tisse'],
+         texte='Le motif est tissé avec des fils très fins, donc plus plat que la broderie. Une bonne option pour les petits textes et les détails fins.'),
+    dict(nom='Caoutchouc', en='Rubber / PVC', photos=['patch-caoutchouc'],
+         texte='Un patch moulé en caoutchouc souple, avec du relief et une finition durable. Parfait pour un look moderne sur une casquette ou un sac.'),
+]
+
+def photo_patch(nom, alt):
+    base = f'/assets/img/photos/{nom}'
+    return (f'<div class="ph patch"><img src="{base}-1086.webp" srcset="{base}-600.webp 600w, {base}-1086.webp 1086w" '
+            f'sizes="(max-width:980px) 100vw, 33vw" alt="{e(alt)}" width="1086" height="607" loading="lazy" decoding="async"></div>')
+
+def types_patches():
+    cartes = ''
+    for t in TYPES_PATCHES:
+        visuel = (photo_patch(t['photos'][0], f'Exemple de patch {t["nom"].lower()}') if t['photos']
+                  else ph('Photo à venir', '#2a2420'))
+        cartes += f'''<article class="type-patch rv">{visuel}
+        <div class="txt"><h3>{t['nom']} <span class="mono">{t['en']}</span></h3><p>{t['texte']}</p></div></article>'''
+    return f'''<section class="sec wrap"><div class="head"><h2 class="h2 rv">Les types de patches</h2>
+    <p class="note rv">On t’aide à choisir selon ton logo, ton produit et le look que tu veux.</p></div>
+    <div class="types-patches">{cartes}</div></section>'''
+
 def service(s, i):
     exemples = ''.join(f'<figure class="rv">{ph("Photo à venir", s["ton"])}<figcaption>{x}</figcaption></figure>' for x in s['exemples'])
     extras = ''
@@ -468,6 +495,7 @@ def service(s, i):
   {phead([('/services', 'Nos services'), ('/services/' + s['slug'], s['nom'])], s['nom'], s['texte'], ctas, DESSINS[i % 3])}
   <section class="sec wrap">{ph('Grande photo principale · ' + s['tag'], s['ton'], 'rv', 'aspect-ratio:16/7')}</section>
   <section class="sec wrap">{plus_prevoir(s['plus'], s['prevoir'])}</section>
+  {types_patches() if s['slug'] == 'patches-ecussons' else ''}
   <section class="sec wrap"><div class="head"><h2 class="h2 rv">Exemples</h2>
     <div class="links rv"><a href="/realisations?f={s['filtre']}">Voir les réalisations <span class="arr">→</span></a></div></div>
     <div class="ex">{exemples}</div>
@@ -634,8 +662,8 @@ def css_minifie():
 CSS = ''
 
 # Chaque PNG devient du WebP en 2 largeurs ; le HTML est réécrit avec srcset et sizes.
-LARGEURS = {'logo-complet-lutteurs': (520, 1000), 'logo-texte': (260, 1000), 'illustration': (400, 800), 'services/': (800,)}
-TAILLES = {'logo-texte': '130px', 'logo-complet-lutteurs': '(max-width:600px) 88vw, 760px', 'illustration': '(max-width:980px) 180px, 300px',
+LARGEURS = {'bonhomme': (400, 642), 'logo-complet-lutteurs': (520, 1000), 'logo-texte': (260, 1000), 'illustration': (400, 800), 'services/': (800,)}
+TAILLES = {'bonhomme': '(max-width:600px) 60vw, 380px', 'logo-texte': '130px', 'logo-complet-lutteurs': '(max-width:600px) 88vw, 760px', 'illustration': '(max-width:980px) 180px, 300px',
            'services/': '(max-width:980px) 62vw, 31vw'}
 
 def largeurs(nom):
@@ -686,7 +714,7 @@ def prefixer(html):
     if not CHEMIN_BASE:
         return html
     import re
-    for attr in ('href="/', 'src="/', 'action="/', 'url(/'):
+    for attr in ('href="/', 'src="/', 'action="/', 'url(/', 'data-intro="/'):
         html = html.replace(attr, attr[:-1] + CHEMIN_BASE + '/')
     html = re.sub(r'(srcset="|imagesrcset=")([^"]*)',
                   lambda m: m.group(1) + re.sub(r'(^|,\s*)/', lambda n: n.group(1) + CHEMIN_BASE + '/', m.group(2)), html)
