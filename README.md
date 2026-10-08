@@ -11,6 +11,7 @@ personnalisés à Bromont. Mandat Scalera SCA-2026-059 : 12 pages.
 | `statique/site.css` | La feuille de style commune (direction B2, tout carré) |
 | `statique/site.js` | Menu cell, carrousel, quotes, filtres des réalisations, formulaire |
 | `statique/img/` | Logo et dessins en PNG transparent (tirés de captures, vectoriels à recevoir) |
+| `convertir-dessins.py` | Dessins du client (`marque/client-2026-10-07-dessins/`) → `statique/img/dessins/*-blanc.png` (blanc sur transparent) |
 | `site/` | Le site construit (ne pas éditer à la main, il est écrasé) |
 | `serveur-local.py` | Aperçu local qui sert `/services/broderie` comme Cloudflare le fera |
 | `../contenu/texte-1-plan-de-contenu.md` | Le plan de contenu du client, source des textes |

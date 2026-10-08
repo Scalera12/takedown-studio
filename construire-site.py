@@ -148,6 +148,17 @@ CHOIX_SERVICE = [('je-sais-pas', 'Je ne sais pas encore')] + [(s['slug'], s['nom
 
 DESSINS = ['illustration-pinceau', 'illustration-encre', 'logo-complet-lutteurs']
 
+# Dessins du client (WhatsApp, 7 oct. 2026), convertis en blanc par convertir-dessins.py
+DESSIN_SERVICE = {
+    'vetements-personnalises': 'dessins/vetements-chandail',
+    'broderie': 'dessins/broderie-aiguille',
+    'serigraphie': 'dessins/serigraphie-cadre',
+    'impression-dtf': 'dessins/presse-chaleur',
+    'casquettes-tuques': 'dessins/casquette-tuque',
+    'patches-ecussons': 'dessins/patch-aiguille',
+    'autocollants': 'dessins/autocollants-planche',
+}
+
 # ---------------------------------------------------------------- morceaux communs
 MENU = [('/', 'Accueil'), ('/agence-branding', 'L’agence'), ('/services', 'Nos services'),
         ('/realisations', 'Réalisations'), ('/contact', 'Contact')]
@@ -263,13 +274,12 @@ def etapes():
     <div class="top">
       <div><p class="mono rv" style="color:var(--mute)">Le processus</p><h2 class="h2 rv" style="margin-top:12px">Comment ça fonctionne</h2>
       <p class="rv">Tu nous expliques ton projet. On choisit les produits et on prépare la soumission. Tu approuves le visuel. On lance la production selon les conditions confirmées.</p></div>
-      <img class="rv" src="/assets/img/illustration-encre-blanc.png" alt="" loading="lazy" width="250" height="192">
     </div>
     <ol class="steps" style="list-style:none">
-      <li style="display:contents"><div class="rv"><b>01</b><p>Tu nous expliques ton projet.</p></div></li>
-      <li style="display:contents"><div class="rv"><b>02</b><p>On choisit les produits et la technique.</p></div></li>
-      <li style="display:contents"><div class="rv"><b>03</b><p>Tu approuves le visuel et la soumission.</p></div></li>
-      <li style="display:contents"><div class="rv"><b>04</b><p>On lance la production.</p></div></li>
+      <li style="display:contents"><div class="rv"><span class="dessin"><img src="/assets/img/dessins/bonhomme-surpris-blanc.png" alt="" loading="lazy" width="548" height="1000"></span><b>01</b><p>Tu nous expliques ton projet.</p></div></li>
+      <li style="display:contents"><div class="rv"><span class="dessin"><img src="/assets/img/dessins/casquettes-tuques-pile-blanc.png" alt="" loading="lazy" width="1000" height="769"></span><b>02</b><p>On choisit les produits et la technique.</p></div></li>
+      <li style="display:contents"><div class="rv"><span class="dessin"><img src="/assets/img/dessins/chandail-loupe-blanc.png" alt="" loading="lazy" width="1000" height="670"></span><b>03</b><p>Tu approuves le visuel et la soumission.</p></div></li>
+      <li style="display:contents"><div class="rv"><span class="dessin"><img src="/assets/img/dessins/bonhomme-casquette-blanc.png" alt="" loading="lazy" width="908" height="1000"></span><b>04</b><p>On lance la production.</p></div></li>
     </ol>
   </section>'''
 
@@ -492,7 +502,7 @@ def service(s, i):
             f'<a class="btn btn-g" href="/realisations?f={s["filtre"]}">Voir les réalisations</a>')
     corps = f'''{nav('/services')}
 <main id="contenu">
-  {phead([('/services', 'Nos services'), ('/services/' + s['slug'], s['nom'])], s['nom'], s['texte'], ctas, DESSINS[i % 3])}
+  {phead([('/services', 'Nos services'), ('/services/' + s['slug'], s['nom'])], s['nom'], s['texte'], ctas, DESSIN_SERVICE.get(s['slug'], DESSINS[i % 3]))}
   <section class="sec wrap">{ph('Grande photo principale · ' + s['tag'], s['ton'], 'rv', 'aspect-ratio:16/7')}</section>
   <section class="sec wrap">{plus_prevoir(s['plus'], s['prevoir'])}</section>
   {types_patches() if s['slug'] == 'patches-ecussons' else ''}
@@ -525,7 +535,7 @@ def realisations():
 <main id="contenu">
   {phead([('/realisations', 'Réalisations')], 'Nos réalisations',
          'Découvre quelques projets réalisés par Takedown Studio. Chaque projet est différent, et la technique utilisée dépend du produit, du visuel, de la quantité et du résultat recherché.',
-         '', 'illustration-encre')}
+         '', 'dessins/bonhomme-aiguille')}
   <section class="sec wrap">
     <div class="chips" role="group" aria-label="Filtrer par technique">{chips}</div>
     <div class="reals">{items}</div>
@@ -620,7 +630,7 @@ def introuvable():
     corps = f'''{nav('')}
 <main id="contenu">
   {phead([('/404', 'Page introuvable')], 'Page introuvable', 'Cette page existe pas ou elle a changé d’adresse.',
-         '<a class="btn btn-w" href="/">Retour à l’accueil</a><a class="btn btn-g" href="/services">Nos services</a>', 'illustration-pinceau')}
+         '<a class="btn btn-w" href="/">Retour à l’accueil</a><a class="btn btn-g" href="/services">Nos services</a>', 'dessins/bonhomme-couche')}
 </main>
 {pied()}'''
     return page('/404', 'Page introuvable | Takedown Studio', 'Cette page n’existe pas.', corps).replace(
@@ -662,9 +672,9 @@ def css_minifie():
 CSS = ''
 
 # Chaque PNG devient du WebP en 2 largeurs ; le HTML est réécrit avec srcset et sizes.
-LARGEURS = {'bonhomme': (400, 642), 'logo-complet-lutteurs': (520, 1000), 'logo-texte': (260, 1000), 'illustration': (400, 800), 'services/': (800,)}
+LARGEURS = {'bonhomme': (400, 642), 'logo-complet-lutteurs': (520, 1000), 'logo-texte': (260, 1000), 'illustration': (400, 800), 'services/': (800,), 'dessins/': (360, 720)}
 TAILLES = {'bonhomme': '(max-width:600px) 60vw, 380px', 'logo-texte': '130px', 'logo-complet-lutteurs': '(max-width:600px) 88vw, 760px', 'illustration': '(max-width:980px) 180px, 300px',
-           'services/': '(max-width:980px) 62vw, 31vw'}
+           'services/': '(max-width:980px) 62vw, 31vw', 'dessins/': '(max-width:980px) 180px, 300px'}
 
 def largeurs(nom):
     return next((v for k, v in LARGEURS.items() if nom.startswith(k)), (400, 800))
@@ -703,7 +713,7 @@ def images_srcset(html):
         sizes = next((v for k, v in TAILLES.items() if nom.startswith(k)), '50vw')
         jeu = ', '.join(f'/assets/img/{nom}-{w}.webp {w}w' for w in ws)
         return f'src="/assets/img/{nom}-{ws[-1]}.webp" srcset="{jeu}" sizes="{sizes}"'
-    return re.sub(r'src="/assets/img/((?:services/)?[\w-]+)\.png"', un, html)
+    return re.sub(r'src="/assets/img/((?:services/|dessins/)?[\w-]+)\.png"', un, html)
 
 # ---------------------------------------------------------------- construction
 # Aperçu GitHub Pages : le site vit sous /takedown-studio/, donc on préfixe les adresses
