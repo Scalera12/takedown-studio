@@ -5,6 +5,8 @@
 :root{
   --bg:#000; --s1:#0f0f10; --s2:#1a1a1b; --ink:#F4F4F2; --mute:#8a8a8d; --line:#262628;
   --pad:clamp(16px,3.4vw,48px); --max:1440px; --ease:cubic-bezier(.2,.7,.1,1);
+  /* trait de feutre ondulé (style des dessins du client), pour les soulignés au survol */
+  --vague:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 6' preserveAspectRatio='none'%3E%3Cpath d='M1 3.6C14 1.6 28 5 46 3.2S82 1.8 99 3.9' fill='none' stroke='white' stroke-width='1.7' stroke-linecap='round' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E");
 }
 *{box-sizing:border-box;margin:0;padding:0;border-radius:0}
 html{scroll-behavior:smooth}
@@ -30,7 +32,8 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:200;op
 .nav .logo img{height:17px;width:auto}
 .nav ul{display:flex;gap:32px;list-style:none;font-size:14px;color:#cfcfd2}
 .nav ul a:hover,.nav ul a[aria-current]{color:#fff}
-.nav ul a[aria-current]{text-decoration:underline;text-underline-offset:6px}
+.nav ul a{padding-bottom:7px;background:var(--vague) no-repeat 0 100%/0 6px;transition:background-size .45s var(--ease),color .3s}
+.nav ul a:hover,.nav ul a[aria-current]{background-size:100% 6px}
 .nav .right{display:flex;gap:10px;align-items:center}
 .burger{display:none;width:40px;height:40px}
 .burger span{display:block;width:20px;height:1.5px;background:#fff;margin:5px auto;transition:transform .3s var(--ease),opacity .3s}
@@ -46,7 +49,8 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:200;op
 .nav .btn{padding:9px 16px;font-size:12px;gap:0}
 .arr{display:inline-block;transition:transform .35s var(--ease)}
 a:hover .arr{transform:translateX(5px)}
-.lien{display:inline-flex;gap:10px;align-items:center;font-weight:600;font-size:15px}
+.lien{display:inline-flex;gap:10px;align-items:center;font-weight:600;font-size:15px;padding-bottom:6px;background:var(--vague) no-repeat 0 100%/0 6px;transition:background-size .5s var(--ease)}
+.lien:hover{background-size:100% 6px}
 
 /* ---------- header de l'accueil (B v1, identique) ---------- */
 .hero{min-height:min(calc(100svh - 56px),980px);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:80px var(--pad) 70px;position:relative;
@@ -378,3 +382,88 @@ a:hover .arr{transform:translateX(5px)}
 .type-patch h3 .mono{color:var(--mute);font-size:11px}
 .type-patch p{color:#c9c9cc}
 @media (max-width:980px){.types-patches{grid-template-columns:1fr}}
+
+/* =====================================================================
+   Le style dessiné du client mélangé au site (2026-10-11)
+   Toujours noir et blanc, tout carré. Le trait vient de leurs dessins : feutre, bouts arrondis, gouttes.
+   ===================================================================== */
+
+/* mot souligné à l'encre dans certains titres : le trait se trace quand le titre apparaît */
+.encre{position:relative;display:inline-block;white-space:nowrap}
+.encre .trait{position:absolute;left:-2%;bottom:-.2em;width:104%;height:.26em;overflow:visible;pointer-events:none}
+.encre .trait path{fill:none;stroke:currentColor;stroke-width:4.4;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:0}
+.encre .trait path + path{stroke-width:2.4;opacity:.8}
+.x .encre .trait{bottom:-.14em}
+.js .rv .encre .trait path{stroke-dashoffset:1;transition:stroke-dashoffset .9s .35s var(--ease)}
+.js .rv .encre .trait path + path{transition-delay:.75s}
+.js .rv.in .encre .trait path{stroke-dashoffset:0}
+
+/* gouttes d'encre (reprises du chandail taché) qui coulent d'une ligne de section */
+.coule{position:absolute;bottom:0;right:22%;display:flex;gap:16px;align-items:flex-start;transform:translateY(100%);pointer-events:none;z-index:2}
+.coule img{width:auto;height:44px;margin-top:-6px}
+.coule img + img{height:27px;margin-top:-4px}
+.coule.gauche{top:0;bottom:auto;left:calc(var(--pad) + 14%);right:auto;transform:none}
+.phead,.hesite{position:relative}
+
+/* dessins des tuiles : au survol, le trait « bouillonne » comme un dessin animé fait main */
+@keyframes boil{0%{transform:rotate(-1.6deg) scale(1.05)}33%{transform:rotate(1.1deg) scale(1.05) translate(1px,-1px)}66%{transform:rotate(-.4deg) scale(1.05) translate(-1px,1px)}100%{transform:rotate(-1.6deg) scale(1.05)}}
+.tile.dessin .art img{max-width:78%}
+.tile.dessin:hover .art img,.steps div:hover .dessin img,.svc:hover .ph.art img{animation:boil .5s steps(1) infinite;transition:none}
+.tile.dessin .art{background:radial-gradient(55% 60% at 50% 55%,#1b1b1d 0%,transparent 75%)}
+
+/* page Nos services : le dessin du client tient la place de la photo */
+.svc .ph.art{background:var(--s1);display:flex;align-items:center;justify-content:center;padding:clamp(28px,5vw,64px)}
+.svc .ph.art::before{background:radial-gradient(50% 55% at 50% 52%,#1c1c1e 0%,transparent 75%)}
+.svc .ph.art img{position:relative;inset:auto;width:auto;height:auto;max-width:62%;max-height:100%;object-fit:contain}
+.svc + .svc .ph.art{border-left:0}
+
+/* quotes : le dessin du client à côté de chaque mot, il s'allume avec la ligne */
+.words .line .cote{display:flex;align-items:center;gap:clamp(14px,2vw,28px);flex-shrink:0;align-self:center}
+.words .line .mini{height:clamp(44px,5.6vw,92px);width:auto;max-width:clamp(70px,9vw,170px);object-fit:contain;opacity:.14;transform:rotate(-6deg) scale(.9);transition:opacity .6s var(--ease),transform .8s var(--ease)}
+.words .line.on .mini{opacity:1;transform:rotate(0) scale(1)}
+.words .line:hover .mini{animation:boil .5s steps(1) infinite}
+html:not(.js) .words .line .mini{opacity:1;transform:none}
+
+/* tu hésites : les deux bonshommes en tuque */
+.hesite .wrap{grid-template-columns:1fr auto auto;gap:clamp(24px,4vw,56px)}
+.hesite .duo{width:clamp(140px,14vw,210px)}
+
+/* page Patches : l'étiquette tissée, à part des patches */
+.types-patches{grid-template-columns:repeat(2,1fr)}
+.type-patch .ph{aspect-ratio:16/9}
+.etiquette{margin-top:16px;border:1px solid var(--line);display:grid;grid-template-columns:1fr 1fr}
+.etiquette .ph.patch{background:#fff;aspect-ratio:16/9;padding:0}
+.etiquette .ph.patch img{object-fit:contain;padding:6%}
+.etiquette .txt{padding:clamp(24px,3.4vw,44px);display:flex;flex-direction:column;justify-content:center;gap:12px;border-left:1px solid var(--line)}
+.etiquette .txt > .mono{color:var(--mute)}
+.etiquette h3{font-size:clamp(24px,2.4vw,32px);font-weight:600;letter-spacing:-.02em;line-height:1.05;display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.etiquette h3 .mono{color:var(--mute);font-size:11px}
+.etiquette p{color:#c9c9cc;max-width:52ch}
+
+/* page d'entrée : les dessins du client flottent autour des lutteurs */
+.splash .nuee{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.splash .nuee img{position:absolute;width:var(--w);height:auto;opacity:0;transition:opacity 1.4s var(--ease);will-change:transform}
+.splash .nuee img.on{opacity:var(--o,.75)}
+.splash .flotte,.splash .entrer{position:relative;z-index:1}
+
+@media (max-width:980px){
+  .hesite .wrap{grid-template-columns:1fr auto}
+  .hesite .duo{grid-row:1;grid-column:2;width:130px;align-self:start}
+  .hesite .btn{grid-column:1/-1;justify-self:start}
+  .etiquette{grid-template-columns:1fr}
+  .etiquette .txt{border-left:0;border-top:1px solid var(--line)}
+  .coule{right:12%}
+}
+@media (max-width:600px){
+  .types-patches{grid-template-columns:1fr}
+  .hesite .duo{width:96px}
+  .hesite .btn{justify-self:stretch}
+  .coule img{height:34px}.coule img + img{height:21px}
+  .words .line .mini{height:38px;max-width:64px}
+}
+@media (prefers-reduced-motion:reduce){
+  .js .rv .encre .trait path{stroke-dashoffset:0;transition:none}
+  .tile.dessin:hover .art img,.steps div:hover .dessin img,.svc:hover .ph.art img,.words .line:hover .mini{animation:none}
+  .words .line .mini{transition:none}
+  .splash .nuee img{transition:none}
+}

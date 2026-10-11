@@ -159,6 +159,38 @@ DESSIN_SERVICE = {
     'autocollants': 'dessins/autocollants-planche',
 }
 
+# Tuiles de services (accueil, « Services associés », page Nos services) : un dessin du client
+# par service, en action quand il en existe un (la sérigraphie montre l'impression, l'en-tête montre le cadre).
+DESSIN_TUILE = dict(DESSIN_SERVICE, serigraphie='dessins/serigraphie-impression')
+
+# Trait d'encre dessiné sous un mot de titre (style des dessins du client : feutre, bout arrondi,
+# deux passes qui ne se superposent pas tout à fait). Il se trace quand le titre apparaît.
+TRAIT = ('<svg class="trait" viewBox="0 0 300 16" preserveAspectRatio="none" aria-hidden="true">'
+         '<path pathLength="1" d="M3 9.5C46 6.2 92 11.8 140 8.6S232 5.4 297 8.8"/>'
+         '<path pathLength="1" d="M18 12.6C70 10.4 128 13.8 190 11.2S256 10.2 282 12"/></svg>')
+
+def encre(mot):
+    return f'<span class="encre">{mot}{TRAIT}</span>'
+
+def gouttes(cls='coule'):
+    # deux gouttes reprises du chandail taché du client, qui « coulent » d'une ligne de section
+    return (f'<span class="{cls}" aria-hidden="true">'
+            '<img src="/assets/img/dessins/goutte-longue-blanc.png" alt="" width="40" height="178" loading="lazy">'
+            '<img src="/assets/img/dessins/goutte-courte-blanc.png" alt="" width="42" height="111" loading="lazy"></span>')
+
+def mots(petits=True):
+    # les quotes « Du fil. De l'encre... » avec le dessin du client qui va avec chaque mot
+    lignes = [('Du fil.', 'fil-aiguille', 'Broderie<br>Casquettes, polos', 'Broderie'),
+              ('De l’encre.', 'serigraphie-racloir', 'Sérigraphie<br>En quantité', 'Sérigraphie'),
+              ('De la chaleur.', 'presse-chaleur', 'Impression DTF<br>Petits lots', 'Impression DTF'),
+              ('Ta marque.', None, 'Takedown Studio<br>Bromont', 'Takedown Studio')]
+    out = ''
+    for txt, dessin, long_, court in lignes:
+        img = (f'<img class="mini" src="/assets/img/dessins/{dessin}-blanc.png" sizes="160px" alt="" loading="lazy">' if dessin
+               else '<img class="mini" src="/assets/img/bonhomme-goutte-blanc.png" sizes="120px" alt="" loading="lazy">')
+        out += f'<div class="line x"><span>{txt}</span><span class="cote">{img}<small>{long_ if petits else court}</small></span></div>'
+    return f'<section class="words wrap" aria-label="Nos techniques">{out}</section>'
+
 # ---------------------------------------------------------------- morceaux communs
 MENU = [('/', 'Accueil'), ('/agence-branding', 'L’agence'), ('/services', 'Nos services'),
         ('/realisations', 'Réalisations'), ('/contact', 'Contact')]
@@ -182,8 +214,8 @@ def nav(courant):
 
 def pied(court=False):
     services = ''.join(f'<a href="/services/{s["slug"]}">{nom_court(s)}</a>' for s in SERVICES)
-    tete = '' if court else '''<p class="mono" style="color:var(--mute)">Demander une soumission</p>
-        <h2 class="x"><span class="ind">On regarde ton</span><br>projet ensemble!</h2>'''
+    tete = '' if court else f'''<p class="mono" style="color:var(--mute)">Demander une soumission</p>
+        <h2 class="x rv"><span class="ind">On regarde ton</span><br>projet {encre('ensemble!')}</h2>'''
     appel = '' if court else '''<div>
             <p>Envoie-nous ton idée, ton logo et la quantité que tu as en tête. On va te guider pour la suite.</p>
             <a class="btn btn-w" href="/contact">Demander une soumission <span class="arr">→</span></a>
@@ -212,10 +244,12 @@ def pied(court=False):
 </footer>'''
 
 def hesite():
-    return '''<section class="hesite">
+    return f'''<section class="hesite">
+  {gouttes('coule gauche')}
   <div class="wrap">
     <div><h2 class="x rv">Tu hésites entre plusieurs options?</h2>
     <p class="rv">Envoie-nous ton idée et les informations que tu as. On va t’aider à choisir la bonne combinaison de produits et de techniques.</p></div>
+    <img class="duo rv" src="/assets/img/dessins/deux-tuques-blanc.png" alt="" loading="lazy" width="1000" height="640">
     <a class="btn btn-w rv" href="/contact">Demander une soumission <span class="arr">→</span></a>
   </div>
 </section>'''
@@ -235,9 +269,9 @@ def ph(tag, ton, cls='', style=''):
     return f'<div class="ph {cls}" style="--t:{ton};{style}"><span class="tag">{e(tag)}</span></div>'
 
 def tuile(s, titre_tag='h3'):
-    # Dessin maison dans le style Takedown (statique/img/services/), comme la case « Tu sais pas quelle technique choisir? »
+    # Dessin du client (WhatsApp, 7 oct.) qui correspond au service
     return (f'<a class="tile dessin rv" href="/services/{s["slug"]}">'
-            f'<div class="art"><img src="/assets/img/services/{s["slug"]}-blanc.png" alt="" loading="lazy"></div>'
+            f'<div class="art"><img src="/assets/img/{DESSIN_TUILE[s["slug"]]}-blanc.png" alt="" loading="lazy"></div>'
             f'<div class="lab"><div><{titre_tag}>{nom_court(s)}</{titre_tag}><p>{s["court"]}</p></div>'
             f'<span class="go" aria-hidden="true">→</span></div></a>')
 
@@ -261,6 +295,7 @@ def phead(chemin, titre, intro, ctas='', dessin=None):
     {f'<div class="ctas">{ctas}</div>' if ctas else ''}
   </div>
   {fig}
+  {gouttes()}
 </section>'''
 
 def plus_prevoir(plus, prevoir):
@@ -270,9 +305,9 @@ def plus_prevoir(plus, prevoir):
     </div>'''
 
 def etapes():
-    return '''<section class="how wrap">
+    return f'''<section class="how wrap">
     <div class="top">
-      <div><p class="mono rv" style="color:var(--mute)">Le processus</p><h2 class="h2 rv" style="margin-top:12px">Comment ça fonctionne</h2>
+      <div><p class="mono rv" style="color:var(--mute)">Le processus</p><h2 class="h2 rv" style="margin-top:12px">Comment ça {encre('fonctionne')}</h2>
       <p class="rv">Tu nous expliques ton projet. On choisit les produits et on prépare la soumission. Tu approuves le visuel. On lance la production selon les conditions confirmées.</p></div>
     </div>
     <ol class="steps" style="list-style:none">
@@ -361,7 +396,7 @@ def accueil():
 
   <section class="sec wrap" id="services" aria-labelledby="t-services">
     <div class="head">
-      <h2 class="h2 rv" id="t-services">Nos services</h2>
+      <h2 class="h2 rv" id="t-services">Nos {encre('services')}</h2>
       <div class="links rv"><a href="/services">Tous les services <span class="arr">→</span></a></div>
     </div>
     <div class="grid">{tuiles}</div>
@@ -369,12 +404,7 @@ def accueil():
 
   {etapes()}
 
-  <section class="words wrap" aria-label="Nos techniques">
-    <div class="line x"><span>Du fil.</span><small>Broderie<br>Casquettes, polos</small></div>
-    <div class="line x"><span>De l’encre.</span><small>Sérigraphie<br>En quantité</small></div>
-    <div class="line x"><span>De la chaleur.</span><small>Impression DTF<br>Petits lots</small></div>
-    <div class="line x"><span>Ta marque.</span><small>Takedown Studio<br>Bromont</small></div>
-  </section>
+  {mots()}
 
   <section class="mission" aria-labelledby="t-presentation">
     {photo(4, 'L’atelier de Takedown Studio à Bromont, avec les presses à chaleur et le séchoir de sérigraphie', pos='50% 62%')}
@@ -409,12 +439,7 @@ def agence():
     {plus_prevoir('Un même contact pour ton projet, des conseils concrets et des produits qui vont bien ensemble.',
                   'Un projet qui regroupe plusieurs produits demande plus de préparation. Le budget et les délais dépendent des articles choisis.')}
   </section>
-  <section class="words wrap" aria-label="Nos techniques">
-    <div class="line x"><span>Du fil.</span><small>Broderie</small></div>
-    <div class="line x"><span>De l’encre.</span><small>Sérigraphie</small></div>
-    <div class="line x"><span>De la chaleur.</span><small>Impression DTF</small></div>
-    <div class="line x"><span>Ta marque.</span><small>Takedown Studio</small></div>
-  </section>
+  {mots(False)}
   {etapes()}
 </main>
 {hesite()}
@@ -428,7 +453,7 @@ def services_index():
     for s in SERVICES:
         phrase = s['texte'].split('. ')[0].rstrip('.') + '.'
         blocs += f'''<article class="svc rv">
-      {ph(s['tag'], s['ton'])}
+      <a class="ph art" href="/services/{s['slug']}" tabindex="-1" aria-hidden="true"><img src="/assets/img/{DESSIN_TUILE[s['slug']]}-blanc.png" alt="" loading="lazy"></a>
       <div class="txt"><span class="mono" style="color:var(--mute)">{e(s['court'])}</span><h2>{s['nom']}</h2><p>{phrase}</p>
       <div><a class="btn btn-g" href="/services/{s['slug']}">Découvrir le service <span class="arr">→</span></a></div></div>
     </article>'''
@@ -453,16 +478,17 @@ def services_index():
                 'Vêtements personnalisés, broderie, sérigraphie, impression DTF, casquettes et tuques, patches et autocollants. Découvre nos services à Bromont.',
                 corps, fil=[('/services', 'Nos services')], extra_ld=ld)
 
-# Types de patches (demande de Takedown, 2026-10-07) : brodé, tissé (woven), caoutchouc (rubber / PVC).
+# Types de patches (demande de Takedown, 2026-10-07) : brodé, caoutchouc (rubber / PVC).
+# L'étiquette tissée (woven label) est présentée À PART : « pas patch, c'est une étiquette mince » (Takedown, WhatsApp).
 # Photos d'exemple envoyées par le client (marque/client-2026-10-07/).
 TYPES_PATCHES = [
     dict(nom='Brodé', en='Embroidered', photos=['patch-brode-rose', 'patch-brode-bleu'],
          texte='Ton logo cousu en fil sur une base de tissu. Du relief, des couleurs vives et un contour net. Le classique pour les casquettes et les vestes.'),
-    dict(nom='Tissé', en='Woven', photos=['patch-tisse'],
-         texte='Le motif est tissé avec des fils très fins, donc plus plat que la broderie. Une bonne option pour les petits textes et les détails fins.'),
     dict(nom='Caoutchouc', en='Rubber / PVC', photos=['patch-caoutchouc'],
          texte='Un patch moulé en caoutchouc souple, avec du relief et une finition durable. Parfait pour un look moderne sur une casquette ou un sac.'),
 ]
+ETIQUETTE = dict(nom='Étiquette tissée', en='Woven label', photo='patch-tisse',
+                 texte='Pas un patch : une étiquette mince et souple, tissée avec des fils très fins. Elle est plus plate que la broderie et les petits textes ressortent bien. On la coud au collet, sur une couture ou au bas d’un vêtement, pour signer ta marque comme une marque de vêtements.')
 
 def photo_patch(nom, alt):
     base = f'/assets/img/photos/{nom}'
@@ -476,9 +502,13 @@ def types_patches():
                   else ph('Photo à venir', '#2a2420'))
         cartes += f'''<article class="type-patch rv">{visuel}
         <div class="txt"><h3>{t['nom']} <span class="mono">{t['en']}</span></h3><p>{t['texte']}</p></div></article>'''
+    x = ETIQUETTE
+    etiq = f'''<article class="etiquette rv">{photo_patch(x['photo'], 'Exemple d’étiquette tissée Takedown Studio, une étiquette mince')}
+      <div class="txt"><span class="mono">Aussi possible</span><h3>{x['nom']} <span class="mono">{x['en']}</span></h3><p>{x['texte']}</p>
+      <p><a class="lien" href="{soum('patches-ecussons')}">Demander une soumission <span class="arr">→</span></a></p></div></article>'''
     return f'''<section class="sec wrap"><div class="head"><h2 class="h2 rv">Les types de patches</h2>
     <p class="note rv">On t’aide à choisir selon ton logo, ton produit et le look que tu veux.</p></div>
-    <div class="types-patches">{cartes}</div></section>'''
+    <div class="types-patches">{cartes}</div>{etiq}</section>'''
 
 def service(s, i):
     exemples = ''.join(f'<figure class="rv">{ph("Photo à venir", s["ton"])}<figcaption>{x}</figcaption></figure>' for x in s['exemples'])
@@ -559,7 +589,8 @@ def contact():
     corps = f'''{nav('/contact')}
 <main id="contenu">
   {phead([('/contact', 'Contact')], 'Demander une soumission',
-         'Envoie-nous ton idée, ton logo et la quantité que tu as en tête. On va regarder les possibilités avec toi et te guider vers les bons produits et la bonne technique.')}
+         'Envoie-nous ton idée, ton logo et la quantité que tu as en tête. On va regarder les possibilités avec toi et te guider vers les bons produits et la bonne technique.',
+         dessin='dessins/chandail-tache')}
   <section class="wrap formgrid">
     <div>
       <form id="soumission" class="form" action="/api/soumission" method="post" enctype="multipart/form-data" novalidate>
@@ -674,7 +705,7 @@ CSS = ''
 # Chaque PNG devient du WebP en 2 largeurs ; le HTML est réécrit avec srcset et sizes.
 LARGEURS = {'bonhomme': (400, 642), 'logo-complet-lutteurs': (520, 1000), 'logo-texte': (260, 1000), 'illustration': (400, 800), 'services/': (800,), 'dessins/': (360, 720)}
 TAILLES = {'bonhomme': '(max-width:600px) 60vw, 380px', 'logo-texte': '130px', 'logo-complet-lutteurs': '(max-width:600px) 88vw, 760px', 'illustration': '(max-width:980px) 180px, 300px',
-           'services/': '(max-width:980px) 62vw, 31vw', 'dessins/': '(max-width:980px) 180px, 300px'}
+           'services/': '(max-width:980px) 62vw, 31vw', 'dessins/': '(max-width:600px) 60vw, 320px'}
 
 def largeurs(nom):
     return next((v for k, v in LARGEURS.items() if nom.startswith(k)), (400, 800))
@@ -710,10 +741,10 @@ def images_srcset(html):
         ws = largeurs(nom)
         if len(ws) == 1:
             return f'src="/assets/img/{nom}-{ws[0]}.webp"'
-        sizes = next((v for k, v in TAILLES.items() if nom.startswith(k)), '50vw')
+        sizes = m.group(2) or next((v for k, v in TAILLES.items() if nom.startswith(k)), '50vw')
         jeu = ', '.join(f'/assets/img/{nom}-{w}.webp {w}w' for w in ws)
         return f'src="/assets/img/{nom}-{ws[-1]}.webp" srcset="{jeu}" sizes="{sizes}"'
-    return re.sub(r'src="/assets/img/((?:services/|dessins/)?[\w-]+)\.png"', un, html)
+    return re.sub(r'src="/assets/img/((?:services/|dessins/)?[\w-]+)\.png"(?: sizes="([^"]*)")?', un, html)
 
 # ---------------------------------------------------------------- construction
 # Aperçu GitHub Pages : le site vit sous /takedown-studio/, donc on préfixe les adresses
@@ -765,7 +796,10 @@ def construire():
            ''.join(f'  <url><loc>{BASE}{u}</loc><lastmod>{AUJ}</lastmod></url>\n' for u in urls) + '</urlset>\n')
     ecrire('robots.txt', f'User-agent: *\nAllow: /\nDisallow: /api/\n\nSitemap: {BASE}/sitemap.xml\n')
     print(f'✓ {len(pages)} fichiers HTML, {len(urls)} pages dans le sitemap → {SORTIE}')
-    construire_construction()
+    if os.environ.get('SANS_CONSTRUCTION'):
+        print('· page en construction laissée telle quelle (SANS_CONSTRUCTION)')
+    else:
+        construire_construction()
 
 def construire_construction():
     """Copie autonome de la page « en construction » dans ../site-construction/ (son propre dépôt GitHub).

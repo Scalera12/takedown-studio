@@ -90,7 +90,26 @@ def convertir(nom, fichier):
     return im.size
 
 
+# Gouttes d'encre détachées, reprises telles quelles du chandail taché du client
+# (boîtes en pixels dans chandail-tache-blanc.png, 1000 px de large). Servent de petits détails
+# qui « coulent » des lignes de section.
+GOUTTES = {
+    'goutte-longue': (40, 400, 125, 610),
+    'goutte-courte': (725, 390, 805, 525),
+}
+
+
+def gouttes():
+    src = Image.open(os.path.join(DEST, 'chandail-tache-blanc.png'))
+    for nom, boite in GOUTTES.items():
+        g = src.crop(boite)
+        g = g.crop(g.getchannel('A').point(lambda v: 255 if v > 40 else 0).getbbox())
+        g.save(os.path.join(DEST, f'{nom}-blanc.png'), optimize=True)
+        print(f'{nom:24s}', g.size)
+
+
 if __name__ == '__main__':
     os.makedirs(DEST, exist_ok=True)
     for nom, f in DESSINS.items():
         print(f'{nom:24s}', convertir(nom, f))
+    gouttes()

@@ -28,6 +28,59 @@
   };
   flotter(d.querySelector('.hero.bientot .flotte'));
 
+  /* page d'entrée : les dessins du client flottent autour des lutteurs (demande de Takedown).
+     Même flottement à sommes de sinus que le logo, plus une lente dérive et une légère rotation,
+     chacun avec ses propres fréquences. Une seule boucle pour tous, transform seulement.
+     Positions en % de l'écran, choisies pour laisser le logo et le bouton libres. */
+  var NUEE_LARGE=[
+    ['broderie-aiguille',   7, 10, 15, -8],
+    ['presse-chaleur',     79,  8, 14,  6],
+    ['serigraphie-racloir', 4, 56, 10,  9],
+    ['patch-aiguille',     85, 50, 11, -6],
+    ['chandail-tache',     13, 80, 15,  4],
+    ['deux-tuques',        72, 78, 16, -3]
+  ];
+  var NUEE_CELL=[
+    ['broderie-aiguille',   2,  8, 30, -8],
+    ['presse-chaleur',     66,  7, 30,  6],
+    ['chandail-tache',      3, 77, 32,  4],
+    ['deux-tuques',        63, 78, 33, -3]
+  ];
+  var nuee=function(sp,base){
+    var cell=innerWidth<700, liste=cell?NUEE_CELL:NUEE_LARGE;
+    var boite=d.createElement('div'); boite.className='nuee'; boite.setAttribute('aria-hidden','true');
+    var els=liste.map(function(n,i){
+      var im=new Image(); im.alt=''; im.decoding='async';
+      im.src=base+n[0]+'-blanc-360.webp';
+      im.style.left=n[1]+'%'; im.style.top=n[2]+'%';
+      im.style.setProperty('--w',(cell?n[3]+'vw':'min('+n[3]+'vw,'+Math.round(n[3]*13)+'px)'));
+      im.style.setProperty('--o',cell?.6:.72);
+      im.style.transform='rotate('+n[4]+'deg)';
+      boite.appendChild(im);
+      setTimeout(function(){im.classList.add('on')},(calme?0:1500)+i*180);
+      // fréquences propres à chaque dessin, pour qu'ils ne bougent jamais ensemble
+      return {el:im, r0:n[4], p:i*1.7+.4, f:.8+((i*37)%10)/25, a:cell?.55:1};
+    });
+    sp.insertBefore(boite,sp.firstChild);
+    if(calme) return null;
+    var actif=true, depart=null;
+    var bouge=function(now){
+      if(!actif) return;
+      if(depart===null) depart=now;
+      var t=(now-depart)/1000*1.5;
+      for(var i=0;i<els.length;i++){
+        var o=els[i], f=o.f, p=o.p, a=o.a;
+        var x=a*(18*Math.sin(t*.31*f+p)+9*Math.sin(t*.83*f+p*2.1)+26*Math.sin(t*.07+p)),
+            y=a*(14*Math.sin(t*.27*f+p+2)+7*Math.sin(t*.71*f+p*.6)+18*Math.sin(t*.05+p*1.3)),
+            r=o.r0+6*Math.sin(t*.22*f+p)+2.5*Math.sin(t*.61*f+p*1.7);
+        o.el.style.transform='translate3d('+x.toFixed(1)+'px,'+y.toFixed(1)+'px,0) rotate('+r.toFixed(2)+'deg)';
+      }
+      requestAnimationFrame(bouge);
+    };
+    requestAnimationFrame(bouge);
+    return function(){actif=false};
+  };
+
   /* page d'entrée de l'accueil : logo qui flotte + « Entrer ». Une fois par visite (sessionStorage),
      ?intro pour la revoir, ?apercu pour la sauter. Le contenu de l'accueil est déjà dans la page. */
   var marque=d.querySelector('.hero:not(.bientot) .mark');
@@ -43,6 +96,7 @@
       '<div class="bas mono"><span>Agence de branding</span><span>Vêtements et produits personnalisés</span></div>';
     d.body.appendChild(sp);
     var stop=flotter(sp.querySelector('.flotte'),1700);
+    var stopNuee=nuee(sp,(marque.getAttribute('data-intro')||'').replace(/logo-complet[^\/]*$/,'')+'dessins/');
     var bouton=sp.querySelector('.entrer'), parti=false;
     try{bouton.focus({preventScroll:true})}catch(e){}
     var entrer=function(){
@@ -50,7 +104,7 @@
       try{stock&&stock.setItem('td-entree','vue')}catch(e){}
       removeEventListener('keydown',touche); removeEventListener('wheel',roule);
       sp.classList.add('sort'); html.classList.remove('splash-on');
-      setTimeout(function(){stop&&stop();sp.remove()},1100);
+      setTimeout(function(){stop&&stop();stopNuee&&stopNuee();sp.remove()},1100);
     };
     var touche=function(e){if(e.key==='Enter'||e.key==='Escape'||e.key===' '||e.key==='ArrowDown'){e.preventDefault();entrer()}};
     var roule=function(e){if(e.deltaY>8) entrer()};
