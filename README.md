@@ -19,7 +19,7 @@ personnalisés à Bromont. Mandat Scalera SCA-2026-059 : 12 pages.
 ## Travailler
 
 ```sh
-python3 construire-site.py      # reconstruit site/
+SANS_CONSTRUCTION=1 python3 construire-site.py   # reconstruit site/ sans toucher à ../site-construction
 python3 serveur-local.py 8766   # http://localhost:8766
 ```
 
@@ -38,11 +38,9 @@ Chaque push sur `main` reconstruit le site et le publie sur GitHub Pages
 - Tutoiement partout, aucun tiret cadratin (le script refuse de construire s'il en trouve un).
 - Aucun minimum, délai ni garantie affiché avant confirmation écrite de Takedown.
 
-## À faire avant la mise en ligne
+## Avant la mise en ligne
 
-- [ ] Domaine final (`BASE` dans le script, mis à `https://takedownstudio.com` en attendant).
-- [ ] Brancher `/api/soumission` : Worker Cloudflare, fichiers dans R2, courriel à Takedown + copie au client.
-- [ ] Vraies photos, classées par service, avec légendes et textes alternatifs.
-- [ ] Logo en vectoriel.
-- [ ] Valider les 3 services de l'étape 15 (`AFFICHER_EXTRAS`).
-- [ ] Informations commerciales de l'étape 20.
+Tout est dans `lancement.md` : ce qui manque du client, le branchement du courriel du formulaire
+(`worker-soumission/`) et la procédure exacte pour remplacer la page « en construction » sur takedownstudio.com.
+
+Réalisations : une ligne par photo dans `realisations.csv` (photo dans `statique/img/photos/<photo>.jpg`).
