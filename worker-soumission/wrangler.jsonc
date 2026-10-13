@@ -1,0 +1,32 @@
+{
+  // Worker du formulaire de soumission de takedownstudio.com.
+  // account_id épinglé : un déploiement lancé sous un autre compte (ex. celui
+  // de Fabrice) échoue au lieu d'atterrir au mauvais endroit.
+  "name": "takedown-soumission",
+  "account_id": "66af920c9f23ce05fd9c829f3191788e",
+  "main": "src/index.js",
+  "compatibility_date": "2026-10-01",
+  "workers_dev": true,
+
+  "vars": {
+    // ESSAI : tout part vers Scalera. Production : voir README.md.
+    "DESTINATAIRE": "info@scalera.ca",
+    "COPIE_CLIENT": "non",
+    "EXPEDITEUR": "Site Takedown Studio <onboarding@resend.dev>",
+    "SITE": "https://takedownstudio.com"
+  },
+
+  "kv_namespaces": [
+    { "binding": "FICHIERS_KV", "id": "675b3ef6b5af4256b1255d881db64b30" },
+    { "binding": "SOUMISSIONS", "id": "3b2f4add96424bc3805b01b73a2987ad" }
+  ],
+
+  // rafales : 5 envois par minute par IP (en plus du compteur KV de 10 minutes)
+  "ratelimits": [
+    { "name": "LIMITE", "namespace_id": "4801", "simple": { "limit": 5, "period": 60 } }
+  ]
+
+  // Quand R2 sera activé sur le compte Scalera (demande une carte au dossier) :
+  // ,"r2_buckets": [ { "binding": "FICHIERS_R2", "bucket_name": "takedown-soumissions" } ]
+  // Le Worker utilise R2 automatiquement dès que la liaison existe.
+}
