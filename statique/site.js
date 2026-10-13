@@ -163,7 +163,7 @@
   if(chips.length){
     var filtrer=function(f){
       chips.forEach(function(c){c.setAttribute('aria-pressed',c.dataset.f===f)});
-      qsa('.real').forEach(function(r){r.hidden=!(f==='tous'||r.dataset.c.split(' ').indexOf(f)>-1)});
+      qsa('.real').forEach(function(r){r.hidden=!(f==='tous'||r.classList.contains('insta')||r.dataset.c.split(' ').indexOf(f)>-1)});
     };
     chips.forEach(function(c){c.addEventListener('click',function(){
       filtrer(c.dataset.f);
@@ -201,7 +201,23 @@
       liste.appendChild(li);
     });
   };
-  var ajoute=function(fl){Array.prototype.forEach.call(fl,function(f){if(!choisis.some(function(c){return c.name===f.name&&c.size===f.size}))choisis.push(f)});dessine()};
+  /* mêmes limites que le Worker : 8 fichiers, 10 Mo chacun, 25 Mo au total */
+  var MAX_N=8, MAX_UN=10485760, MAX_TOT=26214400, refus=[];
+  var ajoute=function(fl){
+    refus=[];
+    Array.prototype.forEach.call(fl,function(f){
+      if(choisis.some(function(c){return c.name===f.name&&c.size===f.size}))return;
+      var tot=choisis.reduce(function(a,c){return a+c.size},0);
+      if(f.size>MAX_UN) refus.push(f.name+' dépasse 10 Mo');
+      else if(choisis.length>=MAX_N) refus.push(f.name+' : maximum 8 fichiers');
+      else if(tot+f.size>MAX_TOT) refus.push(f.name+' : maximum 25 Mo au total');
+      else choisis.push(f);
+    });
+    dessine();
+    var et=d.getElementById('etat');
+    if(refus.length){et.className='etat ko';et.textContent='Fichier refusé : '+refus.join(' · ')+'. Envoie-le par courriel à info@takedownstudio.com si tu en as besoin.'}
+    else if(et.className==='etat ko') {et.className='etat';et.textContent=''}
+  };
   inp.addEventListener('change',function(){ajoute(inp.files);inp.value=''});
   ['dragenter','dragover'].forEach(function(t){depot.addEventListener(t,function(e){e.preventDefault();depot.classList.add('sur')})});
   ['dragleave','drop'].forEach(function(t){depot.addEventListener(t,function(e){e.preventDefault();depot.classList.remove('sur')})});
@@ -233,12 +249,15 @@
     bouton.disabled=true; bouton.textContent='Envoi en cours…';
     fetch(form.action,{method:'POST',body:fd}).then(function(r){
       if(!r.ok) throw new Error(r.status);
+      if(form.dataset.merci){location.href=form.dataset.merci;return}
       form.hidden=true;
       etat.className='etat ok';
       etat.textContent='Merci pour ta demande. Nous allons regarder les informations reçues et te contacter pour discuter de ton projet.';
       etat.scrollIntoView({behavior:'smooth',block:'center'});
-    }).catch(function(){
+    }).catch(function(err){
       etat.className='etat ko';
+      if(String(err&&err.message)==='413'){etat.textContent='Tes fichiers sont trop lourds (10 Mo par fichier, 25 Mo au total). Retire-en un ou envoie-le par courriel à info@takedownstudio.com.';return}
+      if(String(err&&err.message)==='429'){etat.textContent='Trop d’envois en peu de temps. Réessaie dans quelques minutes.';return}
       etat.innerHTML='L’envoi n’a pas fonctionné. Réessaie dans un instant ou écris-nous à <a href="mailto:info@takedownstudio.com" style="text-decoration:underline">info@takedownstudio.com</a>.';
     }).then(function(){bouton.disabled=false;bouton.textContent='Envoyer ma demande'});
   });

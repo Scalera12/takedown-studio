@@ -23,6 +23,9 @@ AUJ = datetime.date.today().isoformat()
 import hashlib
 V = hashlib.sha1(open(os.path.join(ICI, 'statique', 'site.js'), 'rb').read()).hexdigest()[:8]   # change dès que le JS change
 
+# Adresse du Worker Cloudflare qui reçoit le formulaire (fichiers dans R2 + courriel à Takedown).
+API_SOUMISSION = os.environ.get('API_SOUMISSION', 'https://takedown-soumission.jack-mobile.workers.dev/api/soumission')
+
 # Les 3 services de l'étape 15 doivent être validés par Takedown avant la mise en ligne.
 AFFICHER_EXTRAS = True
 
@@ -31,6 +34,8 @@ ENTREPRISE = {
     'tel': '579 488-0321', 'tel_intl': '+15794880321',
     'courriel': 'info@takedownstudio.com',
     'rue': '50, chemin de Gaspé, bloc C, local 5', 'ville': 'Bromont', 'region': 'QC', 'cp': 'J2L 2N8',
+    'geo': (45.31643, -72.65788),   # 50 ch. de Gaspé (OpenStreetMap)
+    'reseaux': ['https://www.instagram.com/takedownstudio/'],   # sameAs
 }
 
 def e(s):
@@ -67,7 +72,7 @@ SERVICES = [
          bouton='Demander une soumission pour de la sérigraphie',
          liens=['vetements-personnalises', 'impression-dtf', 'casquettes-tuques'],
          seo='Sérigraphie sur vêtements à Bromont | Takedown Studio',
-         desc='Sérigraphie sur t-shirts et hoodies pour ton équipe, ton événement ou ton merch. Un beau rendu à l’encre, intéressant en quantité. Takedown Studio, Bromont.'),
+         desc='Sérigraphie sur t-shirts et hoodies pour ton équipe, ton événement ou ton merch. Un beau rendu à l’encre, intéressant en quantité. Takedown Studio Bromont.'),
     dict(slug='impression-dtf', nom='Impression numérique DTF', filtre='dtf', ton='#4a3a55',
          tag='Visuel multicolore', court='Plein de couleurs et de détails, même en petite quantité.',
          texte='Le DTF, c’est ton visuel imprimé sur un film, puis transféré sur le vêtement avec une presse à chaleur. C’est pratique pour les petites quantités, les images avec plusieurs couleurs et les dégradés.',
@@ -128,18 +133,24 @@ EXTRAS = [
          prevoir='Il faut confirmer les détails du produit. Une fiche technique ne remplace pas un échantillon lorsque celui-ci est nécessaire.'),
 ]
 
-# Emplacements de réalisations : remplacés par les vraies photos de Takedown.
-REALISATIONS = [
-    dict(titre='Hoodie personnalisé', produit='Hoodie', tech='Impression DTF', c='vetements dtf', svc='impression-dtf', ton='#1d2126', desc='Hoodie personnalisé avec impression DTF.'),
-    dict(titre='Casquette avec logo brodé', produit='Casquette', tech='Broderie', c='broderie casquettes-tuques', svc='broderie', ton='#18191c', desc='Casquette personnalisée avec logo brodé pour une entreprise locale.'),
-    dict(titre='T-shirts d’équipe', produit='T-shirt', tech='Sérigraphie', c='vetements serigraphie', svc='serigraphie', ton='#241d16', desc='T-shirts d’équipe imprimés en sérigraphie.'),
-    dict(titre='Patch sur une veste', produit='Veste', tech='Patch', c='patches vetements', svc='patches-ecussons', ton='#261714', desc='Patch personnalisé appliqué sur une veste.'),
-    dict(titre='Autocollants de logo', produit='Autocollant', tech='Autocollants', c='autocollants', svc='autocollants', ton='#22211b', desc='Autocollants de logo pour emballages.'),
-    dict(titre='Tuques personnalisées', produit='Tuque', tech='Broderie', c='broderie casquettes-tuques', svc='casquettes-tuques', ton='#1a1f27', desc='Tuques personnalisées avec broderie.'),
-    dict(titre='Polos brodés', produit='Polo', tech='Broderie', c='broderie vetements', svc='broderie', ton='#1f2420', desc='Polos brodés pour une équipe.'),
-    dict(titre='Merch d’événement', produit='T-shirt et hoodie', tech='Sérigraphie', c='serigraphie vetements', svc='serigraphie', ton='#221b1b', desc='Merch imprimé en sérigraphie pour un événement.'),
-    dict(titre='Casquettes avec patch', produit='Casquette', tech='Patch', c='patches casquettes-tuques', svc='patches-ecussons', ton='#1c1c20', desc='Casquettes structurées avec patch de logo.'),
-]
+# Réalisations : realisations.csv (une ligne par photo, la photo dans statique/img/photos/<photo>.jpg).
+# Pour en ajouter : déposer le JPG, ajouter la ligne, relancer. Les pages de services prennent
+# automatiquement les photos de leur service ; sans photo, aucun emplacement vide n'est affiché.
+def lire_realisations():
+    import csv
+    chemin = os.path.join(ICI, 'realisations.csv')
+    if not os.path.exists(chemin):
+        return []
+    rows = []
+    for r in csv.DictReader(io.open(chemin, encoding='utf-8')):
+        jpg = os.path.join(ICI, 'statique', 'img', 'photos', r['photo'] + '.jpg')
+        if not os.path.exists(jpg):
+            raise SystemExit(f'photo manquante pour la réalisation : {jpg}')
+        r['w'], r['h'] = Image.open(jpg).size
+        rows.append(r)
+    return rows
+REALISATIONS = lire_realisations()
+INSTAGRAM = 'https://www.instagram.com/takedownstudio/'
 FILTRES = [('tous', 'Tous'), ('vetements', 'Vêtements'), ('broderie', 'Broderie'), ('serigraphie', 'Sérigraphie'),
            ('dtf', 'DTF'), ('casquettes-tuques', 'Casquettes et tuques'), ('patches', 'Patches'), ('autocollants', 'Autocollants')]
 
@@ -230,7 +241,7 @@ def pied(court=False):
           <div class="cols">
             <div><h4>Services</h4>{services}</div>
             <div><h4>Studio</h4><a href="/agence-branding">L’agence</a><a href="/realisations">Réalisations</a><a href="/contact">Contact</a>
-              <h4 style="margin-top:22px">Nous joindre</h4><a href="tel:{ENTREPRISE['tel_intl']}">{ENTREPRISE['tel']}</a><a href="mailto:{ENTREPRISE['courriel']}">{ENTREPRISE['courriel']}</a></div>
+              <h4 style="margin-top:22px">Nous joindre</h4><a href="tel:{ENTREPRISE['tel_intl']}">{ENTREPRISE['tel']}</a><a href="mailto:{ENTREPRISE['courriel']}">{ENTREPRISE['courriel']}</a><a href="{INSTAGRAM}" target="_blank" rel="noopener">Instagram</a></div>
           </div>
         </div>
       </div>
@@ -264,6 +275,18 @@ def photo(n, alt, cls='', style='', pos='50% 50%', eager=False, sizes='100vw'):
             f'</div>')
 
 TRIO = '(max-width:980px) 50vw, 33vw'
+
+def photo_real(r, sizes='(max-width:600px) 100vw, (max-width:980px) 50vw, 33vw', cls='', eager=False):
+    """Photo d'une réalisation, en WebP 600 et 1086 px (générés par optimiser_images)."""
+    base = f'/assets/img/photos/{r["photo"]}'
+    w = min(1086, r['w']); h = round(r['h'] * w / r['w'])
+    fit = ' fit' if r.get('cadrage') == 'contain' else ''
+    charge = 'fetchpriority="high"' if eager else 'loading="lazy"'
+    return (f'<div class="ph{fit} {cls}"><img src="{base}-1086.webp" srcset="{base}-600.webp 600w, {base}-1086.webp 1086w" '
+            f'sizes="{sizes}" alt="{e(r["alt"])}" width="{w}" height="{h}" {charge} decoding="async"></div>')
+
+def reals_de(s):
+    return [r for r in REALISATIONS if r['service'] == s['slug'] or s['filtre'] in r['categories'].split()]
 
 def ph(tag, ton, cls='', style=''):
     return f'<div class="ph {cls}" style="--t:{ton};{style}"><span class="tag">{e(tag)}</span></div>'
@@ -327,7 +350,10 @@ def entreprise_ld():
         'telephone': ENTREPRISE['tel_intl'], 'email': ENTREPRISE['courriel'],
         'address': {'@type': 'PostalAddress', 'streetAddress': ENTREPRISE['rue'], 'addressLocality': ENTREPRISE['ville'],
                     'addressRegion': ENTREPRISE['region'], 'postalCode': ENTREPRISE['cp'], 'addressCountry': 'CA'},
-        'areaServed': [{'@type': 'City', 'name': 'Bromont'}, {'@type': 'AdministrativeArea', 'name': 'Estrie'}],
+        'geo': {'@type': 'GeoCoordinates', 'latitude': ENTREPRISE['geo'][0], 'longitude': ENTREPRISE['geo'][1]},
+        'hasMap': 'https://www.google.com/maps/search/?api=1&query=' + 'Takedown+Studio+50+chemin+de+Gasp%C3%A9+Bromont',
+        'areaServed': [{'@type': 'City', 'name': 'Bromont'}, {'@type': 'AdministrativeArea', 'name': 'Estrie'}],   # régions à confirmer (étape 20)
+        **({'sameAs': ENTREPRISE['reseaux']} if ENTREPRISE['reseaux'] else {}),
         'knowsAbout': [s['nom'] for s in SERVICES],
     }
 
@@ -362,6 +388,7 @@ def page(chemin_url, titre_seo, desc, corps, fil=None, extra_ld=None, js=True):
 <meta property="og:url" content="{url}">
 <meta property="og:image" content="{BASE}/assets/img/partage.png">
 <meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Logo de Takedown Studio, agence de branding à Bromont">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="/favicon.ico" sizes="48x48">
 <link rel="icon" href="/assets/img/icone-192.png" type="image/png" sizes="192x192">
@@ -445,7 +472,7 @@ def agence():
 {hesite()}
 {pied()}'''
     return page('/agence-branding', 'Agence de branding à Bromont | Takedown Studio',
-                'Takedown Studio t’aide à donner une image cohérente à tes vêtements et à tes produits : choix des produits, des couleurs, des placements et de la technique.',
+                'Takedown Studio t’aide à donner une image cohérente à tes vêtements et à tes produits : choix des produits, des couleurs, des placements, de la technique.',
                 corps, fil=[('/agence-branding', 'L’agence')])
 
 def services_index():
@@ -511,7 +538,12 @@ def types_patches():
     <div class="types-patches">{cartes}</div>{etiq}</section>'''
 
 def service(s, i):
-    exemples = ''.join(f'<figure class="rv">{ph("Photo à venir", s["ton"])}<figcaption>{x}</figcaption></figure>' for x in s['exemples'])
+    photos = reals_de(s)
+    exemples = ''.join(f'<figure class="rv">{photo_real(r)}<figcaption>{r["titre"]}</figcaption></figure>' for r in photos[1:7])
+    exemples = (f'<div class="ex">{exemples}</div>' if exemples else '') + \
+        '<ul class="ex-liste rv">' + ''.join(f'<li>{x}</li>' for x in s['exemples']) + '</ul>'
+    grande = (f'<section class="sec wrap"><figure class="grande rv">{photo_real(photos[0], "(max-width:1200px) 100vw, 1200px")}'
+              f'<figcaption class="mono">{photos[0]["titre"]} · {photos[0]["tech"]}</figcaption></figure></section>') if photos else ''
     extras = ''
     if s['slug'] == 'vetements-personnalises' and AFFICHER_EXTRAS:
         extras = '<section class="sec wrap"><div class="head"><h2 class="h2 rv">Aussi possible</h2><p class="note rv">Avec nos partenaires, pour les projets qui sortent de l’ordinaire.</p></div>' + ''.join(f'''
@@ -533,12 +565,12 @@ def service(s, i):
     corps = f'''{nav('/services')}
 <main id="contenu">
   {phead([('/services', 'Nos services'), ('/services/' + s['slug'], s['nom'])], s['nom'], s['texte'], ctas, DESSIN_SERVICE.get(s['slug'], DESSINS[i % 3]))}
-  <section class="sec wrap">{ph('Grande photo principale · ' + s['tag'], s['ton'], 'rv', 'aspect-ratio:16/7')}</section>
+  {grande}
   <section class="sec wrap">{plus_prevoir(s['plus'], s['prevoir'])}</section>
   {types_patches() if s['slug'] == 'patches-ecussons' else ''}
   <section class="sec wrap"><div class="head"><h2 class="h2 rv">Exemples</h2>
     <div class="links rv"><a href="/realisations?f={s['filtre']}">Voir les réalisations <span class="arr">→</span></a></div></div>
-    <div class="ex">{exemples}</div>
+    {exemples}
     <p class="rv" style="margin-top:40px"><a class="btn btn-w" href="{soum(s['slug'])}">{s['bouton']} <span class="arr">→</span></a></p>
   </section>
   {extras}
@@ -553,14 +585,20 @@ def service(s, i):
                 fil=[('/services', 'Nos services'), ('/services/' + s['slug'], s['nom'])], extra_ld=ld)
 
 def realisations():
-    chips = ''.join(f'<button class="chip" type="button" data-f="{k}" aria-pressed="{str(k == "tous").lower()}">{t}</button>' for k, t in FILTRES)
-    items = ''.join(f'''<article class="real rv" data-c="{r['c']}">
-      <div class="ph" style="--t:{r['ton']}"><span class="tag">Photo à venir</span></div>
+    presents = {'tous'} | {c for r in REALISATIONS for c in r['categories'].split()}
+    chips = ''.join(f'<button class="chip" type="button" data-f="{k}" aria-pressed="{str(k == "tous").lower()}">{t}</button>'
+                    for k, t in FILTRES if k in presents)
+    items = ''.join(f'''<article class="real rv" data-c="{r['categories']}">
+      {photo_real(r)}
       <h3>{r['titre']}</h3>
       <div class="meta mono"><span>{r['produit']}</span><span>{r['tech']}</span></div>
-      <p>{r['desc']}</p>
-      <a class="lien" href="/services/{r['svc']}">{nom_court(PAR_SLUG[r['svc']])} <span class="arr">→</span></a>
+      <a class="lien" href="/services/{r['service']}">{nom_court(PAR_SLUG[r['service']])} <span class="arr">→</span></a>
     </article>''' for r in REALISATIONS)
+    insta = f'''<a class="real insta rv" href="{INSTAGRAM}" target="_blank" rel="noopener" data-c="tous">
+      <div class="ph"><span class="ig">@takedownstudio</span></div>
+      <h3>Nos derniers projets sur Instagram <span class="arr">→</span></h3>
+      <div class="meta mono"><span>Broderie</span><span>Sérigraphie</span><span>DTF</span></div>
+    </a>'''
     corps = f'''{nav('/realisations')}
 <main id="contenu">
   {phead([('/realisations', 'Réalisations')], 'Nos réalisations',
@@ -568,7 +606,7 @@ def realisations():
          '', 'dessins/bonhomme-aiguille')}
   <section class="sec wrap">
     <div class="chips" role="group" aria-label="Filtrer par technique">{chips}</div>
-    <div class="reals">{items}</div>
+    <div class="reals">{items}{insta}</div>
     <p style="margin-top:56px"><a class="btn btn-w" href="/contact">Parle-nous de ton projet <span class="arr">→</span></a></p>
   </section>
 </main>
@@ -593,7 +631,7 @@ def contact():
          dessin='dessins/chandail-tache')}
   <section class="wrap formgrid">
     <div>
-      <form id="soumission" class="form" action="/api/soumission" method="post" enctype="multipart/form-data" novalidate>
+      <form id="soumission" class="form" action="{API_SOUMISSION}" data-merci="/merci" method="post" enctype="multipart/form-data" novalidate>
         {champ('nom', 'Nom', extra=' autocomplete="name"')}
         {champ('entreprise', 'Entreprise', req=False, extra=' autocomplete="organization"')}
         {champ('courriel', 'Courriel', 'email', extra=' autocomplete="email" inputmode="email"')}
@@ -656,6 +694,17 @@ def construction():
                 'Takedown Studio, agence de branding à Bromont : vêtements et produits personnalisés. Notre nouveau site s’en vient, écris-nous pour ton projet.',
                 corps)
     return html
+
+def merci():
+    corps = f'''{nav('')}
+<main id="contenu">
+  {phead([('/merci', 'Demande envoyée')], 'Merci, on a reçu ta demande!',
+         'On regarde les informations et les fichiers que tu nous as envoyés, puis on te revient par courriel ou par téléphone pour discuter de ton projet.',
+         '<a class="btn btn-w" href="/realisations">Voir nos réalisations</a><a class="btn btn-g" href="/">Retour à l’accueil</a>', 'dessins/bonhomme-casquette')}
+</main>
+{pied(court=True)}'''
+    return page('/merci', 'Demande envoyée | Takedown Studio', 'Ta demande de soumission a bien été envoyée à Takedown Studio.', corps).replace(
+        '<link rel="canonical"', '<meta name="robots" content="noindex"><link rel="canonical"')
 
 def introuvable():
     corps = f'''{nav('')}
@@ -755,7 +804,7 @@ def prefixer(html):
     if not CHEMIN_BASE:
         return html
     import re
-    for attr in ('href="/', 'src="/', 'action="/', 'url(/', 'data-intro="/'):
+    for attr in ('href="/', 'src="/', 'action="/', 'url(/', 'data-intro="/', 'data-merci="/'):
         html = html.replace(attr, attr[:-1] + CHEMIN_BASE + '/')
     html = re.sub(r'(srcset="|imagesrcset=")([^"]*)',
                   lambda m: m.group(1) + re.sub(r'(^|,\s*)/', lambda n: n.group(1) + CHEMIN_BASE + '/', m.group(2)), html)
@@ -784,7 +833,7 @@ def construire():
     # Fichiers « page.html » : Cloudflare les sert à /page, sans barre oblique finale,
     # comme les adresses du plan de contenu (/services/broderie).
     pages = {'index.html': accueil(), 'agence-branding.html': agence(), 'services.html': services_index(),
-             'realisations.html': realisations(), 'contact.html': contact(), '404.html': introuvable()}
+             'realisations.html': realisations(), 'contact.html': contact(), 'merci.html': merci(), '404.html': introuvable()}
     for i, s in enumerate(SERVICES):
         pages[f'services/{s["slug"]}.html'] = service(s, i)
     for rel, html in pages.items():

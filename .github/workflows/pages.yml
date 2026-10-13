@@ -23,9 +23,13 @@ jobs:
         with:
           python-version: '3.12'
       - run: pip install pillow
-      - run: python3 construire-site.py
+      # Variable du dépôt EN_LIGNE=oui : le site est servi sur takedownstudio.com (racine, indexable).
+      # Sinon : aperçu sous /takedown-studio/, bloqué pour Google.
+      - run: |
+          if [ "${{ vars.EN_LIGNE }}" = "oui" ]; then export CHEMIN_BASE=""; else export CHEMIN_BASE="/${{ github.event.repository.name }}"; fi
+          python3 construire-site.py
         env:
-          CHEMIN_BASE: /${{ github.event.repository.name }}
+          SANS_CONSTRUCTION: '1'
       - uses: actions/upload-pages-artifact@v3
         with:
           path: site

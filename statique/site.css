@@ -467,3 +467,20 @@ html:not(.js) .words .line .mini{opacity:1;transform:none}
   .words .line .mini{transition:none}
   .splash .nuee img{transition:none}
 }
+
+/* ---------- réalisations (photos du client) ---------- */
+.ph.fit{background:#fff;padding:0}
+.ph.fit::before{display:none}
+.ph.fit img{object-fit:contain;padding:8%}
+.grande .ph{aspect-ratio:16/8}
+.grande .ph.fit{aspect-ratio:21/8}
+.grande figcaption{margin-top:12px;color:var(--mute);font-size:12px;letter-spacing:.06em;text-transform:uppercase}
+.ex+.ex-liste{margin-top:28px}
+.ex-liste{list-style:none;display:flex;flex-wrap:wrap;gap:8px}
+.ex-liste li{border:1px solid var(--line);padding:9px 16px;font-size:14px;font-weight:500;color:#d6d6d9}
+.real.insta{display:block}
+.real.insta .ph{aspect-ratio:4/5;background:#111;border:1px solid var(--line);align-items:center;justify-content:center}
+.real.insta .ph::before{display:none}
+.real.insta .ig{font-family:"IBM Plex Mono",monospace;font-size:clamp(15px,2vw,20px);letter-spacing:.04em}
+.real.insta:hover .ph{background:#fff;color:#000}
+@media (max-width:980px){.grande .ph{aspect-ratio:4/3}}
