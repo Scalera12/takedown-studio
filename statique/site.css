@@ -82,6 +82,7 @@ a:hover .arr{transform:translateX(5px)}
 .phead .ctas{display:flex;gap:10px;flex-wrap:wrap;margin-top:32px}
 .phead .fig{position:absolute;right:var(--pad);bottom:clamp(30px,5vw,70px);width:clamp(150px,20vw,300px);opacity:.95;pointer-events:none}
 /* dessins du client (portrait ou paysage) : même encombrement, calés en bas à droite */
+.phead:has(> .fig){background:#000}
 .phead .fig[src*="/dessins/"]{height:clamp(150px,19vw,290px);width:clamp(150px,21vw,310px);object-fit:contain;object-position:100% 100%}
 @media (min-width:981px){.phead:has(> .fig[src*="/dessins/"]) > .wrap{padding-right:calc(var(--pad) + clamp(150px,21vw,310px) + 24px)}
   .phead:has(> .fig[src*="/dessins/"]) h1{font-size:clamp(40px,6vw,100px)}}
@@ -409,11 +410,11 @@ a:hover .arr{transform:translateX(5px)}
 @keyframes boil{0%{transform:rotate(-1.6deg) scale(1.05)}33%{transform:rotate(1.1deg) scale(1.05) translate(1px,-1px)}66%{transform:rotate(-.4deg) scale(1.05) translate(-1px,1px)}100%{transform:rotate(-1.6deg) scale(1.05)}}
 .tile.dessin .art img{max-width:78%}
 .tile.dessin:hover .art img,.steps div:hover .dessin img,.svc:hover .ph.art img{animation:boil .5s steps(1) infinite;transition:none}
-.tile.dessin .art{background:radial-gradient(55% 60% at 50% 55%,#1b1b1d 0%,transparent 75%)}
+.tile.dessin .art{background:none}
 
 /* page Nos services : le dessin du client tient la place de la photo */
 .svc .ph.art{background:var(--s1);display:flex;align-items:center;justify-content:center;padding:clamp(28px,5vw,64px)}
-.svc .ph.art::before{background:radial-gradient(50% 55% at 50% 52%,#1c1c1e 0%,transparent 75%)}
+.svc .ph.art::before{display:none}
 .svc .ph.art img{position:relative;inset:auto;width:auto;height:auto;max-width:62%;max-height:100%;object-fit:contain}
 .svc + .svc .ph.art{border-left:0}
 
