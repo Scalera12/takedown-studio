@@ -27,6 +27,7 @@
     return function(){actif=false};
   };
   flotter(d.querySelector('.hero.bientot .flotte'));
+  flotter(d.querySelector('.hero .script-flotte'),2100);
 
   /* page d'entrée : les dessins du client flottent autour des lutteurs (demande de Takedown).
      Même flottement à sommes de sinus que le logo, plus une lente dérive et une légère rotation,
@@ -116,7 +117,7 @@
   }
 
   /* le bonhomme de l'entête fait un tour complet au survol (comme le logo de store.lqqkstudio.com) */
-  var bonhomme=d.querySelector('.hero .mark.bonhomme');
+  var bonhomme=d.querySelector('.hero .mark.bonhomme, .hero .mark.script');
   if(bonhomme&&!calme){
     var tourner=function(){if(bonhomme.classList.contains('tourne')) return; bonhomme.classList.add('tourne')};
     bonhomme.addEventListener('mouseenter',tourner);

@@ -411,8 +411,7 @@ def accueil():
     corps = f'''{nav('/')}
 <main id="contenu">
   <section class="hero">
-    <img class="logo-hero fade" src="/assets/img/logo-texte-blanc.png" sizes="(max-width:600px) 78vw, 520px" alt="" width="1000" height="131" style="animation-delay:.1s">
-    <img class="mark bonhomme" src="/assets/img/bonhomme-goutte-blanc.png" data-intro="/assets/img/logo-complet-lutteurs-blanc-1000.webp" alt="Takedown Studio" width="642" height="497" fetchpriority="high">
+    <div class="script-flotte"><img class="mark script" src="/assets/img/logo-texte-blanc.png" sizes="(max-width:600px) 86vw, 820px" data-intro="/assets/img/logo-complet-lutteurs-blanc-1000.webp" alt="Takedown Studio" width="1000" height="131" fetchpriority="high"></div>
     <h1 class="sr">Takedown Studio, agence de branding à Bromont</h1>
     <p class="sub fade" style="animation-delay:1.3s">Vêtements et produits personnalisés à Bromont</p>
     <p class="pos fade" style="animation-delay:1.4s">Agence de branding spécialisée en vêtements et produits personnalisés.</p>

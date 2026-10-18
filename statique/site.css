@@ -367,7 +367,6 @@ a:hover .arr{transform:translateX(5px)}
 /* ---------- entête de l'accueil : le bonhomme à la goutte (demande de Takedown, 2026-10-07) ----------
    Environ 2 fois plus petit que l'ancien logo des lutteurs. Au survol, il fait un tour complet
    comme le logo de store.lqqkstudio.com (piloté par site.js : la classe .tourne se retire à la fin). */
-.hero .logo-hero{width:min(78vw,520px);height:auto;margin-bottom:clamp(26px,4vh,44px)}
 .hero .mark.bonhomme{width:min(52vw,380px,calc((100svh - 400px) * .8));min-width:min(60vw,200px);cursor:pointer;transform-origin:50% 55%}
 .hero .mark.bonhomme.tourne{animation:tour .95s cubic-bezier(.45,0,.2,1)}
 @keyframes tour{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}
@@ -486,3 +485,12 @@ html:not(.js) .words .line .mini{opacity:1;transform:none}
 .real.insta .ig{font-family:"IBM Plex Mono",monospace;font-size:clamp(15px,2vw,20px);letter-spacing:.04em}
 .real.insta:hover .ph{background:#fff;color:#000}
 @media (max-width:980px){.grande .ph{aspect-ratio:4/3}}
+
+/* accueil (demande de Takedown, 2026-10-18) : juste le script « Takedown Studio » qui se dessine, flotte
+   et fait un tour au survol; entête plus court pour voir le début des services */
+.hero:has(.script){min-height:auto;padding-top:clamp(90px,14vh,150px);padding-bottom:clamp(60px,9vh,100px)}
+.hero .script-flotte{will-change:transform;transform-origin:50% 50%}
+.hero .mark.script{width:min(86vw,820px);min-width:0;height:auto;cursor:pointer;transform-origin:50% 50%}
+.hero .mark.script.tourne{animation:tour .95s cubic-bezier(.45,0,.2,1)}
+@media (prefers-reduced-motion: reduce){.hero .mark.script.tourne{animation:none}}
+.hero:has(.script) .sub{margin-top:clamp(28px,5vh,48px)}
