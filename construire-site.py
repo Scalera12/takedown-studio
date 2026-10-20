@@ -417,6 +417,8 @@ def accueil():
     <p class="sr">Vêtements et produits personnalisés à Bromont. Agence de branding spécialisée en vêtements et produits personnalisés.</p>
   </section>
 
+  <div class="bande" aria-hidden="true"><div class="piste"><span>Vêtements personnalisés<i>✱</i>Broderie<i>✱</i>Sérigraphie<i>✱</i>Impression DTF<i>✱</i>Casquettes et tuques<i>✱</i>Patches et écussons<i>✱</i>Autocollants<i>✱</i>Bromont, QC<i>✱</i></span><span>Vêtements personnalisés<i>✱</i>Broderie<i>✱</i>Sérigraphie<i>✱</i>Impression DTF<i>✱</i>Casquettes et tuques<i>✱</i>Patches et écussons<i>✱</i>Autocollants<i>✱</i>Bromont, QC<i>✱</i></span></div></div>
+
   <section class="sec wrap" id="services" aria-labelledby="t-services">
     <div class="head">
       <h2 class="h2 rv" id="t-services">Nos {encre('services')}</h2>
