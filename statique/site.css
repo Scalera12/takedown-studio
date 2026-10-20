@@ -497,15 +497,6 @@ html:not(.js) .words .line .mini{opacity:1;transform:none}
 @media (prefers-reduced-motion: reduce){.hero .mark.script.tourne{animation:none}}
 .hero:has(.script) .sub{margin-top:clamp(28px,5vh,48px)}
 .hero:has(.script)+.sec{padding-top:clamp(20px,3vw,44px)}
-/* bandeau qui défile entre l'entête et les services (2026-10-20) : une bande d'adhésif blanche, un peu penchée */
-.bande{background:var(--ink);color:#000;transform:rotate(-2deg);margin:clamp(8px,2vh,20px) -4vw 0;overflow:hidden;box-shadow:0 18px 40px -18px rgba(0,0,0,.9)}
-.bande .piste{display:flex;width:max-content;animation:bande 34s linear infinite}
-.bande:hover .piste{animation-play-state:paused}
-.bande span{display:block;white-space:nowrap;font-variation-settings:"wdth" 125;font-weight:800;text-transform:uppercase;letter-spacing:-.01em;font-size:clamp(18px,2.4vw,34px);line-height:1;padding:clamp(12px,1.6vw,18px) 0}
-.bande i{font-style:normal;margin:0 .55em;display:inline-block;transform:translateY(.04em)}
-.bande+.sec{padding-top:clamp(64px,8vw,110px)}
-@keyframes bande{to{transform:translateX(-50%)}}
-@media (prefers-reduced-motion: reduce){.bande .piste{animation:none}}
 /* 2026-10-20 (Alex) : le script en haut + le monstre (bonhomme à la goutte) dessous, sans texte ni boutons */
 .hero:has(.script) .mark.bonhomme{width:min(46vw,300px,calc((100svh - 430px) * .85));min-width:min(52vw,180px);margin-top:clamp(22px,4vh,40px);animation-delay:.7s}
 .hero .mark.fini{clip-path:none;animation:none}
