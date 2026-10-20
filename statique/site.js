@@ -116,24 +116,22 @@
     addEventListener('keydown',touche); addEventListener('wheel',roule,{passive:true});
   }
 
-  /* l'entête : le script « Takedown Studio » se dessine, fait un premier tour sur lui-même,
-     puis refait un tour à chaque survol ou toucher (comme le logo de store.lqqkstudio.com).
+  /* l'entête : le script « Takedown Studio » et le monstre se dessinent; le script fait un premier tour
+     sur lui-même, puis chacun refait un tour au survol ou au toucher (comme le logo de store.lqqkstudio.com).
      Minuteries plutôt qu'animationend : plus fiable. */
-  var bonhomme=d.querySelector('.hero .mark.bonhomme, .hero .mark.script');
-  if(bonhomme&&!calme){
-    var duree=bonhomme.classList.contains('script')?1150:1000;
+  Array.prototype.forEach.call(d.querySelectorAll('.hero .mark.bonhomme, .hero .mark.script'),function(el){
+    if(calme) return;
+    var script=el.classList.contains('script'), duree=script?1150:1000, fin=script?2150:2550;   // fin du dessin
     var tourner=function(){
-      if(bonhomme.classList.contains('tourne')) return;
-      bonhomme.classList.add('fini','tourne');
-      setTimeout(function(){bonhomme.classList.remove('tourne')},duree);
+      if(el.classList.contains('tourne')) return;
+      el.classList.add('fini','tourne');
+      setTimeout(function(){el.classList.remove('tourne')},duree);
     };
-    bonhomme.addEventListener('mouseenter',tourner);
-    bonhomme.addEventListener('click',tourner);
-    if(bonhomme.classList.contains('script')){
-      if(d.documentElement.classList.contains('splash-vu')) bonhomme.classList.add('fini');
-      else setTimeout(function(){bonhomme.classList.add('fini');tourner()},2150);   // après le dessin (0,2 s + 1,8 s)
-    }
-  }
+    el.addEventListener('mouseenter',tourner);
+    el.addEventListener('click',tourner);
+    if(d.documentElement.classList.contains('splash-vu')) el.classList.add('fini');
+    else setTimeout(function(){el.classList.add('fini');if(script) tourner()},fin);
+  });
 
   /* apparition au défilement */
   if('IntersectionObserver' in window){

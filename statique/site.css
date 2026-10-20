@@ -497,3 +497,7 @@ html:not(.js) .words .line .mini{opacity:1;transform:none}
 @media (prefers-reduced-motion: reduce){.hero .mark.script.tourne{animation:none}}
 .hero:has(.script) .sub{margin-top:clamp(28px,5vh,48px)}
 .hero:has(.script)+.sec{padding-top:clamp(20px,3vw,44px)}
+/* 2026-10-20 (Alex) : le script en haut + le monstre (bonhomme à la goutte) dessous, sans texte ni boutons */
+.hero:has(.script) .mark.bonhomme{width:min(46vw,300px,calc((100svh - 430px) * .85));min-width:min(52vw,180px);margin-top:clamp(22px,4vh,40px);animation-delay:.7s}
+.hero .mark.fini{clip-path:none;animation:none}
+.hero .mark.bonhomme.tourne{clip-path:none}
