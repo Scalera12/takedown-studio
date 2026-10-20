@@ -417,6 +417,10 @@ def accueil():
     <p class="sr">Vêtements et produits personnalisés à Bromont. Agence de branding spécialisée en vêtements et produits personnalisés.</p>
   </section>
 
+  <section class="tr-a" aria-label="Takedown Studio">
+    <p class="mono rv">Agence de branding · Bromont, QC</p>
+    <p class="phrase rv">On met ta marque sur des vêtements et des produits que les gens vont aimer utiliser.</p>
+  </section>
 
   <section class="sec wrap" id="services" aria-labelledby="t-services">
     <div class="head">
