@@ -116,13 +116,23 @@
     addEventListener('keydown',touche); addEventListener('wheel',roule,{passive:true});
   }
 
-  /* le bonhomme de l'entête fait un tour complet au survol (comme le logo de store.lqqkstudio.com) */
+  /* l'entête : le script « Takedown Studio » se dessine, fait un premier tour sur lui-même,
+     puis refait un tour à chaque survol ou toucher (comme le logo de store.lqqkstudio.com).
+     Minuteries plutôt qu'animationend : plus fiable. */
   var bonhomme=d.querySelector('.hero .mark.bonhomme, .hero .mark.script');
   if(bonhomme&&!calme){
-    var tourner=function(){if(bonhomme.classList.contains('tourne')) return; bonhomme.classList.add('tourne')};
+    var duree=bonhomme.classList.contains('script')?1150:1000;
+    var tourner=function(){
+      if(bonhomme.classList.contains('tourne')) return;
+      bonhomme.classList.add('fini','tourne');
+      setTimeout(function(){bonhomme.classList.remove('tourne')},duree);
+    };
     bonhomme.addEventListener('mouseenter',tourner);
     bonhomme.addEventListener('click',tourner);
-    bonhomme.addEventListener('animationend',function(e){if(e.animationName==='tour') bonhomme.classList.remove('tourne')});
+    if(bonhomme.classList.contains('script')){
+      if(d.documentElement.classList.contains('splash-vu')) bonhomme.classList.add('fini');
+      else setTimeout(function(){bonhomme.classList.add('fini');tourner()},2150);   // après le dessin (0,2 s + 1,8 s)
+    }
   }
 
   /* apparition au défilement */

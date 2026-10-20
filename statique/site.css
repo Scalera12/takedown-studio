@@ -491,6 +491,9 @@ html:not(.js) .words .line .mini{opacity:1;transform:none}
 .hero:has(.script){min-height:auto;padding-top:clamp(90px,14vh,150px);padding-bottom:clamp(60px,9vh,100px)}
 .hero .script-flotte{will-change:transform;transform-origin:50% 50%}
 .hero .mark.script{width:min(86vw,820px);min-width:0;height:auto;cursor:pointer;transform-origin:50% 50%}
-.hero .mark.script.tourne{animation:tour .95s cubic-bezier(.45,0,.2,1)}
+.hero .mark.script.fini{clip-path:none;animation:none}
+.hero .mark.script.tourne{animation:tourY 1.1s cubic-bezier(.45,0,.2,1);clip-path:none}
+@keyframes tourY{from{transform:perspective(1000px) rotateY(0)}to{transform:perspective(1000px) rotateY(360deg)}}
 @media (prefers-reduced-motion: reduce){.hero .mark.script.tourne{animation:none}}
 .hero:has(.script) .sub{margin-top:clamp(28px,5vh,48px)}
+.hero:has(.script)+.sec{padding-top:clamp(20px,3vw,44px)}
