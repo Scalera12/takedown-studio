@@ -520,7 +520,8 @@ html:not(.js) .words .line .mini{opacity:1;transform:none}
   transform-origin:50% 0;opacity:0;animation:coule 3.2s var(--d) infinite cubic-bezier(.55,0,.85,.4)}
 @keyframes coule{0%{opacity:0;transform:translate(-50%,0) scaleY(.15)}12%{opacity:1}42%{opacity:1;transform:translate(-50%,0) scaleY(1)}55%{transform:translate(-50%,40%) scaleY(1.15)}100%{opacity:0;transform:translate(-50%,520%) scaleY(1.2)}}
 .hero-dessins .difficiles{position:relative;z-index:1;margin-top:clamp(18px,3vh,34px)}
-.hero-dessins::after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(40% 46% at 50% 62%,rgba(0,0,0,.7),transparent 75%)}
+/* pas d'effet de lampe derrière le chandail (Takedown n'aime pas) : fond noir uni */
+.hero-dessins{background:var(--bg)}
 .hero-dessins .chemise,.hero-dessins .difficiles{z-index:2}
 @media (max-width:700px){
   .hero-dessins{min-height:0;padding-top:clamp(70px,14vw,110px);padding-bottom:clamp(120px,34vw,160px)}
