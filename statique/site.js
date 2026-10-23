@@ -84,7 +84,7 @@
 
   /* page d'entrée de l'accueil : logo qui flotte + « Entrer ». Une fois par visite (sessionStorage),
      ?intro pour la revoir, ?apercu pour la sauter. Le contenu de l'accueil est déjà dans la page. */
-  var marque=d.querySelector('.hero:not(.bientot) .mark');
+  var marque=d.querySelector('.hero:not(.bientot) .mark, .hero[data-intro]');
   var q=new URLSearchParams(location.search), stock=null;
   try{stock=sessionStorage}catch(e){}
   var deja=false; try{deja=stock&&stock.getItem('td-entree')==='vue'}catch(e){}

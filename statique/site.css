@@ -510,3 +510,29 @@ html:not(.js) .words .line .mini{opacity:1;transform:none}
 .hero .difficiles .p{font-size:clamp(16px,1.5vw,19px);line-height:1.55;color:var(--mute);max-width:46ch;margin:clamp(18px,2.6vh,26px) auto 0}
 .hero .difficiles .lien{margin-top:clamp(20px,3vh,30px);text-transform:uppercase;letter-spacing:.04em;font-size:14px}
 .splash-on .hero .difficiles{animation-play-state:paused}
+
+/* ---------- entête de l'accueil (2026-10-23, demande d'Alex) : plus de logos, un fond fait de 4 dessins
+   du client qui se balancent + le chandail au centre dont les gouttes coulent ---------- */
+.hero-dessins{min-height:min(calc(100svh - 56px),900px);overflow:hidden;justify-content:center;padding-top:clamp(40px,6vh,70px);padding-bottom:clamp(40px,6vh,70px)}
+.hero-dessins .fond-dessins{position:absolute;inset:0;pointer-events:none;max-width:1600px;margin:0 auto}
+.hero-dessins .d{position:absolute;height:auto;opacity:.92;--r0:-3deg;--r1:3deg;animation:balance 5.5s ease-in-out infinite alternate;transform-origin:50% 90%}
+.hero-dessins .d1{left:3%;top:5%;width:clamp(120px,15vw,250px);--r0:-7deg;--r1:-1deg;animation-duration:4.6s}
+.hero-dessins .d2{right:2.5%;top:7%;width:clamp(150px,22vw,360px);--r0:2deg;--r1:7deg;animation-duration:6.2s;animation-delay:-2s}
+.hero-dessins .d3{left:6%;bottom:4%;width:clamp(80px,9.5vw,160px);--r0:-4deg;--r1:5deg;animation-duration:5.1s;animation-delay:-1s}
+.hero-dessins .d4{right:3.5%;bottom:5%;width:clamp(150px,22vw,360px);--r0:-2deg;--r1:3deg;animation-duration:7s;animation-delay:-3s;transform-origin:50% 50%}
+@keyframes balance{from{transform:rotate(var(--r0)) translateY(0)}to{transform:rotate(var(--r1)) translateY(-12px)}}
+.hero-dessins .chemise{position:relative;width:min(70vw,420px);margin:0 auto}
+.hero-dessins .chemise img{display:block;width:100%;height:auto}
+.hero-dessins .chemise .goutte{position:absolute;left:var(--x);top:var(--y);width:calc(2.6% * var(--l));aspect-ratio:42/111;background:url(/assets/img/dessins/goutte-courte-blanc-360.webp) center/contain no-repeat;
+  transform-origin:50% 0;opacity:0;animation:coule 3.2s var(--d) infinite cubic-bezier(.55,0,.85,.4)}
+@keyframes coule{0%{opacity:0;transform:translate(-50%,0) scaleY(.15)}12%{opacity:1}42%{opacity:1;transform:translate(-50%,0) scaleY(1)}55%{transform:translate(-50%,40%) scaleY(1.15)}100%{opacity:0;transform:translate(-50%,520%) scaleY(1.2)}}
+.hero-dessins .difficiles{position:relative;z-index:1;margin-top:clamp(18px,3vh,34px)}
+.hero-dessins::after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(40% 46% at 50% 62%,rgba(0,0,0,.7),transparent 75%)}
+.hero-dessins .chemise,.hero-dessins .difficiles{z-index:2}
+@media (max-width:700px){
+  .hero-dessins{min-height:0;padding-top:clamp(70px,14vw,110px);padding-bottom:clamp(120px,34vw,160px)}
+  .hero-dessins .d{opacity:.5}
+  .hero-dessins .d1{left:-3%;top:1.5%;width:28vw}.hero-dessins .d2{right:-6%;top:2%;width:38vw}
+  .hero-dessins .d3{left:-1%;bottom:1.5%;width:17vw}.hero-dessins .d4{right:-8%;bottom:2%;width:40vw}
+}
+@media (prefers-reduced-motion: reduce){.hero-dessins .d,.hero-dessins .chemise .goutte{animation:none}.hero-dessins .chemise .goutte{display:none}}

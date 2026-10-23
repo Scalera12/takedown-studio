@@ -410,9 +410,14 @@ def accueil():
     tuiles = ''.join(tuile(s) for s in SERVICES) + tuile_aide()
     corps = f'''{nav('/')}
 <main id="contenu">
-  <section class="hero">
-    <div class="script-flotte"><img class="mark script" src="/assets/img/logo-texte-blanc.png" sizes="(max-width:600px) 86vw, 820px" data-intro="/assets/img/logo-complet-lutteurs-blanc-1000.webp" alt="Takedown Studio" width="1000" height="131" fetchpriority="high"></div>
-    <img class="mark bonhomme" src="/assets/img/bonhomme-goutte-blanc.png" alt="" width="642" height="497">
+  <section class="hero hero-dessins" data-intro="/assets/img/logo-complet-lutteurs-blanc-1000.webp">
+    <div class="fond-dessins" aria-hidden="true">
+      <img class="d d1" src="/assets/img/dessins/bonhomme-casquette-blanc.png" alt="" width="908" height="1000">
+      <img class="d d2" src="/assets/img/dessins/deux-tuques-blanc.png" alt="" width="1000" height="640">
+      <img class="d d3" src="/assets/img/dessins/bonhomme-surpris-blanc.png" alt="" width="548" height="1000">
+      <img class="d d4" src="/assets/img/dessins/bonhomme-couche-blanc.png" alt="" width="1000" height="627">
+    </div>
+    <div class="chemise" aria-hidden="true"><img src="/assets/img/dessins/chandail-tache-blanc.png" alt="" width="1000" height="633" fetchpriority="high"><span class="goutte" style="--x:19.5%;--y:64%;--d:0s;--l:1"></span><span class="goutte" style="--x:24%;--y:79%;--d:1.1s;--l:0.8"></span><span class="goutte" style="--x:52%;--y:77%;--d:0.5s;--l:1.15"></span><span class="goutte" style="--x:66%;--y:72%;--d:1.7s;--l:0.9"></span><span class="goutte" style="--x:76.5%;--y:79%;--d:0.85s;--l:1"></span><span class="goutte" style="--x:81.5%;--y:71%;--d:2.3s;--l:0.75"></span></div>
     <div class="difficiles fade">
       <p class="t">On est {encre('difficiles')}.<br><span class="t2">Pour que vous n’ayez pas à l’être.</span></p>
       <p class="p">On pose beaucoup de questions, on cherche les bons produits et on s’attarde aux petits détails. Pas pour compliquer votre projet. Pour le rendre meilleur.</p>
