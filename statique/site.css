@@ -537,17 +537,18 @@ html:not(.js) .words .line .mini{opacity:1;transform:none}
 .hero-dessins .difficiles{margin-top:clamp(22px,3.6vh,40px)}
 .hero-dessins .difficiles .t{font-size:clamp(22px,2.6vw,38px);font-weight:600;letter-spacing:-.03em;line-height:1.1}
 
-/* entête (2026-10-23, Alex) : seulement le chandail en haut; les bonhommes du client marchent en file
-   tout en bas, vers la droite, en boucle infinie (2 groupes identiques, la piste glisse de -50 % à 0) */
+/* entête (2026-10-23, Alex) : seulement le chandail en haut; les bonhommes du client MARCHENT en file tout en bas,
+   vers la droite, en boucle infinie. Chaque bonhomme = une bande d'images de marche (statique/img/marche/,
+   tirées de leurs dessins) qui défile image par image (steps), pendant que la piste glisse de -50 % à 0. */
 .hero-dessins{min-height:0;padding-bottom:0}
 .hero-dessins .defile{position:relative;z-index:2;align-self:stretch;width:100vw;margin:clamp(44px,8vh,90px) calc(50% - 50vw) 0;overflow:hidden;padding:14px 0 clamp(14px,2.4vh,26px)}
-.hero-dessins .defile .piste{display:flex;width:max-content;animation:marche 38s linear infinite}
-.hero-dessins .defile .groupe{display:flex;align-items:flex-end;gap:clamp(46px,6vw,110px);padding-right:clamp(46px,6vw,110px)}
-.hero-dessins .defile .p{display:block;height:clamp(78px,11vw,160px);width:auto;transform-origin:50% 100%;animation:pas .5s ease-in-out infinite alternate}
-.hero-dessins .defile .p2,.hero-dessins .defile .p4{height:clamp(60px,8.5vw,124px)}
-.hero-dessins .defile .p1{animation-duration:.46s}.hero-dessins .defile .p2{animation-duration:.55s;animation-delay:-.2s}
-.hero-dessins .defile .p3{animation-duration:.5s;animation-delay:-.35s}.hero-dessins .defile .p4{animation-duration:.62s;animation-delay:-.1s}
+.hero-dessins .defile .piste{display:flex;width:max-content;animation:marche 40s linear infinite}
+.hero-dessins .defile .groupe{display:flex;align-items:flex-end;gap:clamp(40px,5vw,96px);padding-right:clamp(40px,5vw,96px)}
+.hero-dessins .defile .p{flex:none;display:block;height:clamp(84px,11vw,160px);aspect-ratio:var(--ar);overflow:hidden}
+.hero-dessins .defile .p2{height:clamp(76px,10vw,146px)}
+.hero-dessins .defile .p4{height:clamp(56px,7.4vw,108px)}
+.hero-dessins .defile .p img{display:block;height:100%;width:auto;max-width:none;animation:cycle var(--t) steps(var(--n)) infinite}
 @keyframes marche{from{transform:translateX(-50%)}to{transform:translateX(0)}}
-@keyframes pas{from{transform:translateY(0) rotate(-3deg)}to{transform:translateY(-9px) rotate(3deg)}}
-@media (max-width:700px){.hero-dessins{padding-bottom:0}.hero-dessins .defile .piste{animation-duration:26s}.hero-dessins .defile .p{height:96px}.hero-dessins .defile .p2,.hero-dessins .defile .p4{height:74px}.hero-dessins .defile .groupe{gap:40px;padding-right:40px}}
-@media (prefers-reduced-motion: reduce){.hero-dessins .defile .piste,.hero-dessins .defile .p{animation:none}}
+@keyframes cycle{to{transform:translateX(-100%)}}
+@media (max-width:700px){.hero-dessins .defile .piste{animation-duration:28s}.hero-dessins .defile .p{height:96px}.hero-dessins .defile .p2{height:84px}.hero-dessins .defile .p4{height:64px}.hero-dessins .defile .groupe{gap:36px;padding-right:36px}}
+@media (prefers-reduced-motion: reduce){.hero-dessins .defile .piste,.hero-dessins .defile .p img{animation:none}}

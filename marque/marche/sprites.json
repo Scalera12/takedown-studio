@@ -1,0 +1,18 @@
+{
+ "bonhomme-casquette": {
+  "n": 6,
+  "ratio": 0.7287
+ },
+ "deux-tuques": {
+  "n": 4,
+  "ratio": 1.2559
+ },
+ "bonhomme-surpris": {
+  "n": 6,
+  "ratio": 0.5248
+ },
+ "bonhomme-couche": {
+  "n": 4,
+  "ratio": 2.1714
+ }
+}
