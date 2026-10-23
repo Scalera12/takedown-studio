@@ -507,3 +507,11 @@ html:not(.js) .words .line .mini{opacity:1;transform:none}
 .hero:has(.script) .mark.bonhomme{width:min(46vw,300px,calc((100svh - 430px) * .85));min-width:min(52vw,180px);margin-top:clamp(22px,4vh,40px);animation-delay:.7s}
 .hero .mark.fini{clip-path:none;animation:none}
 .hero .mark.bonhomme.tourne{clip-path:none}
+
+/* 2026-10-23 (texte envoyé par le client) : « On est difficiles » sous le monstre, dans l'entête */
+.hero .difficiles{max-width:760px;margin:clamp(30px,5vh,56px) auto 0;animation-delay:1.4s}
+.hero .difficiles .t{font-size:clamp(32px,5vw,68px);font-weight:600;letter-spacing:-.035em;line-height:1.04}
+.hero .difficiles .t2{color:#cfcfd2}
+.hero .difficiles .p{font-size:clamp(16px,1.5vw,19px);line-height:1.55;color:var(--mute);max-width:46ch;margin:clamp(18px,2.6vh,26px) auto 0}
+.hero .difficiles .lien{margin-top:clamp(20px,3vh,30px);text-transform:uppercase;letter-spacing:.04em;font-size:14px}
+.splash-on .hero .difficiles{animation-play-state:paused}

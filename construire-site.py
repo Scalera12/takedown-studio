@@ -413,6 +413,11 @@ def accueil():
   <section class="hero">
     <div class="script-flotte"><img class="mark script" src="/assets/img/logo-texte-blanc.png" sizes="(max-width:600px) 86vw, 820px" data-intro="/assets/img/logo-complet-lutteurs-blanc-1000.webp" alt="Takedown Studio" width="1000" height="131" fetchpriority="high"></div>
     <img class="mark bonhomme" src="/assets/img/bonhomme-goutte-blanc.png" alt="" width="642" height="497">
+    <div class="difficiles fade">
+      <p class="t">On est {encre('difficiles')}.<br><span class="t2">Pour que vous n’ayez pas à l’être.</span></p>
+      <p class="p">On pose beaucoup de questions, on cherche les bons produits et on s’attarde aux petits détails. Pas pour compliquer votre projet. Pour le rendre meilleur.</p>
+      <a class="lien" href="/contact">On jase de votre projet ? <span class="arr">↗</span></a>
+    </div>
     <h1 class="sr">Takedown Studio, agence de branding à Bromont</h1>
     <p class="sr">Vêtements et produits personnalisés à Bromont. Agence de branding spécialisée en vêtements et produits personnalisés.</p>
   </section>
