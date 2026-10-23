@@ -418,12 +418,10 @@ def accueil():
       <img class="d d4" src="/assets/img/dessins/bonhomme-couche-blanc.png" alt="" width="1000" height="627">
     </div>
     <div class="chemise" aria-hidden="true"><img src="/assets/img/dessins/chandail-tache-blanc.png" alt="" width="1000" height="633" fetchpriority="high"><span class="goutte" style="--x:19.5%;--y:64%;--d:0s;--l:1"></span><span class="goutte" style="--x:24%;--y:79%;--d:1.1s;--l:0.8"></span><span class="goutte" style="--x:52%;--y:77%;--d:0.5s;--l:1.15"></span><span class="goutte" style="--x:66%;--y:72%;--d:1.7s;--l:0.9"></span><span class="goutte" style="--x:76.5%;--y:79%;--d:0.85s;--l:1"></span><span class="goutte" style="--x:81.5%;--y:71%;--d:2.3s;--l:0.75"></span></div>
+    <h1 class="titre-patch fade"><picture><source media="(max-width:700px)" srcset="/assets/img/titre-patch-2lignes-blanc-700.webp 700w, /assets/img/titre-patch-2lignes-blanc-1400.webp 1400w" sizes="88vw"><img src="/assets/img/titre-patch-ligne-blanc.png" alt="Agence de branding Bromont" width="1334" height="339" fetchpriority="high"></picture></h1>
     <div class="difficiles fade">
-      <p class="t">On est {encre('difficiles')}.<br><span class="t2">Pour que vous n’ayez pas à l’être.</span></p>
-      <p class="p">On pose beaucoup de questions, on cherche les bons produits et on s’attarde aux petits détails. Pas pour compliquer votre projet. Pour le rendre meilleur.</p>
-      <a class="lien" href="/contact">On jase de votre projet ? <span class="arr">↗</span></a>
+      <h2 class="t">On est {encre('difficiles')}.<br><span class="t2">Pour que vous n’ayez pas à l’être.</span></h2>
     </div>
-    <h1 class="sr">Takedown Studio, agence de branding à Bromont</h1>
     <p class="sr">Vêtements et produits personnalisés à Bromont. Agence de branding spécialisée en vêtements et produits personnalisés.</p>
   </section>
 
@@ -758,8 +756,8 @@ def css_minifie():
 CSS = ''
 
 # Chaque PNG devient du WebP en 2 largeurs ; le HTML est réécrit avec srcset et sizes.
-LARGEURS = {'bonhomme': (400, 642), 'logo-complet-lutteurs': (520, 1000), 'logo-texte': (260, 1000), 'illustration': (400, 800), 'services/': (800,), 'dessins/': (360, 720)}
-TAILLES = {'bonhomme': '(max-width:600px) 60vw, 380px', 'logo-texte': '130px', 'logo-complet-lutteurs': '(max-width:600px) 88vw, 760px', 'illustration': '(max-width:980px) 180px, 300px',
+LARGEURS = {'titre-patch': (700, 1400), 'bonhomme': (400, 642), 'logo-complet-lutteurs': (520, 1000), 'logo-texte': (260, 1000), 'illustration': (400, 800), 'services/': (800,), 'dessins/': (360, 720)}
+TAILLES = {'titre-patch': '(max-width:700px) 88vw, min(86vw, 980px)', 'bonhomme': '(max-width:600px) 60vw, 380px', 'logo-texte': '130px', 'logo-complet-lutteurs': '(max-width:600px) 88vw, 760px', 'illustration': '(max-width:980px) 180px, 300px',
            'services/': '(max-width:980px) 62vw, 31vw', 'dessins/': '(max-width:600px) 60vw, 320px'}
 
 def largeurs(nom):

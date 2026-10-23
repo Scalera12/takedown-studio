@@ -536,3 +536,11 @@ html:not(.js) .words .line .mini{opacity:1;transform:none}
   .hero-dessins .d3{left:-1%;bottom:1.5%;width:17vw}.hero-dessins .d4{right:-8%;bottom:2%;width:40vw}
 }
 @media (prefers-reduced-motion: reduce){.hero-dessins .d,.hero-dessins .chemise .goutte{animation:none}.hero-dessins .chemise .goutte{display:none}}
+
+/* h1 de l'accueil (2026-10-23) : « Agence de branding / B R O M O N T » dans le lettrage de leur patch rose,
+   recréé à partir du patch (image, alt = le texte). Une ligne sur ordi, deux lignes sur cell. */
+.titre-patch{position:relative;z-index:2;margin:clamp(10px,2vh,24px) auto 0;width:min(86vw,980px)}
+.titre-patch img{display:block;width:100%;height:auto}
+@media (max-width:700px){.titre-patch{width:88vw}}
+.hero-dessins .difficiles{margin-top:clamp(22px,3.6vh,40px)}
+.hero-dessins .difficiles .t{font-size:clamp(22px,2.6vw,38px);font-weight:600;letter-spacing:-.03em;line-height:1.1}
