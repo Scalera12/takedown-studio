@@ -541,7 +541,8 @@ html:not(.js) .words .line .mini{opacity:1;transform:none}
    vers la droite, en boucle infinie. Chaque bonhomme = une bande d'images de marche (statique/img/marche/,
    tirées de leurs dessins) qui défile image par image (steps), pendant que la piste glisse de -50 % à 0. */
 .hero-dessins{min-height:0;padding-bottom:0}
-.hero-dessins .defile{position:relative;z-index:2;align-self:stretch;width:100vw;margin:clamp(44px,8vh,90px) calc(50% - 50vw) 0;overflow:hidden;padding:14px 0 clamp(14px,2.4vh,26px)}
+.hero-dessins .defile{position:relative;z-index:2;align-self:stretch;width:100vw;margin:0 calc(50% - 50vw) clamp(18px,3vh,36px);overflow:hidden;padding:6px 0 10px}
+.hero-dessins{padding-bottom:clamp(56px,8vh,96px)!important}   /* la file est en haut, à la place du chandail (2026-10-23) */
 .hero-dessins .defile .piste{display:flex;width:max-content;animation:marche 40s linear infinite}
 .hero-dessins .defile .groupe{display:flex;align-items:flex-end;gap:clamp(40px,5vw,96px);padding-right:clamp(40px,5vw,96px)}
 .hero-dessins .defile .p{flex:none;display:block;height:clamp(84px,11vw,160px);aspect-ratio:var(--ar);overflow:hidden}
@@ -552,3 +553,4 @@ html:not(.js) .words .line .mini{opacity:1;transform:none}
 @keyframes cycle{to{transform:translateX(-100%)}}
 @media (max-width:700px){.hero-dessins .defile .piste{animation-duration:28s}.hero-dessins .defile .p{height:96px}.hero-dessins .defile .p2{height:84px}.hero-dessins .defile .p4{height:64px}.hero-dessins .defile .groupe{gap:36px;padding-right:36px}}
 @media (prefers-reduced-motion: reduce){.hero-dessins .defile .piste,.hero-dessins .defile .p img{animation:none}}
+.hero-dessins+.sec{padding-top:clamp(28px,4vw,56px)}   /* moins de vide sous l'entête */
