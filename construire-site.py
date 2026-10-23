@@ -418,12 +418,10 @@ def accueil():
       <img class="d d4" src="/assets/img/dessins/bonhomme-couche-blanc.png" alt="" width="1000" height="627">
     </div>
     <div class="chemise" aria-hidden="true"><img src="/assets/img/dessins/chandail-tache-blanc.png" alt="" width="1000" height="633" fetchpriority="high"><span class="goutte" style="--x:19.5%;--y:64%;--d:0s;--l:1"></span><span class="goutte" style="--x:24%;--y:79%;--d:1.1s;--l:0.8"></span><span class="goutte" style="--x:52%;--y:77%;--d:0.5s;--l:1.15"></span><span class="goutte" style="--x:66%;--y:72%;--d:1.7s;--l:0.9"></span><span class="goutte" style="--x:76.5%;--y:79%;--d:0.85s;--l:1"></span><span class="goutte" style="--x:81.5%;--y:71%;--d:2.3s;--l:0.75"></span></div>
+    <h1 class="titre-h1 fade"><span class="l1 x">Agence de branding</span> <span class="l2 mono">Bromont</span></h1>
     <div class="difficiles fade">
-      <p class="t">On est {encre('difficiles')}.<br><span class="t2">Pour que vous n’ayez pas à l’être.</span></p>
-      <p class="p">On pose beaucoup de questions, on cherche les bons produits et on s’attarde aux petits détails. Pas pour compliquer votre projet. Pour le rendre meilleur.</p>
-      <a class="lien" href="/contact">On jase de votre projet ? <span class="arr">↗</span></a>
+      <h2 class="t">On est {encre('difficiles')}.<br><span class="t2">Pour que vous n’ayez pas à l’être.</span></h2>
     </div>
-    <h1 class="sr">Takedown Studio, agence de branding à Bromont</h1>
     <p class="sr">Vêtements et produits personnalisés à Bromont. Agence de branding spécialisée en vêtements et produits personnalisés.</p>
   </section>
 
