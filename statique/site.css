@@ -514,13 +514,6 @@ html:not(.js) .words .line .mini{opacity:1;transform:none}
 /* ---------- entête de l'accueil (2026-10-23, demande d'Alex) : plus de logos, un fond fait de 4 dessins
    du client qui se balancent + le chandail au centre dont les gouttes coulent ---------- */
 .hero-dessins{min-height:min(calc(100svh - 56px),900px);overflow:hidden;justify-content:center;padding-top:clamp(40px,6vh,70px);padding-bottom:clamp(40px,6vh,70px)}
-.hero-dessins .fond-dessins{position:absolute;inset:0;pointer-events:none;max-width:1600px;margin:0 auto}
-.hero-dessins .d{position:absolute;height:auto;opacity:.92;--r0:-3deg;--r1:3deg;animation:balance 5.5s ease-in-out infinite alternate;transform-origin:50% 90%}
-.hero-dessins .d1{left:3%;top:5%;width:clamp(120px,15vw,250px);--r0:-7deg;--r1:-1deg;animation-duration:4.6s}
-.hero-dessins .d2{right:2.5%;top:7%;width:clamp(150px,22vw,360px);--r0:2deg;--r1:7deg;animation-duration:6.2s;animation-delay:-2s}
-.hero-dessins .d3{left:6%;bottom:4%;width:clamp(80px,9.5vw,160px);--r0:-4deg;--r1:5deg;animation-duration:5.1s;animation-delay:-1s}
-.hero-dessins .d4{right:3.5%;bottom:5%;width:clamp(150px,22vw,360px);--r0:-2deg;--r1:3deg;animation-duration:7s;animation-delay:-3s;transform-origin:50% 50%}
-@keyframes balance{from{transform:rotate(var(--r0)) translateY(0)}to{transform:rotate(var(--r1)) translateY(-12px)}}
 .hero-dessins .chemise{position:relative;width:min(70vw,420px);margin:0 auto}
 .hero-dessins .chemise img{display:block;width:100%;height:auto}
 .hero-dessins .chemise .goutte{position:absolute;left:var(--x);top:var(--y);width:calc(2.6% * var(--l));aspect-ratio:42/111;background:url(/assets/img/dessins/goutte-courte-blanc-360.webp) center/contain no-repeat;
@@ -531,11 +524,8 @@ html:not(.js) .words .line .mini{opacity:1;transform:none}
 .hero-dessins .chemise,.hero-dessins .difficiles{z-index:2}
 @media (max-width:700px){
   .hero-dessins{min-height:0;padding-top:clamp(70px,14vw,110px);padding-bottom:clamp(120px,34vw,160px)}
-  .hero-dessins .d{opacity:.5}
-  .hero-dessins .d1{left:-3%;top:1.5%;width:28vw}.hero-dessins .d2{right:-6%;top:2%;width:38vw}
-  .hero-dessins .d3{left:-1%;bottom:1.5%;width:17vw}.hero-dessins .d4{right:-8%;bottom:2%;width:40vw}
 }
-@media (prefers-reduced-motion: reduce){.hero-dessins .d,.hero-dessins .chemise .goutte{animation:none}.hero-dessins .chemise .goutte{display:none}}
+@media (prefers-reduced-motion: reduce){.hero-dessins .chemise .goutte{animation:none}.hero-dessins .chemise .goutte{display:none}}
 
 /* h1 visible de l'accueil (2026-10-23, plan d'Alex) : « AGENCE DE BRANDING / B R O M O N T » dans la typo du site,
    puis « On est difficiles » en h2. Paragraphe et lien retirés. */
@@ -544,3 +534,18 @@ html:not(.js) .words .line .mini{opacity:1;transform:none}
 .titre-h1 .l2{display:block;font-size:clamp(12px,1.2vw,17px);letter-spacing:.7em;padding-left:.7em;color:#cfcfd2;margin-top:clamp(12px,1.8vh,20px)}
 .hero-dessins .difficiles{margin-top:clamp(22px,3.6vh,40px)}
 .hero-dessins .difficiles .t{font-size:clamp(22px,2.6vw,38px);font-weight:600;letter-spacing:-.03em;line-height:1.1}
+
+/* entête (2026-10-23, Alex) : seulement le chandail en haut; les bonhommes du client marchent en file
+   tout en bas, vers la droite, en boucle infinie (2 groupes identiques, la piste glisse de -50 % à 0) */
+.hero-dessins{min-height:0;padding-bottom:0}
+.hero-dessins .defile{position:relative;z-index:2;align-self:stretch;width:100vw;margin:clamp(44px,8vh,90px) calc(50% - 50vw) 0;overflow:hidden;padding:14px 0 clamp(14px,2.4vh,26px)}
+.hero-dessins .defile .piste{display:flex;width:max-content;animation:marche 38s linear infinite}
+.hero-dessins .defile .groupe{display:flex;align-items:flex-end;gap:clamp(46px,6vw,110px);padding-right:clamp(46px,6vw,110px)}
+.hero-dessins .defile .p{display:block;height:clamp(78px,11vw,160px);width:auto;transform-origin:50% 100%;animation:pas .5s ease-in-out infinite alternate}
+.hero-dessins .defile .p2,.hero-dessins .defile .p4{height:clamp(60px,8.5vw,124px)}
+.hero-dessins .defile .p1{animation-duration:.46s}.hero-dessins .defile .p2{animation-duration:.55s;animation-delay:-.2s}
+.hero-dessins .defile .p3{animation-duration:.5s;animation-delay:-.35s}.hero-dessins .defile .p4{animation-duration:.62s;animation-delay:-.1s}
+@keyframes marche{from{transform:translateX(-50%)}to{transform:translateX(0)}}
+@keyframes pas{from{transform:translateY(0) rotate(-3deg)}to{transform:translateY(-9px) rotate(3deg)}}
+@media (max-width:700px){.hero-dessins{padding-bottom:0}.hero-dessins .defile .piste{animation-duration:26s}.hero-dessins .defile .p{height:96px}.hero-dessins .defile .p2,.hero-dessins .defile .p4{height:74px}.hero-dessins .defile .groupe{gap:40px;padding-right:40px}}
+@media (prefers-reduced-motion: reduce){.hero-dessins .defile .piste,.hero-dessins .defile .p{animation:none}}

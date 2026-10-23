@@ -411,17 +411,12 @@ def accueil():
     corps = f'''{nav('/')}
 <main id="contenu">
   <section class="hero hero-dessins" data-intro="/assets/img/logo-complet-lutteurs-blanc-1000.webp">
-    <div class="fond-dessins" aria-hidden="true">
-      <img class="d d1" src="/assets/img/dessins/bonhomme-casquette-blanc.png" alt="" width="908" height="1000">
-      <img class="d d2" src="/assets/img/dessins/deux-tuques-blanc.png" alt="" width="1000" height="640">
-      <img class="d d3" src="/assets/img/dessins/bonhomme-surpris-blanc.png" alt="" width="548" height="1000">
-      <img class="d d4" src="/assets/img/dessins/bonhomme-couche-blanc.png" alt="" width="1000" height="627">
-    </div>
     <div class="chemise" aria-hidden="true"><img src="/assets/img/dessins/chandail-tache-blanc.png" alt="" width="1000" height="633" fetchpriority="high"><span class="goutte" style="--x:19.5%;--y:64%;--d:0s;--l:1"></span><span class="goutte" style="--x:24%;--y:79%;--d:1.1s;--l:0.8"></span><span class="goutte" style="--x:52%;--y:77%;--d:0.5s;--l:1.15"></span><span class="goutte" style="--x:66%;--y:72%;--d:1.7s;--l:0.9"></span><span class="goutte" style="--x:76.5%;--y:79%;--d:0.85s;--l:1"></span><span class="goutte" style="--x:81.5%;--y:71%;--d:2.3s;--l:0.75"></span></div>
     <h1 class="titre-h1 fade"><span class="l1 x">Agence de branding</span> <span class="l2 mono">Bromont</span></h1>
     <div class="difficiles fade">
       <h2 class="t">On est {encre('difficiles')}.<br><span class="t2">Pour que vous n’ayez pas à l’être.</span></h2>
     </div>
+    <div class="defile" aria-hidden="true"><div class="piste"><div class="groupe"><img class="p p1" src="/assets/img/dessins/bonhomme-casquette-blanc.png" alt="" width="908" height="1000" loading="lazy"><img class="p p2" src="/assets/img/dessins/deux-tuques-blanc.png" alt="" width="1000" height="640" loading="lazy"><img class="p p3" src="/assets/img/dessins/bonhomme-surpris-blanc.png" alt="" width="548" height="1000" loading="lazy"><img class="p p4" src="/assets/img/dessins/bonhomme-couche-blanc.png" alt="" width="1000" height="627" loading="lazy"><img class="p p1" src="/assets/img/dessins/bonhomme-casquette-blanc.png" alt="" width="908" height="1000" loading="lazy"><img class="p p2" src="/assets/img/dessins/deux-tuques-blanc.png" alt="" width="1000" height="640" loading="lazy"><img class="p p3" src="/assets/img/dessins/bonhomme-surpris-blanc.png" alt="" width="548" height="1000" loading="lazy"><img class="p p4" src="/assets/img/dessins/bonhomme-couche-blanc.png" alt="" width="1000" height="627" loading="lazy"></div><div class="groupe"><img class="p p1" src="/assets/img/dessins/bonhomme-casquette-blanc.png" alt="" width="908" height="1000" loading="lazy"><img class="p p2" src="/assets/img/dessins/deux-tuques-blanc.png" alt="" width="1000" height="640" loading="lazy"><img class="p p3" src="/assets/img/dessins/bonhomme-surpris-blanc.png" alt="" width="548" height="1000" loading="lazy"><img class="p p4" src="/assets/img/dessins/bonhomme-couche-blanc.png" alt="" width="1000" height="627" loading="lazy"><img class="p p1" src="/assets/img/dessins/bonhomme-casquette-blanc.png" alt="" width="908" height="1000" loading="lazy"><img class="p p2" src="/assets/img/dessins/deux-tuques-blanc.png" alt="" width="1000" height="640" loading="lazy"><img class="p p3" src="/assets/img/dessins/bonhomme-surpris-blanc.png" alt="" width="548" height="1000" loading="lazy"><img class="p p4" src="/assets/img/dessins/bonhomme-couche-blanc.png" alt="" width="1000" height="627" loading="lazy"></div></div></div>
     <p class="sr">Vêtements et produits personnalisés à Bromont. Agence de branding spécialisée en vêtements et produits personnalisés.</p>
   </section>
 
