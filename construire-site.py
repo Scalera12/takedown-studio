@@ -211,8 +211,8 @@ def soum(slug=None):
 
 def nav(courant):
     liens = ''.join(
-        f'<li><a href="{u}"{" aria-current=\"page\"" if u == courant else ""}>{t}</a></li>' for u, t in MENU)
-    mob = ''.join(f'<a href="{u}">{t}</a>' for u, t in MENU)
+        f'<li><a href="{u}"{" aria-current=\"page\"" if u == courant else ""}{" class=\"rose\"" if "casquettes" in u else ""}>{t}</a></li>' for u, t in MENU)
+    mob = ''.join(f'<a href="{u}"{" class=\"rose\"" if "casquettes" in u else ""}>{t}</a>' for u, t in MENU)
     return f'''<a class="skip" href="#contenu">Aller au contenu</a>
 <header class="nav">
   <div class="wrap">
