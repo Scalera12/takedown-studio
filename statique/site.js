@@ -183,7 +183,8 @@
     if('IntersectionObserver' in window) new IntersectionObserver(function(es){visible=es[0].isIntersecting},{threshold:.35}).observe(rail); else visible=true;
     if(!reduit) setInterval(function(){
       if(!visible||document.hidden||Date.now()<pauseJusque) return;
-      aller((i+1)%slides.length);
+      var n=(i+1)%slides.length;
+      aller(n,n!==0);
     },+rail.dataset.auto||3000);
   });
 
