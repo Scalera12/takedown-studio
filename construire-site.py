@@ -341,7 +341,7 @@ def crumb(chemin):
     morceaux.append(f'<span aria-current="page">{chemin[-1][1]}</span>')
     return '<nav class="crumb mono" aria-label="Fil d’Ariane">' + '<span aria-hidden="true">/</span>'.join(morceaux) + '</nav>'
 
-def phead(chemin, titre, intro, ctas='', dessin=None):
+def phead(chemin, titre, intro, ctas='', dessin=None, rose=False):
     fig = f'<img class="fig" src="/assets/img/{dessin}-blanc.png" alt="" aria-hidden="true">' if dessin else ''
     # taille du titre : le plus long mot doit toujours tenir sur une ligne (environ 0,95 em par lettre en majuscules larges)
     mots_t = re.sub(r'<[^>]+>', ' ', H.unescape(titre)).split()
@@ -349,7 +349,7 @@ def phead(chemin, titre, intro, ctas='', dessin=None):
     return f'''<section class="phead">
   <div class="wrap">
     {crumb(chemin)}
-    <h1 class="x" style="--m:{marge}">{titre}</h1>
+    <h1 class="x" style="--m:{marge}{";color:var(--rose)" if rose else ""}">{titre}</h1>
     <p class="intro">{intro}</p>
     {f'<div class="ctas">{ctas}</div>' if ctas else ''}
   </div>
@@ -650,7 +650,7 @@ def service(s, i):
             f'<a class="btn btn-g" href="/realisations?f={s["filtre"]}">Voir les réalisations</a>')
     corps = f'''{nav('/services')}
 <main id="contenu">
-  {phead([('/services', 'Nos services'), ('/services/' + s['slug'], s['nom'])], s['nom'], s['texte'], ctas, DESSIN_SERVICE.get(s['slug'], DESSINS[i % 3]))}
+  {phead([('/services', 'Nos services'), ('/services/' + s['slug'], s['nom'])], s['nom'], s['texte'], ctas, DESSIN_SERVICE.get(s['slug'], DESSINS[i % 3]), rose=bool(s.get('rose')))}
   {grande}
   {pp_haut}
   {types_patches() if s['slug'] == 'patches-ecussons' else ''}
