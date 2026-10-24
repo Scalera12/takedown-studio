@@ -172,6 +172,7 @@
     var slides=Array.prototype.slice.call(rail.children), chips=qsa('button',rail.parentNode.querySelector('.chips-g')||rail), i=0, pauseJusque=0, visible=false;
     var reduit=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
     var jeton=0, anim=false;
+    var cell=matchMedia('(max-width:820px)');
     var marque=function(n){
       i=n;chips.forEach(function(c,k){c.setAttribute('aria-pressed',k===n)});
       var c=chips[n], barre=c&&c.parentNode;
@@ -192,7 +193,7 @@
     var minuteur=null;
     var plan=function(){
       clearTimeout(minuteur);
-      if(reduit||!visible||document.hidden) return;
+      if(reduit||!visible||document.hidden||!cell.matches) return;   /* le défilement automatique, c'est seulement sur cell */
       minuteur=setTimeout(function(){
         var n=(i+1)%slides.length;
         aller(n,n===0);
@@ -211,6 +212,7 @@
     },{passive:true});
     if('IntersectionObserver' in window) new IntersectionObserver(function(es){visible=es[0].isIntersecting;plan()},{threshold:.25}).observe(rail); else {visible=true;plan()}
     d.addEventListener('visibilitychange',plan);
+    if(cell.addEventListener) cell.addEventListener('change',plan);
   });
 
   /* filtres des réalisations */
