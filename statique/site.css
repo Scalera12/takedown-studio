@@ -591,3 +591,7 @@ html:not(.js) .words .line .mini{opacity:1;transform:none}
 /* 2026-10-24 (Takedown via Alex) : bloc rose de la page Nos services (casquettes 100 % personnalisées) */
 .svc.rose .ph.art{background:var(--rose)}
 .svc.rose .ph.art img{filter:invert(1)}
+
+/* 2026-10-24 (Takedown via Alex) : guide casquettes, un bloc par info (titres h3 comme ceux de Nos services) */
+.svc .txt h3{font-size:clamp(28px,3vw,42px);font-weight:600;letter-spacing:-.025em;line-height:1.05}
+.guide .svc:last-of-type{border-bottom:1px solid var(--line)}

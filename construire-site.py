@@ -570,6 +570,41 @@ def types_patches():
     <p class="note rv">On t’aide à choisir selon ton logo, ton produit et le look que tu veux.</p></div>
     <div class="types-patches">{cartes}</div>{etiq}</section>'''
 
+# 2026-10-24 (Takedown via Alex) : guide de la page Casquettes 100 % personnalisées, un bloc par info
+# (même disposition que la page Nos services). Dessins provisoires, texte à retravailler avec Takedown.
+GUIDE_CASQUETTES = [
+    ('Les formes', 'On part de la forme qui te ressemble.', [
+        ('dessins/casquettes-tuques-pile', 'Forme', 'Dad cap', 'Couronne basse et visière courbée, souple et décontractée. Un classique facile à porter, très bien pour la broderie.', None),
+        ('dessins/bonhomme-casquette', 'Forme', 'Casquette structurée', 'Couronne haute et rigide qui garde sa forme. Un look net et affirmé, idéal pour un logo bien visible à l’avant.', None),
+        ('dessins/casquette-tuque', 'Forme', 'Trucker', 'Panneau avant en mousse et arrière en filet. Légère et aérée, avec un look streetwear. Le logo se place sur le panneau avant.', None),
+        ('dessins/casquette-tuque-trait', 'Forme', 'Cinq panneaux', 'Couronne basse faite de cinq panneaux, souvent avec une visière plate. Un style plus moderne, avec beaucoup de place pour jouer avec les couleurs.', None)]),
+    ('Les tissus', 'Chaque tissu change le look et le toucher.', [
+        ('dessins/casquettes-tuques-pile', 'Tissu', 'Coton', 'Doux, léger et confortable. Un tissu simple qui convient à la plupart des styles.', None),
+        ('dessins/bonhomme-casquette', 'Tissu', 'Sergé', 'Du coton tissé en diagonale, plus solide et plus structuré. Se prête bien à la broderie.', None),
+        ('dessins/casquette-tuque', 'Tissu', 'Maille', 'Un tissu ajouré et respirant, pour les journées chaudes. On le voit surtout à l’arrière des casquettes trucker.', None),
+        ('dessins/casquette-tuque-trait', 'Tissu', 'Velours côtelé', 'Des lignes verticales en relief et un look rétro. Une texture qui se démarque.', None)]),
+    ('Ton logo', 'Trois façons de mettre ta marque sur la casquette.', [
+        ('dessins/casquettes-tuques-pile', 'Logo', 'Brodé', 'Ton logo cousu directement avec du fil. Du relief, une belle finition et une bonne tenue dans le temps.', None),
+        ('dessins/bonhomme-casquette', 'Logo', 'Patch', 'Un écusson fabriqué à part, puis installé sur la casquette. Un look distinctif, devant ou ailleurs.', ('patches-ecussons', 'Voir les patches')),
+        ('dessins/casquette-tuque', 'Logo', 'Imprimé', 'Ton visuel imprimé directement sur la casquette, quand le modèle le permet. Bien pour les couleurs et les détails.', None)]),
+    ('Les couleurs et les détails', 'Les petites choses qui rendent la casquette vraiment à toi.', [
+        ('dessins/casquette-tuque-trait', 'Couleurs', 'Les couleurs', 'La couronne, la visière, le bouton et les coutures peuvent chacun avoir leur couleur. On t’aide à choisir une palette qui va bien avec ton logo.', None),
+        ('dessins/casquettes-tuques-pile', 'Détails', 'Les détails', 'La fermeture (snapback, boucle en métal, velcro), le dessous de la visière, l’étiquette tissée : on règle tout ça avec toi.', None)]),
+]
+
+def guide_casquettes():
+    out = ''
+    for titre, note, blocs in GUIDE_CASQUETTES:
+        arts = ''
+        for dessin, tag, nom, texte, lien in blocs:
+            btn = f'<div><a class="btn btn-g" href="/services/{lien[0]}">{lien[1]} <span class="arr">→</span></a></div>' if lien else ''
+            arts += f'''<article class="svc rose rv">
+      <div class="ph art"><img src="/assets/img/{dessin}-blanc.png" alt="" loading="lazy"></div>
+      <div class="txt"><span class="mono" style="color:var(--mute)">{tag}</span><h3>{nom}</h3><p>{texte}</p>{btn}</div>
+    </article>'''
+        out += f'''<section class="sec guide"><div class="wrap"><div class="head"><h2 class="h2 rv">{titre}</h2><p class="note rv">{note}</p></div></div>{arts}</section>'''
+    return out
+
 def service(s, i):
     photos = reals_de(s)
     exemples = ''.join(f'<figure class="rv">{photo_real(r)}<figcaption>{r["titre"]}</figcaption></figure>' for r in photos[1:7])
@@ -593,6 +628,14 @@ def service(s, i):
       <div class="grid g3">{''.join(tuile(PAR_SLUG[l]) for l in s['liens'][:3])}</div>
       {('<div class="rv" style="display:flex;gap:28px;flex-wrap:wrap;margin-top:24px">' + ''.join(f'<a class="lien" href="/services/{l}">{nom_court(PAR_SLUG[l])} <span class="arr">→</span></a>' for l in s['liens'][3:]) + '</div>') if len(s['liens']) > 3 else ''}
     </section>'''
+    if s.get('rose'):
+        bloc_exemples = guide_casquettes() + f'''<section class="sec wrap"><p class="rv"><a class="btn btn-w" href="{soum(s['slug'])}">{s['bouton']} <span class="arr">→</span></a></p></section>'''
+    else:
+        bloc_exemples = f'''<section class="sec wrap"><div class="head"><h2 class="h2 rv">Exemples</h2>
+    <div class="links rv"><a href="/realisations?f={s['filtre']}">Voir les réalisations <span class="arr">→</span></a></div></div>
+    {exemples}
+    <p class="rv" style="margin-top:40px"><a class="btn btn-w" href="{soum(s['slug'])}">{s['bouton']} <span class="arr">→</span></a></p>
+  </section>'''
     ctas = (f'<a class="btn btn-w" href="{soum(s["slug"])}">{s["bouton"]}</a>'
             f'<a class="btn btn-g" href="/realisations?f={s["filtre"]}">Voir les réalisations</a>')
     corps = f'''{nav('/services')}
@@ -601,11 +644,7 @@ def service(s, i):
   {grande}
   <section class="sec wrap">{plus_prevoir(s['plus'], s['prevoir'])}</section>
   {types_patches() if s['slug'] == 'patches-ecussons' else ''}
-  <section class="sec wrap"><div class="head"><h2 class="h2 rv">Exemples</h2>
-    <div class="links rv"><a href="/realisations?f={s['filtre']}">Voir les réalisations <span class="arr">→</span></a></div></div>
-    {exemples}
-    <p class="rv" style="margin-top:40px"><a class="btn btn-w" href="{soum(s['slug'])}">{s['bouton']} <span class="arr">→</span></a></p>
-  </section>
+  {bloc_exemples}
   {extras}
   {assoc}
 </main>
