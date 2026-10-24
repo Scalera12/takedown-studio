@@ -172,7 +172,17 @@
     var slides=Array.prototype.slice.call(rail.children), chips=qsa('button',rail.parentNode.querySelector('.chips-g')||rail), i=0, pauseJusque=0, visible=false;
     var reduit=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
     var marque=function(n){i=n;chips.forEach(function(c,k){c.setAttribute('aria-pressed',k===n)})};
-    var aller=function(n,doux){marque(n);rail.scrollTo({left:n*rail.clientWidth,behavior:doux===false?'auto':'smooth'})};
+    var anime=function(vers,duree){
+      var de=rail.scrollLeft, delta=vers-de, t0=null; rail.style.scrollSnapType='none';
+      var pas=function(t){
+        if(t0===null) t0=t;
+        var p=Math.min(1,(t-t0)/duree), e=p<.5?4*p*p*p:1-Math.pow(-2*p+2,3)/2;
+        rail.scrollLeft=de+delta*e;
+        if(p<1) requestAnimationFrame(pas); else rail.style.scrollSnapType='';
+      };
+      requestAnimationFrame(pas);
+    };
+    var aller=function(n,retour){marque(n);anime(n*rail.clientWidth,retour?1300:700)};
     var pause=function(){pauseJusque=Date.now()+8000};
     chips.forEach(function(c,k){c.addEventListener('click',function(){pause();aller(k)})});
     ['pointerdown','touchstart','wheel','focusin'].forEach(function(ev){rail.addEventListener(ev,pause,{passive:true})});
@@ -184,7 +194,7 @@
     if(!reduit) setInterval(function(){
       if(!visible||document.hidden||Date.now()<pauseJusque) return;
       var n=(i+1)%slides.length;
-      aller(n,n!==0);
+      aller(n,n===0);
     },+rail.dataset.auto||3000);
   });
 
