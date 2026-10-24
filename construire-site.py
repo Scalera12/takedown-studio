@@ -204,7 +204,7 @@ def mots(petits=True):
 
 # ---------------------------------------------------------------- morceaux communs
 MENU = [('/', 'Accueil'), ('/agence-branding', 'L’agence'), ('/services', 'Nos services'),
-        ('/realisations', 'Réalisations'), ('/contact', 'Contact')]
+        ('/#casquettes-custom', 'Casquettes custom'), ('/realisations', 'Réalisations'), ('/contact', 'Contact')]
 
 def soum(slug=None):
     return '/contact' + (f'?service={slug}' if slug else '')
@@ -216,7 +216,7 @@ def nav(courant):
     return f'''<a class="skip" href="#contenu">Aller au contenu</a>
 <header class="nav">
   <div class="wrap">
-    <a class="logo" href="/" aria-label="Takedown Studio, accueil"><img src="/assets/img/logo-texte-blanc.png" alt="Takedown Studio" width="130" height="17"></a>
+    <a class="logo" href="/" aria-label="Takedown Studio, accueil"><img src="/assets/img/logo-texte-rose.png" alt="Takedown Studio" width="130" height="17"></a>
     <nav aria-label="Menu principal"><ul>{liens}</ul></nav>
     <div class="right"><a class="btn btn-w" href="/contact"><span class="lg">Demander une&nbsp;</span>soumission</a><button class="burger" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="menu-m"><span></span><span></span></button></div>
   </div>

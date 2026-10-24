@@ -557,7 +557,6 @@ html:not(.js) .words .line .mini{opacity:1;transform:none}
 
 /* 2026-10-24 (Takedown via Alex) : rose du patch brodé, tuile + section casquettes 100 % custom */
 :root{--rose:#F59FC1}
-.titre-h1 .l1{color:var(--rose)}
 .tile.casq{background:var(--rose);color:#000;display:flex;flex-direction:column;justify-content:space-between;padding:30px;aspect-ratio:5/4}
 .tile.casq .mono{color:#000;opacity:.6;margin-bottom:10px}
 .tile.casq p{color:#2a1a20;font-size:15px;max-width:34ch;margin-top:10px}
