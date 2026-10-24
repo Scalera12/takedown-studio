@@ -638,9 +638,10 @@ html:not(.js) .words .line .mini{opacity:1;transform:none}
   .carte-casq .btn:hover,.rail-g .carte-casq:hover .btn:hover{background:#fff;color:#000;border-color:#fff}
 }
 
-/* titres des sections du guide, ordinateur seulement : même typo que le titre de la page, sous-titre en dessous (2026-10-24) */
+/* titres des sections du guide : même typo que le titre de la page, ordi et cell (2026-10-24) */
+.guide .head .h2{font-variation-settings:"wdth" 125;font-weight:800;letter-spacing:-.02em;text-transform:uppercase;line-height:.9;font-size:min(clamp(28px,4.6vw,64px),calc((100vw - 2*var(--pad))/12));overflow-wrap:normal;word-break:normal;hyphens:none}
+.carte-casq h3{overflow-wrap:normal;word-break:normal;hyphens:none}
+/* ordinateur : le sous-titre passe sous le titre */
 @media (min-width:821px){
   .guide .head{flex-direction:column;align-items:flex-start;gap:12px}
-  .guide .head .h2{font-variation-settings:"wdth" 125;font-weight:800;letter-spacing:-.02em;text-transform:uppercase;line-height:.9;font-size:min(clamp(28px,4.6vw,64px),calc((100vw - 2*var(--pad))/12));overflow-wrap:normal;word-break:normal;hyphens:none}
-  .carte-casq h3{overflow-wrap:normal;word-break:normal;hyphens:none}
 }
