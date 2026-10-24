@@ -633,8 +633,10 @@ def service(s, i):
       <div class="grid g3">{''.join(tuile(PAR_SLUG[l]) for l in s['liens'][:3])}</div>
       {('<div class="rv" style="display:flex;gap:28px;flex-wrap:wrap;margin-top:24px">' + ''.join(f'<a class="lien" href="/services/{l}">{nom_court(PAR_SLUG[l])} <span class="arr">→</span></a>' for l in s['liens'][3:]) + '</div>') if len(s['liens']) > 3 else ''}
     </section>'''
+    pp = f'<section class="sec wrap">{plus_prevoir(s["plus"], s["prevoir"])}</section>'
+    pp_haut = '' if s.get('rose') else pp   # pour les casquettes 100 % : « Les plus / À prévoir » passent sous le guide
     if s.get('rose'):
-        bloc_exemples = guide_casquettes() + f'''<section class="sec wrap"><p class="rv"><a class="btn btn-w" href="{soum(s['slug'])}">{s['bouton']} <span class="arr">→</span></a></p></section>'''
+        bloc_exemples = guide_casquettes() + pp + f'''<section class="sec wrap"><p class="rv"><a class="btn btn-w" href="{soum(s['slug'])}">{s['bouton']} <span class="arr">→</span></a></p></section>'''
     else:
         bloc_exemples = f'''<section class="sec wrap"><div class="head"><h2 class="h2 rv">Exemples</h2>
     <div class="links rv"><a href="/realisations?f={s['filtre']}">Voir les réalisations <span class="arr">→</span></a></div></div>
@@ -647,7 +649,7 @@ def service(s, i):
 <main id="contenu">
   {phead([('/services', 'Nos services'), ('/services/' + s['slug'], s['nom'])], s['nom'], s['texte'], ctas, DESSIN_SERVICE.get(s['slug'], DESSINS[i % 3]))}
   {grande}
-  <section class="sec wrap">{plus_prevoir(s['plus'], s['prevoir'])}</section>
+  {pp_haut}
   {types_patches() if s['slug'] == 'patches-ecussons' else ''}
   {bloc_exemples}
   {extras}
