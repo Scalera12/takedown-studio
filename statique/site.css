@@ -584,3 +584,6 @@ html:not(.js) .words .line .mini{opacity:1;transform:none}
 /* 2026-10-24 (Takedown via Alex) : même espace entre chaque bloc de l'accueil (services, casquettes, processus, techniques, agence) */
 .hero-dessins ~ .casq-custom{margin-top:clamp(80px,11vw,150px)}
 .hero-dessins ~ .how,.hero-dessins ~ .words{padding-block:clamp(80px,11vw,150px)}
+
+/* 2026-10-24 (Takedown via Alex) : même espace en haut (avant la file de bonhommes) et en bas (après le texte) de l'entête */
+.hero-dessins{padding-top:clamp(56px,8vh,96px)!important;padding-bottom:clamp(56px,8vh,96px)!important}
