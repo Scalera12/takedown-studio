@@ -622,16 +622,20 @@ html:not(.js) .words .line .mini{opacity:1;transform:none}
 }
 @media (min-width:821px){
   .chips-g{display:none}
-  .rail-g{display:block;overflow:visible}
-  .rail-g .carte-casq{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--line);color:var(--ink)}
-  .rail-g .carte-casq:last-of-type{border-bottom:1px solid var(--line)}
-  .rail-g .carte-casq:nth-of-type(even) .art{order:2}
-  .carte-casq .art{background:var(--rose);aspect-ratio:16/11;padding:clamp(28px,5vw,64px)}
-  .carte-casq .art img{filter:invert(1);max-height:100%;max-width:70%}
-  .carte-casq .lab{padding:clamp(24px,4vw,56px);display:flex;flex-direction:column;justify-content:center;gap:16px}
-  .carte-casq .mono{color:var(--mute)}
-  .carte-casq h3{font-size:clamp(28px,3vw,42px);margin-top:0}
-  .carte-casq p{color:#c9c9cc;max-width:48ch;margin-top:0}
+  .rail-g{display:grid;grid-template-columns:repeat(var(--n,4),1fr);gap:16px;overflow:visible;max-width:var(--max);margin:0 auto;padding-inline:var(--pad)}
+  .rail-g .carte-casq{display:flex;flex-direction:column;justify-content:space-between;gap:18px;min-height:clamp(380px,30vw,470px);padding:clamp(20px,2vw,30px);background:var(--s1);border:1px solid var(--line);color:var(--ink);transition:background .35s,border-color .35s,color .35s}
+  .carte-casq .art img{max-height:clamp(120px,12vw,180px);max-width:80%;transition:filter .35s}
+  .carte-casq .lab{max-width:none}
+  .carte-casq .mono{color:var(--mute);transition:color .35s}
+  .carte-casq h3{font-size:clamp(22px,1.9vw,28px);margin-top:6px}
+  .carte-casq p{color:#c9c9cc;font-size:14px;transition:color .35s}
+  .rail-g .carte-casq:hover{background:var(--rose);border-color:var(--rose);color:#000}
+  .rail-g .carte-casq:hover .art img{filter:invert(1)}
+  .rail-g .carte-casq:hover .mono{color:rgba(0,0,0,.6)}
+  .rail-g .carte-casq:hover p{color:#2a1a20}
+  .carte-casq .btn{margin-top:14px;background:var(--rose);color:#000;border-color:var(--rose)}
+  .rail-g .carte-casq:hover .btn{background:#000;color:var(--rose);border-color:#000}
+}
 }
 
 /* titres des sections du guide : même typo que le titre de la page (2026-10-24) */

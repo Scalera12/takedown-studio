@@ -610,7 +610,7 @@ def guide_casquettes():
             puces += f'<button type="button" class="chip" aria-pressed="{"true" if n == 0 else "false"}">{nom}</button>'
         out += f'''<section class="sec guide"><div class="wrap"><div class="head"><h2 class="h2 rv">{titre}</h2><p class="note rv">{note}</p></div>
       <div class="chips-g" role="group" aria-label="{titre}">{puces}</div></div>
-      <div class="rail-g" data-auto="3000" tabindex="0" aria-label="{titre}">{arts}</div></section>'''
+      <div class="rail-g" style="--n:{len(blocs)}" data-auto="3000" tabindex="0" aria-label="{titre}">{arts}</div></section>'''
     return out
 
 def service(s, i):
