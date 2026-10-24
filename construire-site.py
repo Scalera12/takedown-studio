@@ -303,7 +303,7 @@ def tuile_aide():
 
 def tuile_casquettes():
     # 2026-10-24 (Takedown via Alex) : remplace « Tu sais pas quelle technique choisir? » sur l'accueil
-    return ('<a class="tile dessin casq rv" href="#casquettes-custom">'
+    return ('<a class="tile dessin casq rv" href="/services/casquettes-tuques">'
             '<div class="art"><img src="/assets/img/dessins/casquettes-tuques-pile-blanc.png" alt="" loading="lazy"></div>'
             '<div class="lab"><div><h3>Casquettes 100 % personnalisées</h3><p>Forme, couleurs, tissu, logo : on la monte de A à Z, à ton choix.</p></div>'
             '<span class="go" aria-hidden="true">→</span></div></a>')
