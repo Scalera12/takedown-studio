@@ -167,6 +167,26 @@
 
   var params=new URLSearchParams(location.search);
 
+  /* guide casquettes : carrousels qui défilent aux 3 s (pause quand on touche, quand c'est hors écran ou si le système réduit les animations) */
+  qsa('.rail-g').forEach(function(rail){
+    var slides=Array.prototype.slice.call(rail.children), chips=qsa('button',rail.parentNode.querySelector('.chips-g')||rail), i=0, pauseJusque=0, visible=false;
+    var reduit=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var marque=function(n){i=n;chips.forEach(function(c,k){c.setAttribute('aria-pressed',k===n)})};
+    var aller=function(n,doux){marque(n);rail.scrollTo({left:n*rail.clientWidth,behavior:doux===false?'auto':'smooth'})};
+    var pause=function(){pauseJusque=Date.now()+8000};
+    chips.forEach(function(c,k){c.addEventListener('click',function(){pause();aller(k)})});
+    ['pointerdown','touchstart','wheel','focusin'].forEach(function(ev){rail.addEventListener(ev,pause,{passive:true})});
+    var t=null;
+    rail.addEventListener('scroll',function(){
+      clearTimeout(t);t=setTimeout(function(){var n=Math.round(rail.scrollLeft/rail.clientWidth);if(n!==i&&n>=0&&n<slides.length)marque(n)},80);
+    },{passive:true});
+    if('IntersectionObserver' in window) new IntersectionObserver(function(es){visible=es[0].isIntersecting},{threshold:.35}).observe(rail); else visible=true;
+    if(!reduit) setInterval(function(){
+      if(!visible||document.hidden||Date.now()<pauseJusque) return;
+      aller((i+1)%slides.length);
+    },+rail.dataset.auto||3000);
+  });
+
   /* filtres des réalisations */
   var chips=qsa('.chip[data-f]');
   if(chips.length){
