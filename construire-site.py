@@ -22,7 +22,6 @@ BASE = 'https://takedownstudio.com'   # À CONFIRMER : domaine final du site
 AUJ = datetime.date.today().isoformat()
 import hashlib
 V = hashlib.sha1(open(os.path.join(ICI, 'statique', 'site.js'), 'rb').read()).hexdigest()[:8]   # change dès que le JS change
-VC = hashlib.sha1(open(os.path.join(ICI, 'statique', 'configurateur.js'), 'rb').read()).hexdigest()[:8]
 
 # Adresse du Worker Cloudflare qui reçoit le formulaire (fichiers dans R2 + courriel à Takedown).
 API_SOUMISSION = os.environ.get('API_SOUMISSION', 'https://takedown-soumission.jack-mobile.workers.dev/api/soumission')
@@ -571,14 +570,6 @@ def types_patches():
     <p class="note rv">On t’aide à choisir selon ton logo, ton produit et le look que tu veux.</p></div>
     <div class="types-patches">{cartes}</div>{etiq}</section>'''
 
-def configurateur(s):
-    # 2026-10-24 (Takedown via Alex) : prototype de configurateur de casquette, remplace « Exemples » sur cette page
-    return f'''<section class="sec wrap" id="monte-ta-casquette"><div class="head"><h2 class="h2 rv">Monte ta casquette</h2>
-    <p class="note rv">Choisis la forme, les couleurs, le tissu, le logo et les détails, et vois le résultat tout de suite.</p></div>
-    <div class="cf rv" id="configurateur"><a class="btn btn-rose" id="cf-soum" href="{soum(s['slug'])}">Demander une soumission <span class="arr">→</span></a></div>
-    <script src="/assets/configurateur.js?v={VC}" defer></script>
-  </section>'''
-
 def service(s, i):
     photos = reals_de(s)
     exemples = ''.join(f'<figure class="rv">{photo_real(r)}<figcaption>{r["titre"]}</figcaption></figure>' for r in photos[1:7])
@@ -602,14 +593,6 @@ def service(s, i):
       <div class="grid g3">{''.join(tuile(PAR_SLUG[l]) for l in s['liens'][:3])}</div>
       {('<div class="rv" style="display:flex;gap:28px;flex-wrap:wrap;margin-top:24px">' + ''.join(f'<a class="lien" href="/services/{l}">{nom_court(PAR_SLUG[l])} <span class="arr">→</span></a>' for l in s['liens'][3:]) + '</div>') if len(s['liens']) > 3 else ''}
     </section>'''
-    if s.get('rose'):
-        bloc_exemples = configurateur(s)
-    else:
-        bloc_exemples = f'''<section class="sec wrap"><div class="head"><h2 class="h2 rv">Exemples</h2>
-    <div class="links rv"><a href="/realisations?f={s['filtre']}">Voir les réalisations <span class="arr">→</span></a></div></div>
-    {exemples}
-    <p class="rv" style="margin-top:40px"><a class="btn btn-w" href="{soum(s['slug'])}">{s['bouton']} <span class="arr">→</span></a></p>
-  </section>'''
     ctas = (f'<a class="btn btn-w" href="{soum(s["slug"])}">{s["bouton"]}</a>'
             f'<a class="btn btn-g" href="/realisations?f={s["filtre"]}">Voir les réalisations</a>')
     corps = f'''{nav('/services')}
@@ -618,7 +601,11 @@ def service(s, i):
   {grande}
   <section class="sec wrap">{plus_prevoir(s['plus'], s['prevoir'])}</section>
   {types_patches() if s['slug'] == 'patches-ecussons' else ''}
-  {bloc_exemples}
+  <section class="sec wrap"><div class="head"><h2 class="h2 rv">Exemples</h2>
+    <div class="links rv"><a href="/realisations?f={s['filtre']}">Voir les réalisations <span class="arr">→</span></a></div></div>
+    {exemples}
+    <p class="rv" style="margin-top:40px"><a class="btn btn-w" href="{soum(s['slug'])}">{s['bouton']} <span class="arr">→</span></a></p>
+  </section>
   {extras}
   {assoc}
 </main>
@@ -873,7 +860,6 @@ def construire():
     shutil.copytree(os.path.join(ICI, 'statique', 'img'), os.path.join(SORTIE, 'assets', 'img'))
     shutil.copytree(os.path.join(ICI, 'statique', 'polices'), os.path.join(SORTIE, 'assets', 'polices'))
     shutil.copy(os.path.join(ICI, 'statique', 'site.js'), os.path.join(SORTIE, 'assets', 'site.js'))
-    shutil.copy(os.path.join(ICI, 'statique', 'configurateur.js'), os.path.join(SORTIE, 'assets', 'configurateur.js'))
     images()
     optimiser_images()
 

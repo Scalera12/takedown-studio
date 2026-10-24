@@ -591,29 +591,3 @@ html:not(.js) .words .line .mini{opacity:1;transform:none}
 /* 2026-10-24 (Takedown via Alex) : bloc rose de la page Nos services (casquettes 100 % personnalisées) */
 .svc.rose .ph.art{background:var(--rose)}
 .svc.rose .ph.art img{filter:invert(1)}
-
-/* 2026-10-24 (Takedown via Alex) : configurateur de casquette (prototype) */
-.cf{display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(20px,3vw,48px);align-items:start}
-.cf-view{position:sticky;top:90px}
-.cf-svg{background:var(--s1);border:1px solid var(--line);padding:clamp(12px,2vw,28px)}
-.cf-svg svg{display:block;width:100%;height:auto}
-.cf-resume{margin-top:16px}
-.cf-resume .mono{color:var(--mute);margin-bottom:10px}
-.cf-resume ul{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:0 24px;border-top:1px solid var(--line)}
-.cf-resume li{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid var(--line);font-size:14px}
-.cf-resume li span{color:var(--mute)}
-.cf-resume .btn-rose{margin-top:22px}
-.cf-note{color:var(--mute);font-size:13px;margin-top:14px;max-width:52ch}
-.cf-ctrl{display:grid;gap:0}
-.cf-g{border:0;border-top:1px solid var(--line);padding:22px 0 26px}
-.cf-g legend{color:var(--mute);padding:0 12px 0 0;float:left;width:100%;margin-bottom:14px}
-.cf-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;clear:both}
-.cf-sous{color:var(--mute);margin:12px 0 8px;clear:both}
-.cf-chip{border:1px solid var(--line);background:none;color:#d1d1d6;padding:9px 16px;font-size:13px;font-weight:500;cursor:pointer;transition:background .3s,color .3s,border-color .3s}
-.cf-chip[aria-pressed="true"],.cf-chip:hover{background:#fff;color:#000;border-color:#fff}
-.cf-sw{width:36px;height:36px;border:1px solid rgba(255,255,255,.28);background:var(--c);cursor:pointer;padding:0}
-.cf-sw[aria-pressed="true"]{outline:2px solid var(--rose);outline-offset:3px}
-.cf-fichier{display:inline-flex;border:1px dashed rgba(255,255,255,.4);padding:10px 16px;font-size:13px;font-weight:500;cursor:pointer;margin:0 8px 6px 0}
-.cf-fichier input{position:absolute;opacity:0;width:1px;height:1px}
-.cf-fichier:focus-within{border-color:var(--rose)}
-@media (max-width:900px){.cf{grid-template-columns:1fr}.cf-view{position:static}.cf-resume ul{grid-template-columns:1fr}}
