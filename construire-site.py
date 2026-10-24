@@ -600,9 +600,9 @@ def guide_casquettes():
         puces = ''
         for n, (dessin, tag, nom, texte, lien) in enumerate(blocs):
             btn = f'<div><a class="btn btn-g" href="/services/{lien[0]}">{lien[1]} <span class="arr">→</span></a></div>' if lien else ''
-            arts += f'''<article class="svc rose">
-        <div class="ph art"><img src="/assets/img/{dessin}-blanc.png" alt="" loading="lazy"></div>
-        <div class="txt"><span class="mono" style="color:var(--mute)">{tag}</span><h3>{nom}</h3><p>{texte}</p>{btn}</div>
+            arts += f'''<article class="carte-casq">
+        <div class="art"><img src="/assets/img/{dessin}-blanc.png" alt="" loading="lazy"></div>
+        <div class="lab"><span class="mono">{tag}</span><h3>{nom}</h3><p>{texte}</p>{btn}</div>
       </article>'''
             puces += f'<button type="button" class="chip" aria-pressed="{"true" if n == 0 else "false"}">{nom}</button>'
         out += f'''<section class="sec guide"><div class="wrap"><div class="head"><h2 class="h2 rv">{titre}</h2><p class="note rv">{note}</p></div>
