@@ -13,7 +13,7 @@ Règles fixées par le client (2026-09-30) :
 
 Usage : python3 construire-site.py
 """
-import io, os, json, shutil, datetime, html as H
+import io, os, re, json, shutil, datetime, html as H
 from PIL import Image
 
 ICI = os.path.dirname(os.path.abspath(__file__))
@@ -343,10 +343,13 @@ def crumb(chemin):
 
 def phead(chemin, titre, intro, ctas='', dessin=None):
     fig = f'<img class="fig" src="/assets/img/{dessin}-blanc.png" alt="" aria-hidden="true">' if dessin else ''
+    # taille du titre : le plus long mot doit toujours tenir sur une ligne (environ 0,95 em par lettre en majuscules larges)
+    mots_t = re.sub(r'<[^>]+>', ' ', H.unescape(titre)).split()
+    marge = max(8.0, round(max([len(w) for w in mots_t] or [8]) * 0.95 + 0.5, 1))
     return f'''<section class="phead">
   <div class="wrap">
     {crumb(chemin)}
-    <h1 class="x">{titre}</h1>
+    <h1 class="x" style="--m:{marge}">{titre}</h1>
     <p class="intro">{intro}</p>
     {f'<div class="ctas">{ctas}</div>' if ctas else ''}
   </div>

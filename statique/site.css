@@ -77,7 +77,7 @@ a:hover .arr{transform:translateX(5px)}
   background:radial-gradient(50% 70% at 85% 30%,#18181a 0%,#000 70%)}
 .crumb{display:flex;gap:10px;flex-wrap:wrap;color:var(--mute)}
 .crumb a:hover{color:#fff}
-.phead h1{font-size:min(clamp(40px,7.4vw,112px),calc((100vw - 2*var(--pad))/12));margin-top:22px;max-width:14ch;overflow-wrap:break-word}   /* le plus long mot (PERSONNALISÉES) doit tenir dans l'écran */
+.phead h1{font-size:min(clamp(40px,7.4vw,112px),calc((100vw - 2*var(--pad))/var(--m,14)));margin-top:22px;max-width:14ch;overflow-wrap:normal;word-break:normal;hyphens:none}   /* le plus long mot (PERSONNALISÉES) doit tenir dans l'écran */
 .phead .intro{font-size:clamp(18px,1.8vw,23px);line-height:1.45;color:#dcdcdf;margin-top:26px;max-width:56ch}
 .phead .ctas{display:flex;gap:10px;flex-wrap:wrap;margin-top:32px}
 .phead .fig{position:absolute;right:var(--pad);bottom:clamp(30px,5vw,70px);width:clamp(150px,20vw,300px);opacity:.95;pointer-events:none}
@@ -635,5 +635,5 @@ html:not(.js) .words .line .mini{opacity:1;transform:none}
 }
 
 /* titres des sections du guide : même typo que le titre de la page (2026-10-24) */
-.guide .head .h2{font-variation-settings:"wdth" 125;font-weight:800;letter-spacing:-.02em;text-transform:uppercase;line-height:.9;font-size:min(clamp(28px,4.6vw,64px),calc((100vw - 2*var(--pad))/12));overflow-wrap:break-word}
-.carte-casq h3,.carte-casq p{overflow-wrap:break-word}
+.guide .head .h2{font-variation-settings:"wdth" 125;font-weight:800;letter-spacing:-.02em;text-transform:uppercase;line-height:.9;font-size:min(clamp(28px,4.6vw,64px),calc((100vw - 2*var(--pad))/12))}
+.carte-casq h3,.guide .head .h2{overflow-wrap:normal;word-break:normal;hyphens:none}
