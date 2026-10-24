@@ -113,6 +113,17 @@ SERVICES = [
          liens=[],
          seo='Autocollants personnalisés avec ton logo | Takedown Studio',
          desc='Autocollants personnalisés avec ton logo pour tes emballages, tes commandes et tes événements. On t’aide à choisir le format et la finition. Bromont.'),
+    # 2026-10-24 (Takedown via Alex) : page de départ, texte à retravailler avec Takedown. Bloc rose (rose=True).
+    dict(slug='casquettes-100-personnalisees', nom='Casquettes 100 % personnalisées', filtre='casquettes-tuques', ton='#f29cc0', rose=True,
+         tag='Casquette sur mesure', court='Forme, couleurs, tissu, logo : on la monte de A à Z, à ton choix.',
+         texte='Pas juste ton logo sur une casquette déjà faite. On part de zéro et tu choisis chaque morceau : la forme, les couleurs, le tissu et le logo. On monte la casquette avec toi, de A à Z.',
+         plus='Une casquette unique, pensée pour ta marque, avec la forme, les couleurs, le tissu et le logo que tu choisis.',
+         prevoir='Un projet sur mesure demande plus de préparation qu’une casquette de catalogue. Les minimums, les délais et le prix dépendent de la forme, du tissu et de la méthode choisis, et on te les confirme dans la soumission.',
+         exemples=['Forme : structurée, dad cap, trucker, cinq panneaux', 'Couleurs de la couronne, de la visière et des coutures', 'Tissu : coton, sergé, maille, velours côtelé', 'Logo brodé, en patch ou imprimé', 'Détails : dessous de la visière, étiquette, fermeture'],
+         bouton='Demander une soumission pour une casquette sur mesure',
+         liens=['casquettes-tuques', 'patches-ecussons', 'broderie'],
+         seo='Casquettes 100 % personnalisées | Takedown Studio',
+         desc='Casquettes 100 % personnalisées : forme, couleurs, tissu et logo, on la monte de A à Z selon ton choix. Demande ta soumission à Takedown Studio, Bromont.'),
 ]
 PAR_SLUG = {s['slug']: s for s in SERVICES}
 def nom_court(s):
@@ -168,6 +179,7 @@ DESSIN_SERVICE = {
     'casquettes-tuques': 'dessins/casquette-tuque',
     'patches-ecussons': 'dessins/patch-aiguille',
     'autocollants': 'dessins/autocollants-planche',
+    'casquettes-100-personnalisees': 'dessins/casquettes-tuques-pile',
 }
 
 # Tuiles de services (accueil, « Services associés », page Nos services) : un dessin du client
@@ -293,20 +305,14 @@ def ph(tag, ton, cls='', style=''):
 
 def tuile(s, titre_tag='h3'):
     # Dessin du client (WhatsApp, 7 oct.) qui correspond au service
-    return (f'<a class="tile dessin rv" href="/services/{s["slug"]}">'
+    casq = ' casq' if s.get('rose') else ''
+    return (f'<a class="tile dessin{casq} rv" href="/services/{s["slug"]}">'
             f'<div class="art"><img src="/assets/img/{DESSIN_TUILE[s["slug"]]}-blanc.png" alt="" loading="lazy"></div>'
             f'<div class="lab"><div><{titre_tag}>{nom_court(s)}</{titre_tag}><p>{s["court"]}</p></div>'
             f'<span class="go" aria-hidden="true">→</span></div></a>')
 
 def tuile_aide():
     return '''<a class="tile help rv" href="/contact?service=je-sais-pas"><div><h3>Tu sais pas quelle technique choisir?</h3><p>Envoie-nous ton idée. On t’aide à trouver la bonne combinaison de produits et de techniques.</p></div><div class="bas"><span class="go" aria-hidden="true">→</span><img src="/assets/img/illustration-encre-noir.png" alt="" loading="lazy" width="300" height="230"></div></a>'''
-
-def tuile_casquettes():
-    # 2026-10-24 (Takedown via Alex) : remplace « Tu sais pas quelle technique choisir? » sur l'accueil
-    return ('<a class="tile dessin casq rv" href="/services/casquettes-tuques">'
-            '<div class="art"><img src="/assets/img/dessins/casquettes-tuques-pile-blanc.png" alt="" loading="lazy"></div>'
-            '<div class="lab"><div><h3>Casquettes 100 % personnalisées</h3><p>Forme, couleurs, tissu, logo : on la monte de A à Z, à ton choix.</p></div>'
-            '<span class="go" aria-hidden="true">→</span></div></a>')
 
 def casquettes_custom():
     choix = [('La forme', 'Structurée, dad cap, trucker, cinq panneaux.'),
@@ -434,7 +440,7 @@ def page(chemin_url, titre_seo, desc, corps, fil=None, extra_ld=None, js=True):
 
 # ---------------------------------------------------------------- pages
 def accueil():
-    tuiles = ''.join(tuile(s) for s in SERVICES) + tuile_casquettes()
+    tuiles = ''.join(tuile(s) for s in SERVICES)
     corps = f'''{nav('/')}
 <main id="contenu">
   <section class="hero hero-dessins" data-intro="/assets/img/logo-complet-lutteurs-blanc-1000.webp">
@@ -506,7 +512,7 @@ def services_index():
     blocs = ''
     for s in SERVICES:
         phrase = s['texte'].split('. ')[0].rstrip('.') + '.'
-        blocs += f'''<article class="svc rv">
+        blocs += f'''<article class="svc{' rose' if s.get('rose') else ''} rv">
       <a class="ph art" href="/services/{s['slug']}" tabindex="-1" aria-hidden="true"><img src="/assets/img/{DESSIN_TUILE[s['slug']]}-blanc.png" alt="" loading="lazy"></a>
       <div class="txt"><span class="mono" style="color:var(--mute)">{e(s['court'])}</span><h2>{s['nom']}</h2><p>{phrase}</p>
       <div><a class="btn btn-g" href="/services/{s['slug']}">Découvrir le service <span class="arr">→</span></a></div></div>

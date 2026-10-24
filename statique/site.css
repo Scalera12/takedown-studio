@@ -587,3 +587,7 @@ html:not(.js) .words .line .mini{opacity:1;transform:none}
 
 /* 2026-10-24 (Takedown via Alex) : même espace en haut (avant la file de bonhommes) et en bas (après le texte) de l'entête */
 .hero-dessins{padding-top:clamp(56px,8vh,96px)!important;padding-bottom:clamp(56px,8vh,96px)!important}
+
+/* 2026-10-24 (Takedown via Alex) : bloc rose de la page Nos services (casquettes 100 % personnalisées) */
+.svc.rose .ph.art{background:var(--rose)}
+.svc.rose .ph.art img{filter:invert(1)}
