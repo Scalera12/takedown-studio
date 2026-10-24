@@ -188,6 +188,8 @@
   var sel=form.querySelector('#service'), sais=form.querySelector('#sais-pas');
   var svc=params.get('service');
   if(svc&&sel.querySelector('option[value="'+svc+'"]')) sel.value=svc;
+  var cfg=params.get('config'), ta=form.querySelector('#description');
+  if(cfg&&ta&&!ta.value) ta.value=cfg;
   var majSais=function(){
     if(sais.checked){sel.dataset.avant=sel.value;sel.value='je-sais-pas'}
     else if(sel.value==='je-sais-pas'&&sel.dataset.avant) sel.value=sel.dataset.avant;
