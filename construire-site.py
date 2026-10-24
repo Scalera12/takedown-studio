@@ -216,7 +216,7 @@ def mots(petits=True):
 
 # ---------------------------------------------------------------- morceaux communs
 MENU = [('/', 'Accueil'), ('/agence-branding', 'L’agence'), ('/services', 'Nos services'),
-        ('/#casquettes-custom', 'Casquettes custom'), ('/realisations', 'Réalisations'), ('/contact', 'Contact')]
+        ('/services/casquettes-100-personnalisees', 'Casquettes custom'), ('/realisations', 'Réalisations'), ('/contact', 'Contact')]
 
 def soum(slug=None):
     return '/contact' + (f'?service={slug}' if slug else '')
