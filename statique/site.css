@@ -580,3 +580,7 @@ html:not(.js) .words .line .mini{opacity:1;transform:none}
 @media (max-width:820px){.casq-custom .cc{grid-template-columns:1fr}.casq-custom .art{order:-1}.casq-custom .art img{width:min(62vw,280px)}.casq-custom .choix li{grid-template-columns:1fr;gap:4px}}
 /* seul le lien Casquettes custom du menu est rose (Alex, 2026-10-24) */
 .nav ul a.rose,.menu-m a.rose{color:var(--rose)}
+
+/* 2026-10-24 (Takedown via Alex) : même espace entre chaque bloc de l'accueil (services, casquettes, processus, techniques, agence) */
+.hero-dessins ~ .casq-custom{margin-top:clamp(80px,11vw,150px)}
+.hero-dessins ~ .how,.hero-dessins ~ .words{padding-block:clamp(80px,11vw,150px)}
