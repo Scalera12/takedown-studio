@@ -189,7 +189,7 @@
       };
       requestAnimationFrame(pas);
     };
-    var aller=function(n,retour){marque(n);anime(n*rail.clientWidth,retour?1300:700)};
+    var aller=function(n,retour){marque(n);anime(slides[n].offsetLeft,retour?1300:700)};   /* offsetLeft : tient compte de l'espace entre les encadrés */
     var minuteur=null;
     var plan=function(){
       clearTimeout(minuteur);
@@ -208,7 +208,7 @@
     var t=null;
     rail.addEventListener('scroll',function(){
       if(!anim) pause();
-      clearTimeout(t);t=setTimeout(function(){var n=Math.round(rail.scrollLeft/rail.clientWidth);if(n!==i&&n>=0&&n<slides.length)marque(n)},80);
+      clearTimeout(t);t=setTimeout(function(){var n=0,m=1e9;slides.forEach(function(sl,k){var e=Math.abs(sl.offsetLeft-rail.scrollLeft);if(e<m){m=e;n=k}});if(n!==i)marque(n)},80);
     },{passive:true});
     if('IntersectionObserver' in window) new IntersectionObserver(function(es){visible=es[0].isIntersecting;plan()},{threshold:.25}).observe(rail); else {visible=true;plan()}
     d.addEventListener('visibilitychange',plan);

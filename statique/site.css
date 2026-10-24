@@ -611,7 +611,7 @@ html:not(.js) .words .line .mini{opacity:1;transform:none}
 .carte-casq h3{font-weight:600;letter-spacing:-.025em;line-height:1.05;margin-top:6px}
 .carte-casq p{margin-top:8px}
 @media (max-width:820px){
-  .rail-g{margin:0 var(--pad)}
+  .rail-g{margin:0 var(--pad);gap:12px;position:relative}
   .rail-g .carte-casq{flex:0 0 100%;scroll-snap-align:start;background:var(--s1);border:1px solid var(--line);color:var(--ink);display:flex;flex-direction:column;justify-content:space-between;gap:18px;min-height:clamp(380px,100vw,470px);padding:22px 20px}
   .carte-casq .art img{max-height:clamp(140px,40vw,230px);max-width:75%}
   .carte-casq .lab{max-width:none}
