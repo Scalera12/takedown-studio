@@ -557,13 +557,12 @@ html:not(.js) .words .line .mini{opacity:1;transform:none}
 
 /* 2026-10-24 (Takedown via Alex) : rose du patch brodé, tuile + section casquettes 100 % custom */
 :root{--rose:#F59FC1}
-.tile.casq{background:var(--rose);color:#000;display:flex;flex-direction:column;justify-content:space-between;padding:30px;aspect-ratio:5/4}
-.tile.casq .mono{color:#000;opacity:.6;margin-bottom:10px}
-.tile.casq p{color:#2a1a20;font-size:15px;max-width:34ch;margin-top:10px}
-.tile.casq .bas{display:flex;justify-content:space-between;align-items:end}
-.tile.casq .bas img{width:min(46%,220px);height:auto;filter:invert(1);transition:transform .8s var(--ease)}
-.tile.casq:hover .bas img{transform:rotate(-4deg) scale(1.05)}
-.tile.casq .go{border-color:#000;color:#000}
+.tile.dessin.casq{background:var(--rose);color:#000;border-color:transparent}
+.tile.dessin.casq:hover{border-color:#000}
+.tile.dessin.casq .art img{filter:invert(1)}
+.tile.dessin.casq p{color:#2a1a20}
+.tile.dessin.casq .go{border-color:#000;color:#000}
+.tile.dessin.casq:hover .go{background:#000;color:#fff}
 .casq-custom{margin-top:clamp(90px,11vw,160px);border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:clamp(56px,8vw,110px) 0}
 .casq-custom .cc{display:grid;grid-template-columns:1.15fr .85fr;gap:clamp(32px,5vw,80px);align-items:center}
 .casq-custom .mono{color:var(--rose)}

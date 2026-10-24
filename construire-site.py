@@ -303,10 +303,10 @@ def tuile_aide():
 
 def tuile_casquettes():
     # 2026-10-24 (Takedown via Alex) : remplace « Tu sais pas quelle technique choisir? » sur l'accueil
-    return ('<a class="tile casq rv" href="#casquettes-custom"><div><p class="mono">Casquettes custom</p>'
-            '<h3>Casquettes 100 % personnalisées</h3><p>Forme, couleurs, tissu, logo : on la monte de A à Z, à ton choix.</p></div>'
-            '<div class="bas"><span class="go" aria-hidden="true">→</span>'
-            '<img src="/assets/img/dessins/casquettes-tuques-pile-blanc.png" alt="" loading="lazy" width="1000" height="769"></div></a>')
+    return ('<a class="tile dessin casq rv" href="#casquettes-custom">'
+            '<div class="art"><img src="/assets/img/dessins/casquettes-tuques-pile-blanc.png" alt="" loading="lazy"></div>'
+            '<div class="lab"><div><h3>Casquettes 100 % personnalisées</h3><p>Forme, couleurs, tissu, logo : on la monte de A à Z, à ton choix.</p></div>'
+            '<span class="go" aria-hidden="true">→</span></div></a>')
 
 def casquettes_custom():
     choix = [('La forme', 'Structurée, dad cap, trucker, cinq panneaux.'),
