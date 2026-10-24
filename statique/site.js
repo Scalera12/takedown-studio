@@ -172,7 +172,11 @@
     var slides=Array.prototype.slice.call(rail.children), chips=qsa('button',rail.parentNode.querySelector('.chips-g')||rail), i=0, pauseJusque=0, visible=false;
     var reduit=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
     var jeton=0, anim=false;
-    var marque=function(n){i=n;chips.forEach(function(c,k){c.setAttribute('aria-pressed',k===n)})};
+    var marque=function(n){
+      i=n;chips.forEach(function(c,k){c.setAttribute('aria-pressed',k===n)});
+      var c=chips[n], barre=c&&c.parentNode;
+      if(barre) barre.scrollTo({left:c.offsetLeft-(barre.clientWidth-c.offsetWidth)/2,behavior:'smooth'});   /* la bande suit l'onglet actif */
+    };
     var anime=function(vers,duree){
       var de=rail.scrollLeft, delta=vers-de, t0=null, moi=++jeton; anim=true; rail.style.scrollSnapType='none';
       var pas=function(t){

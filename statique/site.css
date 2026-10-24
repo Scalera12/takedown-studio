@@ -594,7 +594,7 @@ html:not(.js) .words .line .mini{opacity:1;transform:none}
 
 
 /* 2026-10-24 (Takedown via Alex) : guide casquettes en carrousels (un bloc à la fois, changement aux 3 s) */
-.chips-g{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding-bottom:4px;margin-bottom:18px}
+.chips-g{position:relative;display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding-bottom:4px;margin-bottom:18px}
 .chips-g::-webkit-scrollbar{display:none}
 .chips-g .chip{flex:none;background:none;cursor:pointer}
 .rail-g{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-x:contain}
