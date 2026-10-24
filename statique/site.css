@@ -554,3 +554,29 @@ html:not(.js) .words .line .mini{opacity:1;transform:none}
 @media (max-width:700px){.hero-dessins .defile .piste{animation-duration:28s}.hero-dessins .defile .p{height:96px}.hero-dessins .defile .p2{height:84px}.hero-dessins .defile .p4{height:64px}.hero-dessins .defile .groupe{gap:36px;padding-right:36px}}
 @media (prefers-reduced-motion: reduce){.hero-dessins .defile .piste,.hero-dessins .defile .p img{animation:none}}
 .hero-dessins+.sec{padding-top:clamp(28px,4vw,56px)}   /* moins de vide sous l'entête */
+
+/* 2026-10-24 (Takedown via Alex) : rose du patch brodé, tuile + section casquettes 100 % custom */
+:root{--rose:#F59FC1}
+.titre-h1 .l1{color:var(--rose)}
+.tile.casq{background:var(--rose);color:#000;display:flex;flex-direction:column;justify-content:space-between;padding:30px;aspect-ratio:5/4}
+.tile.casq .mono{color:#000;opacity:.6;margin-bottom:10px}
+.tile.casq p{color:#2a1a20;font-size:15px;max-width:34ch;margin-top:10px}
+.tile.casq .bas{display:flex;justify-content:space-between;align-items:end}
+.tile.casq .bas img{width:min(46%,220px);height:auto;filter:invert(1);transition:transform .8s var(--ease)}
+.tile.casq:hover .bas img{transform:rotate(-4deg) scale(1.05)}
+.tile.casq .go{border-color:#000;color:#000}
+.casq-custom{margin-top:clamp(90px,11vw,160px);border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:clamp(56px,8vw,110px) 0}
+.casq-custom .cc{display:grid;grid-template-columns:1.15fr .85fr;gap:clamp(32px,5vw,80px);align-items:center}
+.casq-custom .mono{color:var(--rose)}
+.casq-custom .h2{margin-top:14px}
+.casq-custom .rose{color:var(--rose)}
+.casq-custom .big{font-size:clamp(18px,1.7vw,22px);color:#d1d1d6;max-width:40ch;margin-top:22px;line-height:1.45}
+.casq-custom .choix{list-style:none;margin:34px 0 0;padding:0;border-top:1px solid var(--line)}
+.casq-custom .choix li{display:grid;grid-template-columns:minmax(120px,.38fr) 1fr;gap:18px;padding:15px 0;border-bottom:1px solid var(--line)}
+.casq-custom .choix b{font-weight:600}
+.casq-custom .choix span{color:var(--mute)}
+.btn-rose{display:inline-flex;gap:10px;align-items:center;margin-top:34px;background:var(--rose);color:#000;padding:16px 22px;font-weight:600}
+.btn-rose:hover .arr{transform:translateX(4px)}
+.casq-custom .art{display:flex;justify-content:center}
+.casq-custom .art img{width:min(100%,420px);height:auto}
+@media (max-width:820px){.casq-custom .cc{grid-template-columns:1fr}.casq-custom .art{order:-1}.casq-custom .art img{width:min(62vw,280px)}.casq-custom .choix li{grid-template-columns:1fr;gap:4px}}

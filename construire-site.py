@@ -301,6 +301,33 @@ def tuile(s, titre_tag='h3'):
 def tuile_aide():
     return '''<a class="tile help rv" href="/contact?service=je-sais-pas"><div><h3>Tu sais pas quelle technique choisir?</h3><p>Envoie-nous ton idée. On t’aide à trouver la bonne combinaison de produits et de techniques.</p></div><div class="bas"><span class="go" aria-hidden="true">→</span><img src="/assets/img/illustration-encre-noir.png" alt="" loading="lazy" width="300" height="230"></div></a>'''
 
+def tuile_casquettes():
+    # 2026-10-24 (Takedown via Alex) : remplace « Tu sais pas quelle technique choisir? » sur l'accueil
+    return ('<a class="tile casq rv" href="#casquettes-custom"><div><p class="mono">Casquettes custom</p>'
+            '<h3>Casquettes 100 % personnalisées</h3><p>Forme, couleurs, tissu, logo : on la monte de A à Z, à ton choix.</p></div>'
+            '<div class="bas"><span class="go" aria-hidden="true">→</span>'
+            '<img src="/assets/img/dessins/casquettes-tuques-pile-blanc.png" alt="" loading="lazy" width="1000" height="769"></div></a>')
+
+def casquettes_custom():
+    choix = [('La forme', 'Structurée, dad cap, trucker, cinq panneaux.'),
+             ('Les couleurs', 'La couronne, la visière, le bouton, les coutures.'),
+             ('Le tissu', 'Coton, sergé, maille, velours côtelé.'),
+             ('Ton logo', 'Brodé, en patch ou imprimé, devant, sur le côté ou derrière.'),
+             ('Les détails', 'Le dessous de la visière, l’étiquette, la fermeture.')]
+    lis = ''.join(f'<li class="rv"><b>{t}</b><span>{d}</span></li>' for t, d in choix)
+    return f'''<section class="casq-custom" id="casquettes-custom" aria-labelledby="t-casq">
+    <div class="wrap cc">
+      <div class="txt">
+        <p class="mono rv">Casquettes custom</p>
+        <h2 class="h2 rv" id="t-casq">Ta casquette.<br><span class="rose">100 % à ton choix.</span></h2>
+        <p class="big rv">Pas juste ton logo sur une casquette déjà faite. On part de zéro et tu choisis chaque morceau.</p>
+        <ul class="choix">{lis}</ul>
+        <a class="btn btn-rose rv" href="/contact?service=casquettes-tuques">On monte ta casquette <span class="arr">→</span></a>
+      </div>
+      <div class="art rv"><img src="/assets/img/dessins/bonhomme-casquette-blanc.png" alt="" loading="lazy" width="908" height="1000"></div>
+    </div>
+  </section>'''
+
 def crumb(chemin):
     morceaux = ['<a href="/">Accueil</a>']
     for u, t in chemin[:-1]:
@@ -407,7 +434,7 @@ def page(chemin_url, titre_seo, desc, corps, fil=None, extra_ld=None, js=True):
 
 # ---------------------------------------------------------------- pages
 def accueil():
-    tuiles = ''.join(tuile(s) for s in SERVICES) + tuile_aide()
+    tuiles = ''.join(tuile(s) for s in SERVICES) + tuile_casquettes()
     corps = f'''{nav('/')}
 <main id="contenu">
   <section class="hero hero-dessins" data-intro="/assets/img/logo-complet-lutteurs-blanc-1000.webp">
@@ -426,6 +453,8 @@ def accueil():
     </div>
     <div class="grid">{tuiles}</div>
   </section>
+
+  {casquettes_custom()}
 
   {etapes()}
 
