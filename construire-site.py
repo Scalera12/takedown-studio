@@ -712,14 +712,15 @@ def catalogue():
 
 def realisations():
     presents = {'tous'} | {c for r in REALISATIONS for c in r['categories'].split()}
+    AFFICHER_PHOTOS = False   # 2026-10-26 (Alex Moite) : la page Réalisations montre seulement la carte Instagram pour l'instant
     chips = ''.join(f'<button class="chip" type="button" data-f="{k}" aria-pressed="{str(k == "tous").lower()}">{t}</button>'
-                    for k, t in FILTRES if k in presents)
+                    for k, t in FILTRES if k in presents and AFFICHER_PHOTOS)
     items = ''.join(f'''<article class="real rv" data-c="{r['categories']}">
       {photo_real(r)}
       <h3>{r['titre']}</h3>
       <div class="meta mono"><span>{r['produit']}</span><span>{r['tech']}</span></div>
       <a class="lien" href="/services/{r['service']}">{nom_court(PAR_SLUG[r['service']])} <span class="arr">→</span></a>
-    </article>''' for r in REALISATIONS)
+    </article>''' for r in REALISATIONS if AFFICHER_PHOTOS)
     insta = f'''<a class="real insta rv" href="{INSTAGRAM}" target="_blank" rel="noopener" data-c="tous">
       <div class="ph"><span class="ig">@takedownstudio</span></div>
       <h3>Nos derniers projets sur Instagram <span class="arr">→</span></h3>
@@ -731,7 +732,7 @@ def realisations():
          'Découvre quelques projets réalisés par Takedown Studio. Chaque projet est différent, et la technique utilisée dépend du produit, du visuel, de la quantité et du résultat recherché.',
          '', 'dessins/bonhomme-aiguille')}
   <section class="sec wrap">
-    <div class="chips" role="group" aria-label="Filtrer par technique">{chips}</div>
+    {f'<div class="chips" role="group" aria-label="Filtrer par technique">{chips}</div>' if chips else ''}
     <div class="reals">{items}{insta}</div>
     <p style="margin-top:56px"><a class="btn btn-w" href="/contact">Parle-nous de ton projet <span class="arr">→</span></a></p>
   </section>
