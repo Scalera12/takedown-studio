@@ -691,7 +691,7 @@ def catalogue():
 <main id="contenu">
   {phead([('/catalogue', 'Catalogue')], 'Notre catalogue',
          'Nos produits favoris, du promo au premium. On en a beaucoup plus : dis-nous ce que tu cherches.',
-         '', None)}
+         '', 'illustration-pinceau')}
   <section class="wrap cat-barre"><p class="rv">Livraison gratuite partout au Canada.</p>
     <div class="chips-cat" role="group" aria-label="Filtrer par catégorie">{puces}</div></section>
   {bloc('Promo / Basic', '21 produits favoris. Les essentiels, sans compromis sur le service.', promo)}
