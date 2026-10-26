@@ -690,7 +690,7 @@ def catalogue():
     corps = f'''{nav('/catalogue')}
 <main id="contenu">
   {phead([('/catalogue', 'Catalogue')], 'Notre catalogue',
-         'Voici nos produits favoris, des essentiels promo aux pièces premium. C’est un aperçu : on travaille avec beaucoup plus de produits. Dis-nous ce que tu cherches et on te propose la meilleure option pour ton projet.',
+         'Nos produits favoris, du promo au premium. On en a beaucoup plus : dis-nous ce que tu cherches.',
          '', None)}
   <section class="wrap cat-barre"><p class="rv">Livraison gratuite partout au Canada.</p>
     <div class="chips-cat" role="group" aria-label="Filtrer par catégorie">{puces}</div></section>
