@@ -675,12 +675,18 @@ html:not(.js) .words .line .mini{opacity:1;transform:none}
 .cat-fin{border-top:1px solid var(--line);padding-top:48px;max-width:56ch}
 .cat-fin p{color:#c9c9cc;margin:14px 0 24px}
 @media (max-width:1000px){.cat-grid{grid-template-columns:1fr 1fr}}
+.ptxt .pres{display:none}
 @media (max-width:620px){
-  .cat-grid{grid-template-columns:1fr}
-  .pcat{display:grid;grid-template-columns:112px 1fr}
-  .pimg{aspect-ratio:auto;min-height:150px;height:100%}
-  .ptxt{padding:14px 14px 16px;gap:8px}
-  .ptxt dl div{grid-template-columns:64px 1fr}
+  /* cell : deux produits par rangée, photo grande, texte réduit au minimum (les détails se déplient) */
+  .cat-grid{grid-template-columns:1fr 1fr;gap:10px}
+  .pimg{aspect-ratio:4/5}
+  .ptxt{padding:10px 10px 12px;gap:5px}
+  .ptxt .mono{font-size:9px;letter-spacing:.06em}
+  .ptxt h3{font-size:15px;line-height:1.15}
+  .ptxt dl{display:none}
+  .ptxt .pres{display:block;color:var(--mute);font-size:11px;line-height:1.35}
+  .ptxt details summary{font-size:12px;padding:3px 0}
+  .ptxt details p{font-size:12px}
 }
 
 .cat-fin .ctas{display:flex;gap:10px;flex-wrap:wrap}

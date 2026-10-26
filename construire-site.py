@@ -675,9 +675,12 @@ def carte_produit(x):
     if x['tailles']:
         lignes += f'<div><dt>Tailles</dt><dd>{e(x["tailles"])}</dd></div>'
     plus = f' <em>{e(x["couleurs_plus"])}.</em>' if x['couleurs_plus'] else ''
+    court_t = x['tailles'].split(' (')[0] if x['tailles'] else ''
+    court_p = x['poids'].split(' (')[0] if x['poids'] else ''
+    pres = f'<p class="pres">{e(x["categorie"])}{" · " + e(court_t) if court_t else ""}{" · " + e(court_p) if court_p else ""}</p>'
     return (f'<article class="pcat rv" data-cat="{CAT_SLUG.get(x["categorie"], "autre")}">'
             f'<div class="pimg" style="background:{x.get("fond", "#fff")}"><img src="/assets/img/{x["image"]}" alt="{e(x["nom"])}, {e(x["marque"])}" width="720" height="900" loading="lazy"></div>'
-            f'<div class="ptxt"><p class="mono">{ligne_ref}</p><h3>{e(x["nom"])}</h3><dl>{lignes}</dl>'
+            f'<div class="ptxt"><p class="mono">{ligne_ref}</p><h3>{e(x["nom"])}</h3>{pres}<dl>{lignes}</dl>'
             f'<details><summary>Couleurs ({e(x["couleurs_nb"])})</summary><p>{e(x["couleurs"])}.{plus}</p></details></div></article>')
 
 def catalogue():
