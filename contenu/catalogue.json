@@ -11,7 +11,8 @@
   "couleurs_nb": "19",
   "couleurs_plus": "",
   "couleurs": "White, Black, Ash Grey, Burgundy, Cardinal, Celadon, Charcoal, Cream, Forest, Heather Charcoal, Heather Grey, Military Green, Orange, Pink, Powder Blue, Red, Royal Blue, Sand, True Navy",
-  "image": "catalogue/01.jpg"
+  "image": "catalogue/01.jpg",
+  "fond": "#ffffff"
  },
  {
   "id": 2,
@@ -25,7 +26,8 @@
   "couleurs_nb": "23",
   "couleurs_plus": "",
   "couleurs": "Heliconia, Black, White, Navy, Charcoal Heather, Athletic Grey Heather, Ivory, Sand, Royal, Red, Forest Green, Maroon, Kelly Green, Gold, Fatigue Green, Pink, Purple, Sapphire, Orange, Light Blue, Yellow, Caramel, Brown",
-  "image": "catalogue/02.jpg"
+  "image": "catalogue/02.jpg",
+  "fond": "#ffffff"
  },
  {
   "id": 3,
@@ -39,7 +41,8 @@
   "couleurs_nb": "Sélection de 12",
   "couleurs_plus": "Plus de 60 couleurs offertes",
   "couleurs": "Black, White, Navy, Athletic Heather, Natural, Military Green, Maroon, Red, Royal, Caramel, Charcoal, Light Blue",
-  "image": "catalogue/03.jpg"
+  "image": "catalogue/03.jpg",
+  "fond": "#ffffff"
  },
  {
   "id": 4,
@@ -53,7 +56,8 @@
   "couleurs_nb": "Sélection",
   "couleurs_plus": "Plus de 30 couleurs offertes",
   "couleurs": "White, Black, Arctic, Ash Grey, Brown, Burgundy, Cardinal, Cream, Forest, Heather Grey, Mustard, Navy, Pink, Red, Royal Blue, Sage",
-  "image": "catalogue/04.jpg"
+  "image": "catalogue/04.jpg",
+  "fond": "#ffffff"
  },
  {
   "id": 5,
@@ -67,7 +71,8 @@
   "couleurs_nb": "Sélection",
   "couleurs_plus": "Plus de 40 couleurs offertes",
   "couleurs": "White, Black, Bone, Cardinal, Cream, Forest Green, Heather Grey, Heavy Metal, Maroon, Midnight Navy, Military Green, Natural, Oatmeal, Red, Royal, Sand",
-  "image": "catalogue/05.jpg"
+  "image": "catalogue/05.jpg",
+  "fond": "#ffffff"
  },
  {
   "id": 6,
@@ -81,7 +86,8 @@
   "couleurs_nb": "Sélection de 12",
   "couleurs_plus": "Plus de 80 couleurs offertes",
   "couleurs": "Black, White, Navy, Sport Grey, Charcoal, Sand, Natural, Military Green, Maroon, Red, Royal, Forest Green",
-  "image": "catalogue/06.jpg"
+  "image": "catalogue/06.jpg",
+  "fond": "#ffffff"
  },
  {
   "id": 7,
@@ -95,7 +101,8 @@
   "couleurs_nb": "9",
   "couleurs_plus": "",
   "couleurs": "White, Black, Celadon, Heather Charcoal, Heather Grey, Orange, Powder Blue, Sand, True Navy",
-  "image": "catalogue/07.jpg"
+  "image": "catalogue/07.jpg",
+  "fond": "#ffffff"
  },
  {
   "id": 8,
@@ -109,7 +116,8 @@
   "couleurs_nb": "8",
   "couleurs_plus": "",
   "couleurs": "Charcoal Heather, Black, White, Navy, Athletic Grey Heather, Royal Blue, Red, Orange",
-  "image": "catalogue/08.jpg"
+  "image": "catalogue/08.jpg",
+  "fond": "#ffffff"
  },
  {
   "id": 9,
@@ -123,7 +131,8 @@
   "couleurs_nb": "Sélection",
   "couleurs_plus": "Plus de 40 couleurs offertes",
   "couleurs": "White, Black, Antique Cherry Red, Ash, Charcoal, Dark Heather, Forest, Light Blue, Light Pink, Maroon, Military Green, Navy, Red, Royal, Sand, Sport Grey",
-  "image": "catalogue/09.jpg"
+  "image": "catalogue/09.jpg",
+  "fond": "#ffffff"
  },
  {
   "id": 10,
@@ -137,7 +146,8 @@
   "couleurs_nb": "7",
   "couleurs_plus": "",
   "couleurs": "Army, Army Heather, Black, Black Camo, Bone, Cement, Charcoal Heather",
-  "image": "catalogue/10.jpg"
+  "image": "catalogue/10.jpg",
+  "fond": "#ffffff"
  },
  {
   "id": 11,
@@ -151,7 +161,8 @@
   "couleurs_nb": "13",
   "couleurs_plus": "",
   "couleurs": "Black, Navy, Charcoal Heather, Athletic Grey Heather, Royal, Red, Ivory, Maroon, Forest Green, White, Ash Grey, Caramel, Sand",
-  "image": "catalogue/11.jpg"
+  "image": "catalogue/11.jpg",
+  "fond": "#ffffff"
  },
  {
   "id": 12,
@@ -165,7 +176,8 @@
   "couleurs_nb": "12",
   "couleurs_plus": "",
   "couleurs": "Black, White, Navy, Athletic Heather, Dark Heather Grey, Oatmeal Heather, Military Green, Maroon, Red, Royal, Caramel, Sand",
-  "image": "catalogue/12.jpg"
+  "image": "catalogue/12.jpg",
+  "fond": "#ffffff"
  },
  {
   "id": 13,
@@ -179,7 +191,8 @@
   "couleurs_nb": "Sélection",
   "couleurs_plus": "Plus de 40 couleurs offertes",
   "couleurs": "White, Black, Alpine Green, Army, Bone, Brown, Charcoal, Classic Navy, Forest Green, Grey Heather, Gunmetal Heather, Ivory, Maroon, Red, Royal, Sandstone",
-  "image": "catalogue/13.jpg"
+  "image": "catalogue/13.jpg",
+  "fond": "#ffffff"
  },
  {
   "id": 14,
@@ -193,7 +206,8 @@
   "couleurs_nb": "18",
   "couleurs_plus": "",
   "couleurs": "Balsam Green, Blue Mist, Bone, Burgundy, Charcoal Heather Grey, Coffee Brown, Dark Military Green, Dark Teal, Dusty Rose, Grey Heather, Lapis Blue, Midnight Blue, Onyx, Orange Burst, Saddle, Sahara, Scarlet Red, Storm Grey",
-  "image": "catalogue/14.jpg"
+  "image": "catalogue/14.jpg",
+  "fond": "#ffffff"
  },
  {
   "id": 15,
@@ -207,7 +221,8 @@
   "couleurs_nb": "Sélection de 12",
   "couleurs_plus": "Environ 50 couleurs offertes",
   "couleurs": "Black, White, Navy, Sport Grey, Charcoal, Dark Heather, Sand, Military Green, Maroon, Red, Royal, Forest",
-  "image": "catalogue/15.jpg"
+  "image": "catalogue/15.jpg",
+  "fond": "#ffffff"
  },
  {
   "id": 16,
@@ -221,7 +236,8 @@
   "couleurs_nb": "21",
   "couleurs_plus": "",
   "couleurs": "Black, White, Navy, Charcoal Heather, Athletic Grey Heather, Ivory, Sand, Ash Grey, Royal, Red, Forest Green, Maroon, Gold, Pink, Purple, Orange, Kelly, Brown, Caramel, Light Blue, Heliconia",
-  "image": "catalogue/16.jpg"
+  "image": "catalogue/16.jpg",
+  "fond": "#ffffff"
  },
  {
   "id": 17,
@@ -235,7 +251,8 @@
   "couleurs_nb": "12",
   "couleurs_plus": "",
   "couleurs": "White, Black, Cranberry, Dark Grey, Green Camo, Khaki, Light Blue, Navy, Orange, Pink, Spruce, Stone",
-  "image": "catalogue/17.jpg"
+  "image": "catalogue/17.jpg",
+  "fond": "#ffffff"
  },
  {
   "id": 18,
@@ -249,7 +266,8 @@
   "couleurs_nb": "11",
   "couleurs_plus": "",
   "couleurs": "Black/Black, Black/White, Navy/White, Charcoal/White, Caramel/Black, Heather/Black, Brown/Khaki, Moss/Khaki, Red/White, Royal/White, White/White",
-  "image": "catalogue/18.jpg"
+  "image": "catalogue/18.jpg",
+  "fond": "#ffffff"
  },
  {
   "id": 19,
@@ -263,7 +281,8 @@
   "couleurs_nb": "7",
   "couleurs_plus": "",
   "couleurs": "Red, Navy, Black, Royal, White, Heather, Dark Grey",
-  "image": "catalogue/19.jpg"
+  "image": "catalogue/19.jpg",
+  "fond": "#ffffff"
  },
  {
   "id": 20,
@@ -277,7 +296,8 @@
   "couleurs_nb": "11",
   "couleurs_plus": "",
   "couleurs": "Black, Navy, Charcoal Heather, Athletic Grey Heather, Ivory, Caramel, Royal, Red, Forest Green, Maroon, Gold",
-  "image": "catalogue/20.jpg"
+  "image": "catalogue/20.jpg",
+  "fond": "#ffffff"
  },
  {
   "id": 21,
@@ -291,7 +311,8 @@
   "couleurs_nb": "6",
   "couleurs_plus": "",
   "couleurs": "Black, Cream, Espresso, Old Rose, Sauge, Slate Blue",
-  "image": "catalogue/21.jpg"
+  "image": "catalogue/21.jpg",
+  "fond": "#ffffff"
  },
  {
   "id": 22,
@@ -305,7 +326,8 @@
   "couleurs_nb": "Sélection de 14",
   "couleurs_plus": "Plus de 60 couleurs offertes",
   "couleurs": "Black, White, Ivory, Pepper, Grey, Granite, Sandstone, Khaki, Moss, Sage, Blue Jean, True Navy, Espresso, Brick",
-  "image": "catalogue/22.jpg"
+  "image": "catalogue/22.jpg",
+  "fond": "#ffffff"
  },
  {
   "id": 23,
@@ -319,7 +341,8 @@
   "couleurs_nb": "Sélection",
   "couleurs_plus": "Plus de 50 couleurs offertes",
   "couleurs": "Black, Carbon Black, Vintage Black, Black Edge, Dark Silver, Charcoal, Dark Teal, Army, Navy, Ash, Sage, Pink, Light Pink, Light Blue, Cement, White",
-  "image": "catalogue/23.jpg"
+  "image": "catalogue/23.jpg",
+  "fond": "#ffffff"
  },
  {
   "id": 24,
@@ -333,7 +356,8 @@
   "couleurs_nb": "11",
   "couleurs_plus": "",
   "couleurs": "Black, Burgundy, Concrete, Dark Navy, Desert Beige, Latte, Off Black, Off White, Slate Blue, Utility Green, White",
-  "image": "catalogue/24.jpg"
+  "image": "catalogue/24.jpg",
+  "fond": "#ffffff"
  },
  {
   "id": 25,
@@ -347,7 +371,8 @@
   "couleurs_nb": "6",
   "couleurs_plus": "",
   "couleurs": "White, Ivory, Dusty Green, Icy Rock, Black, Acid Black",
-  "image": "catalogue/25.jpg"
+  "image": "catalogue/25.jpg",
+  "fond": "#ffffff"
  },
  {
   "id": 26,
@@ -361,7 +386,8 @@
   "couleurs_nb": "8",
   "couleurs_plus": "",
   "couleurs": "Ivory, Black, White, Navy, Charcoal, Caramel, Maroon, Military Green",
-  "image": "catalogue/26.jpg"
+  "image": "catalogue/26.jpg",
+  "fond": "#ffffff"
  },
  {
   "id": 27,
@@ -375,7 +401,8 @@
   "couleurs_nb": "Sélection",
   "couleurs_plus": "50 couleurs offertes",
   "couleurs": "White, Black, Berry, Blossom, Blue Jean, Espresso, Granite, Grey, Ivory, Khaki, Mustard, Navy, Pepper, Red, Sandstone, True Navy",
-  "image": "catalogue/27.jpg"
+  "image": "catalogue/27.jpg",
+  "fond": "#ffffff"
  },
  {
   "id": 28,
@@ -389,7 +416,8 @@
   "couleurs_nb": "20",
   "couleurs_plus": "",
   "couleurs": "White, Antique Gold, Black, Cardinal, Carrot, Charcoal Heather, Chestnut, Dove Grey, Heather Grey, Lemon, Navy, Oatmeal Heather, Ocean Blue, Pale Pink, Purple, Royal, Sandshell, Seafoam, Smoke, Sport Green",
-  "image": "catalogue/28.jpg"
+  "image": "catalogue/28.jpg",
+  "fond": "#ffffff"
  },
  {
   "id": 29,
@@ -403,7 +431,8 @@
   "couleurs_nb": "17",
   "couleurs_plus": "",
   "couleurs": "Black, Pigment Black, Alpine Green, Army, Ash Heather, Asphalt, Bone, Brown, Cement, Darkwood Tree Camo, Deadwood Tree Camo, Grey Heather, Navy, Red, Royal, Sandstone, Storm Blue",
-  "image": "catalogue/29.jpg"
+  "image": "catalogue/29.jpg",
+  "fond": "#ffffff"
  },
  {
   "id": 30,
@@ -417,7 +446,8 @@
   "couleurs_nb": "23",
   "couleurs_plus": "",
   "couleurs": "Black, Navy, Gold, Orange, Wine, Red, Pink, Dark Green, Brown, Blue, Kelly Green, Purple, Royal, Dark Beige, Khaki, Dark Beige/Black, Dark Beige/Navy, Dark Beige/Green, Light Khaki, Light Khaki / Navy, Cactus, Olive, Light khaki / Black",
-  "image": "catalogue/30.jpg"
+  "image": "catalogue/30.jpg",
+  "fond": "#ffffff"
  },
  {
   "id": 31,
@@ -431,7 +461,8 @@
   "couleurs_nb": "5",
   "couleurs_plus": "",
   "couleurs": "Washed Black, Washed Brown, Washed Dark Green, Washed Navy, Washed Stone",
-  "image": "catalogue/31.jpg"
+  "image": "catalogue/31.jpg",
+  "fond": "#ffffff"
  },
  {
   "id": 32,
@@ -445,7 +476,8 @@
   "couleurs_nb": "24",
   "couleurs_plus": "",
   "couleurs": "Army, Black, Blush, Coral, Dark Brown, Dusty Rose, Grey, Heather Grey, Lavender, Light Pink, Maroon, Maui Blue, Mustard, Mint, Pigment Amber, Pigment Clay, Pigment Plum, Pigment Sage, Red, Royal, Saddle, Safety Orange, Smoke, White",
-  "image": "catalogue/32.jpg"
+  "image": "catalogue/32.jpg",
+  "fond": "#ffffff"
  },
  {
   "id": 33,
@@ -459,6 +491,7 @@
   "couleurs_nb": "11",
   "couleurs_plus": "",
   "couleurs": "Black, Black Charcoal, Light Grey, Forest Green, Ivory, Lavender, Navy, Pigment Amber, Pigment Clay, Royal White, White Grey",
-  "image": "catalogue/33.jpg"
+  "image": "catalogue/33.jpg",
+  "fond": "#ffffff"
  }
 ]

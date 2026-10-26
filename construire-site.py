@@ -675,7 +675,7 @@ def carte_produit(x):
         lignes += f'<div><dt>Tailles</dt><dd>{e(x["tailles"])}</dd></div>'
     plus = f' <em>{e(x["couleurs_plus"])}.</em>' if x['couleurs_plus'] else ''
     return (f'<article class="pcat rv" data-cat="{CAT_SLUG.get(x["categorie"], "autre")}">'
-            f'<div class="pimg"><img src="/assets/img/{x["image"]}" alt="{e(x["nom"])}, {e(x["marque"])}" width="720" height="900" loading="lazy"></div>'
+            f'<div class="pimg" style="background:{x.get("fond", "#fff")}"><img src="/assets/img/{x["image"]}" alt="{e(x["nom"])}, {e(x["marque"])}" width="720" height="900" loading="lazy"></div>'
             f'<div class="ptxt"><p class="mono">{ligne_ref}</p><h3>{e(x["nom"])}</h3><dl>{lignes}</dl>'
             f'<details><summary>Couleurs ({e(x["couleurs_nb"])})</summary><p>{e(x["couleurs"])}.{plus}</p></details></div></article>')
 
@@ -692,7 +692,7 @@ def catalogue():
   {phead([('/catalogue', 'Catalogue')], 'Notre catalogue',
          'Nos produits favoris, du promo au premium.<span class="cat-plus">On en a ' + encre('beaucoup plus') + '.</span>Dis-nous ce que tu cherches.',
          '', 'illustration-pinceau')}
-  <section class="wrap cat-barre"><p class="rv">Livraison gratuite partout au Canada.</p>
+  <section class="wrap cat-barre"><p class="rv">Livraison gratuite partout au Canada. <a class="lien" href="/assets/documents/catalogue-takedown-studio.pdf" download>Télécharger le catalogue (PDF) <span class="arr">↓</span></a></p>
     <div class="chips-cat" role="group" aria-label="Filtrer par catégorie">{puces}</div></section>
   {bloc('Promo / Basic', '21 produits favoris. Les essentiels, sans compromis sur le service.', promo)}
   {bloc('Premium', '12 produits favoris. Des vêtements qui méritent ton logo.', prem)}
@@ -947,6 +947,7 @@ def construire():
     global CSS
     CSS = css_minifie()
     shutil.copytree(os.path.join(ICI, 'statique', 'img'), os.path.join(SORTIE, 'assets', 'img'))
+    shutil.copytree(os.path.join(ICI, 'statique', 'documents'), os.path.join(SORTIE, 'assets', 'documents'))
     shutil.copytree(os.path.join(ICI, 'statique', 'polices'), os.path.join(SORTIE, 'assets', 'polices'))
     shutil.copy(os.path.join(ICI, 'statique', 'site.js'), os.path.join(SORTIE, 'assets', 'site.js'))
     images()

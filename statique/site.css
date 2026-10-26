@@ -662,7 +662,7 @@ html:not(.js) .words .line .mini{opacity:1;transform:none}
 .cat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
 .cat-section[hidden],.pcat[hidden]{display:none}
 .pcat{background:var(--s1);border:1px solid var(--line);display:flex;flex-direction:column}
-.pimg{background:#efeeea;aspect-ratio:4/5;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.pimg{background:#fff;aspect-ratio:4/5;display:flex;align-items:center;justify-content:center;overflow:hidden}
 .pimg img{width:100%;height:100%;object-fit:contain}
 .ptxt{padding:20px 22px 22px;display:flex;flex-direction:column;gap:10px}
 .ptxt .mono{color:var(--mute)}
@@ -692,3 +692,5 @@ html:not(.js) .words .line .mini{opacity:1;transform:none}
 
 /* catalogue : « On en a beaucoup plus » bien visible, sur sa propre ligne, en gras blanc avec le trait d'encre du site */
 .cat-plus{display:block;margin:14px 0 14px;color:#fff;font-weight:700;font-size:1.3em;letter-spacing:-.02em;line-height:1.15}
+
+.cat-barre .lien{margin-left:10px;color:#fff;font-weight:600;white-space:nowrap}
