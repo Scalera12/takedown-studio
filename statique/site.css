@@ -689,3 +689,6 @@ html:not(.js) .words .line .mini{opacity:1;transform:none}
   .phead:has(+ .cat-barre){padding-bottom:28px}
   .phead:has(+ .cat-barre) .fig{width:auto;max-width:150px;height:105px;margin-top:18px;object-fit:contain;object-position:0 100%}
 }
+
+/* catalogue : « On en a beaucoup plus » bien visible, sur sa propre ligne, en gras blanc avec le trait d'encre du site */
+.cat-plus{display:block;margin:14px 0 14px;color:#fff;font-weight:700;font-size:1.3em;letter-spacing:-.02em;line-height:1.15}
