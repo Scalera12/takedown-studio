@@ -163,7 +163,8 @@ def lire_realisations():
 REALISATIONS = lire_realisations()
 INSTAGRAM = 'https://www.instagram.com/takedownstudio/'
 FILTRES = [('tous', 'Tous'), ('vetements', 'Vêtements'), ('broderie', 'Broderie'), ('serigraphie', 'Sérigraphie'),
-           ('dtf', 'DTF'), ('casquettes-tuques', 'Casquettes et tuques'), ('patches', 'Patches'), ('autocollants', 'Autocollants')]
+           ('dtf', 'DTF'), ('casquettes-tuques', 'Casquettes et tuques'), ('patches', 'Patches'), ('autocollants', 'Autocollants'),
+           ('accessoires', 'Accessoires et sacs')]
 
 CHOIX_SERVICE = [('je-sais-pas', 'Je ne sais pas encore')] + [(s['slug'], s['nom']) for s in SERVICES] + \
                 [('vetements-sport-sublimation', 'Vêtements de sport et sublimation'), ('produits-sur-mesure', 'Produits sur mesure')]
