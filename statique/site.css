@@ -712,3 +712,9 @@ html:not(.js) .words .line .mini{opacity:1;transform:none}
   .menu-m a{display:block;font-variation-settings:"wdth" 125;font-weight:800;text-transform:uppercase;font-size:clamp(30px,8vw,46px);line-height:1.1;padding:10px 0;border-bottom:1px solid var(--line)}
   .menu-m .btn{margin-top:30px;width:100%;font-size:15px;border:0}
 }
+
+/* section « Nos réalisations » (Instagram) de la page Nos services */
+.ig-ligne{display:flex;align-items:center;gap:16px;margin-bottom:24px;color:#fff}
+.ig-ligne p{color:#c9c9cc;max-width:52ch}
+.ig-ico{flex:none}
+.btn .ig-ico{margin-right:10px}

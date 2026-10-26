@@ -505,6 +505,12 @@ def agence():
                 'Takedown Studio t’aide à donner une image cohérente à tes vêtements et à tes produits : choix des produits, des couleurs, des placements, de la technique.',
                 corps, fil=[('/agence-branding', 'L’agence')])
 
+# logo Instagram dessiné en SVG (trait blanc, taille remplacée au besoin)
+LOGO_INSTA = ('<svg class="ig-ico" viewBox="0 0 24 24" width="__T__" height="__T__" aria-hidden="true" focusable="false">'
+              '<rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="1.7"/>'
+              '<circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="1.7"/>'
+              '<circle cx="17.3" cy="6.7" r="1.15" fill="currentColor"/></svg>')
+
 def services_index():
     blocs = ''
     for s in SERVICES:
@@ -526,8 +532,8 @@ def services_index():
          '<a class="btn btn-w" href="/contact?service=je-sais-pas">Je sais pas quelle technique choisir</a>', 'illustration-pinceau')}
   <section class="sec">{blocs}</section>
   <section class="sec wrap"><div class="head"><h2 class="h2 rv">Nos réalisations</h2></div>
-    <p class="rv" style="color:#c9c9cc;max-width:52ch;margin-bottom:24px">Nos projets, c’est sur Instagram que ça se passe.</p>
-    <p class="rv"><a class="btn btn-g" href="{INSTAGRAM}" target="_blank" rel="noopener">Voir nos réalisations sur Instagram <span class="arr">→</span></a></p></section>
+    <div class="ig-ligne rv">{LOGO_INSTA.replace('__T__', '44')}<p>Nos projets, c’est sur Instagram que ça se passe.</p></div>
+    <p class="rv"><a class="btn btn-g" href="{INSTAGRAM}" target="_blank" rel="noopener">{LOGO_INSTA.replace('__T__', '18')} Voir nos réalisations sur Instagram <span class="arr">→</span></a></p></section>
   {extras}
 </main>
 {hesite()}
