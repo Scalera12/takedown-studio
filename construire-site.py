@@ -531,10 +531,12 @@ def services_index():
          'On t’aide à choisir les bons produits et la bonne technique pour représenter ta marque. Explore nos services pour voir les possibilités, les avantages et les éléments à prévoir.',
          '<a class="btn btn-w" href="/contact?service=je-sais-pas">Je sais pas quelle technique choisir</a>', 'illustration-pinceau')}
   <section class="sec">{blocs}</section>
-  <section class="sec wrap"><div class="head"><h2 class="h2 rv">Nos réalisations</h2></div>
-    <div class="ig-ligne rv">{LOGO_INSTA.replace('__T__', '44')}<p>Nos derniers projets, tu les trouves sur Instagram.</p></div>
-    <p class="rv"><a class="btn btn-g" href="{INSTAGRAM}" target="_blank" rel="noopener">{LOGO_INSTA.replace('__T__', '18')} Voir nos réalisations sur Instagram <span class="arr">→</span></a></p></section>
   {extras}
+  <section class="wrap ig-section"><hr class="ig-sep">
+    <div class="ig-bloc"><div class="ig-txt">
+      <div class="ig-ligne rv">{LOGO_INSTA.replace('__T__', '44')}<p>Nos derniers projets, tu les trouves sur Instagram.</p></div>
+      <p class="rv"><a class="btn btn-g" href="{INSTAGRAM}" target="_blank" rel="noopener">{LOGO_INSTA.replace('__T__', '18')} Voir nos réalisations sur Instagram <span class="arr">→</span></a></p></div>
+      <img class="ig-dessin rv" src="/assets/img/dessins/chandail-loupe-blanc.png" sizes="(max-width:820px) 62vw, 380px" alt="" width="1000" height="670" loading="lazy"></div></section>
 </main>
 {hesite()}
 {pied()}'''
