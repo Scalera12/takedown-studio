@@ -492,13 +492,6 @@ def agence():
          '<a class="btn btn-w" href="/contact">Parle-nous de ton projet</a><a class="btn btn-g" href="/services">Nos services</a>',
          'logo-complet-lutteurs')}
   <section class="sec wrap">
-    <div class="trio">
-      {photo(1, 'Étagères de vêtements vierges et presse de sérigraphie dans l’atelier Takedown', 'rv', sizes=TRIO)}
-      {photo(2, 'Espace de travail de l’atelier avec machine à coudre, presse à chaleur et planches de skate au mur', 'rv', sizes=TRIO)}
-      {photo(3, 'Comptoir d’accueil de Takedown Studio avec casquettes et vêtements personnalisés', 'rv', sizes=TRIO)}
-    </div>
-  </section>
-  <section class="sec wrap">
     {plus_prevoir('Un même contact pour ton projet, des conseils concrets et des produits qui vont bien ensemble.',
                   'Un projet qui regroupe plusieurs produits demande plus de préparation. Le budget et les délais dépendent des articles choisis.')}
   </section>
