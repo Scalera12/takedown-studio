@@ -532,7 +532,7 @@ def services_index():
          '<a class="btn btn-w" href="/contact?service=je-sais-pas">Je sais pas quelle technique choisir</a>', 'illustration-pinceau')}
   <section class="sec">{blocs}</section>
   <section class="sec wrap"><div class="head"><h2 class="h2 rv">Nos réalisations</h2></div>
-    <div class="ig-ligne rv">{LOGO_INSTA.replace('__T__', '44')}<p>Nos projets, c’est sur Instagram que ça se passe.</p></div>
+    <div class="ig-ligne rv">{LOGO_INSTA.replace('__T__', '44')}<p>Nos derniers projets, tu les trouves sur Instagram.</p></div>
     <p class="rv"><a class="btn btn-g" href="{INSTAGRAM}" target="_blank" rel="noopener">{LOGO_INSTA.replace('__T__', '18')} Voir nos réalisations sur Instagram <span class="arr">→</span></a></p></section>
   {extras}
 </main>
