@@ -215,6 +215,15 @@
     if(cell.addEventListener) cell.addEventListener('change',plan);
   });
 
+  /* catalogue : filtre par catégorie */
+  var cchips=qsa('.chips-cat .chip');
+  cchips.forEach(function(c){c.addEventListener('click',function(){
+    var f=c.dataset.cat;
+    cchips.forEach(function(x){x.setAttribute('aria-pressed',x===c)});
+    qsa('.pcat').forEach(function(a){a.hidden=!(f==='tous'||a.dataset.cat===f)});
+    qsa('.cat-section').forEach(function(sec){sec.hidden=!qsa('.pcat:not([hidden])',sec).length});
+  })});
+
   /* filtres des réalisations */
   var chips=qsa('.chip[data-f]');
   if(chips.length){

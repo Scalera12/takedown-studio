@@ -652,3 +652,33 @@ html:not(.js) .words .line .mini{opacity:1;transform:none}
   .phead{padding-top:22px}
   .crumb.mono{font-size:9px;letter-spacing:.06em;line-height:1.3;gap:2px 6px}
 }
+
+/* 2026-10-26 (Takedown via Alex Moite) : page Catalogue */
+.cat-barre{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-top:26px}
+.cat-barre p{color:var(--mute);font-size:14px}
+.chips-cat{display:flex;gap:8px;flex-wrap:wrap}
+.chips-cat .chip{background:none;cursor:pointer}
+.chips-cat .chip[aria-pressed="true"],.chips-cat .chip:hover{background:#fff;color:#000;border-color:#fff}
+.cat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.cat-section[hidden],.pcat[hidden]{display:none}
+.pcat{background:var(--s1);border:1px solid var(--line);display:flex;flex-direction:column}
+.pimg{background:#efeeea;aspect-ratio:4/5;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.pimg img{width:100%;height:100%;object-fit:contain}
+.ptxt{padding:20px 22px 22px;display:flex;flex-direction:column;gap:10px}
+.ptxt .mono{color:var(--mute)}
+.ptxt h3{font-size:clamp(20px,1.8vw,24px);font-weight:600;letter-spacing:-.02em;line-height:1.1}
+.ptxt dl{border-top:1px solid var(--line)}
+.ptxt dl div{display:grid;grid-template-columns:78px 1fr;gap:12px;padding:7px 0;border-bottom:1px solid var(--line);font-size:13px}
+.ptxt dt{color:var(--mute)}
+.ptxt details summary{cursor:pointer;font-size:13px;font-weight:600;padding:6px 0}
+.ptxt details p{color:#c9c9cc;font-size:13px;line-height:1.5;margin:6px 0 0}
+.cat-fin{border-top:1px solid var(--line);padding-top:48px;max-width:56ch}
+.cat-fin p{color:#c9c9cc;margin:14px 0 24px}
+@media (max-width:1000px){.cat-grid{grid-template-columns:1fr 1fr}}
+@media (max-width:620px){
+  .cat-grid{grid-template-columns:1fr}
+  .pcat{display:grid;grid-template-columns:112px 1fr}
+  .pimg{aspect-ratio:auto;min-height:150px;height:100%}
+  .ptxt{padding:14px 14px 16px;gap:8px}
+  .ptxt dl div{grid-template-columns:64px 1fr}
+}

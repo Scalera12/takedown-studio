@@ -216,7 +216,7 @@ def mots(petits=True):
 
 # ---------------------------------------------------------------- morceaux communs
 MENU = [('/', 'Accueil'), ('/agence-branding', 'L’agence'), ('/services', 'Nos services'),
-        ('/services/casquettes-100-personnalisees', 'Casquettes custom'), ('/realisations', 'Réalisations'), ('/contact', 'Contact')]
+        ('/services/casquettes-100-personnalisees', 'Casquettes custom'), ('/catalogue', 'Catalogue'), ('/realisations', 'Réalisations'), ('/contact', 'Contact')]
 
 def soum(slug=None):
     return '/contact' + (f'?service={slug}' if slug else '')
@@ -252,7 +252,7 @@ def pied(court=False):
           {appel}
           <div class="cols">
             <div><h4>Services</h4>{services}</div>
-            <div><h4>Studio</h4><a href="/agence-branding">L’agence</a><a href="/realisations">Réalisations</a><a href="/contact">Contact</a>
+            <div><h4>Studio</h4><a href="/agence-branding">L’agence</a><a href="/catalogue">Catalogue</a><a href="/realisations">Réalisations</a><a href="/contact">Contact</a>
               <h4 style="margin-top:22px">Nous joindre</h4><a href="tel:{ENTREPRISE['tel_intl']}">{ENTREPRISE['tel']}</a><a href="mailto:{ENTREPRISE['courriel']}">{ENTREPRISE['courriel']}</a><a href="{INSTAGRAM}" target="_blank" rel="noopener">Instagram</a></div>
           </div>
         </div>
@@ -659,6 +659,53 @@ def service(s, i):
     return page('/services/' + s['slug'], s['seo'], s['desc'], corps,
                 fil=[('/services', 'Nos services'), ('/services/' + s['slug'], s['nom'])], extra_ld=ld)
 
+# 2026-10-26 (Takedown via Alex Moite) : page Catalogue, les produits favoris (promo / basic et premium)
+CATALOGUE = json.load(io.open(os.path.join(ICI, 'contenu', 'catalogue.json'), encoding='utf-8'))
+CAT_FILTRES = [('tous', 'Tous'), ('tshirt', 'T-shirts'), ('manches-longues', 'Manches longues'), ('crewneck', 'Crewnecks'),
+               ('hoodie', 'Hoodies'), ('casquette', 'Casquettes'), ('tuque', 'Tuques'), ('accessoire', 'Accessoires')]
+CAT_SLUG = {'T-shirt': 'tshirt', 'Manches longues': 'manches-longues', 'Crewneck': 'crewneck', 'Hoodie': 'hoodie',
+            'Casquette': 'casquette', 'Tuque': 'tuque', 'Accessoire': 'accessoire'}
+
+def carte_produit(x):
+    ligne_ref = e(x['marque']) + (' · ' + e(x['ref']) if x['ref'] else '')
+    lignes = f'<div><dt>Catégorie</dt><dd>{e(x["categorie"])}</dd></div>'
+    if x['poids']:
+        lignes += f'<div><dt>Poids</dt><dd>{e(x["poids"])}</dd></div>'
+    if x['tailles']:
+        lignes += f'<div><dt>Tailles</dt><dd>{e(x["tailles"])}</dd></div>'
+    plus = f' <em>{e(x["couleurs_plus"])}.</em>' if x['couleurs_plus'] else ''
+    return (f'<article class="pcat rv" data-cat="{CAT_SLUG.get(x["categorie"], "autre")}">'
+            f'<div class="pimg"><img src="/assets/img/{x["image"]}" alt="{e(x["nom"])}, {e(x["marque"])}" width="720" height="900" loading="lazy"></div>'
+            f'<div class="ptxt"><p class="mono">{ligne_ref}</p><h3>{e(x["nom"])}</h3><dl>{lignes}</dl>'
+            f'<details><summary>Couleurs ({e(x["couleurs_nb"])})</summary><p>{e(x["couleurs"])}.{plus}</p></details></div></article>')
+
+def catalogue():
+    puces = ''.join(f'<button type="button" class="chip" data-cat="{k}" aria-pressed="{"true" if k == "tous" else "false"}">{t}</button>' for k, t in CAT_FILTRES)
+    promo = [x for x in CATALOGUE if x['section'] == 'promo']
+    prem = [x for x in CATALOGUE if x['section'] == 'premium']
+    def bloc(titre, note, liste):
+        cartes = ''.join(carte_produit(x) for x in liste)
+        return (f'<section class="sec wrap cat-section"><div class="head"><h2 class="h2 rv">{titre}</h2><p class="note rv">{note}</p></div>'
+                f'<div class="cat-grid">{cartes}</div></section>')
+    corps = f'''{nav('/catalogue')}
+<main id="contenu">
+  {phead([('/catalogue', 'Catalogue')], 'Notre catalogue',
+         'Voici nos produits favoris, des essentiels promo aux pièces premium. C’est un aperçu : on travaille avec beaucoup plus de produits. Dis-nous ce que tu cherches et on te propose la meilleure option pour ton projet.',
+         '<a class="btn btn-w" href="/contact">Demander une soumission</a><a class="btn btn-g" href="/services">Nos services</a>', 'illustration-pinceau')}
+  <section class="wrap cat-barre"><p class="rv">Livraison gratuite partout au Canada.</p>
+    <div class="chips-cat" role="group" aria-label="Filtrer par catégorie">{puces}</div></section>
+  {bloc('Promo / Basic', '21 produits favoris. Les essentiels, sans compromis sur le service.', promo)}
+  {bloc('Premium', '12 produits favoris. Des vêtements qui méritent ton logo.', prem)}
+  <section class="sec wrap"><div class="cat-fin rv"><h2 class="h2">Tu cherches autre chose?</h2>
+    <p>Ces produits sont nos favoris, mais on en a beaucoup plus. Parle-nous de ton projet et on te trouve le bon produit.</p>
+    <a class="btn btn-w" href="/contact">Demander une soumission <span class="arr">→</span></a></div></section>
+</main>
+{hesite()}
+{pied()}'''
+    return page('/catalogue', 'Catalogue de vêtements et de produits personnalisés | Takedown Studio',
+                'Les produits favoris de Takedown Studio : t-shirts, crewnecks, hoodies, casquettes, tuques, du promo au premium. On en a beaucoup plus. Demande ta soumission.',
+                corps, fil=[('/catalogue', 'Catalogue')])
+
 def realisations():
     presents = {'tous'} | {c for r in REALISATIONS for c in r['categories'].split()}
     chips = ''.join(f'<button class="chip" type="button" data-f="{k}" aria-pressed="{str(k == "tous").lower()}">{t}</button>'
@@ -908,14 +955,14 @@ def construire():
     # Fichiers « page.html » : Cloudflare les sert à /page, sans barre oblique finale,
     # comme les adresses du plan de contenu (/services/broderie).
     pages = {'index.html': accueil(), 'agence-branding.html': agence(), 'services.html': services_index(),
-             'realisations.html': realisations(), 'contact.html': contact(), 'merci.html': merci(), '404.html': introuvable()}
+             'catalogue.html': catalogue(), 'realisations.html': realisations(), 'contact.html': contact(), 'merci.html': merci(), '404.html': introuvable()}
     for i, s in enumerate(SERVICES):
         pages[f'services/{s["slug"]}.html'] = service(s, i)
     for rel, html in pages.items():
         assert '—' not in html, f'tiret cadratin dans {rel}'
         ecrire(rel, html)
 
-    urls = ['/', '/agence-branding', '/services'] + [f'/services/{s["slug"]}' for s in SERVICES] + ['/realisations', '/contact']
+    urls = ['/', '/agence-branding', '/services'] + [f'/services/{s["slug"]}' for s in SERVICES] + ['/catalogue', '/realisations', '/contact']
     ecrire('sitemap.xml', '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
            ''.join(f'  <url><loc>{BASE}{u}</loc><lastmod>{AUJ}</lastmod></url>\n' for u in urls) + '</urlset>\n')
     ecrire('robots.txt', f'User-agent: *\nAllow: /\nDisallow: /api/\n\nSitemap: {BASE}/sitemap.xml\n')
