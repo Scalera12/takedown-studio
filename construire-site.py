@@ -691,14 +691,14 @@ def catalogue():
 <main id="contenu">
   {phead([('/catalogue', 'Catalogue')], 'Notre catalogue',
          'Voici nos produits favoris, des essentiels promo aux pièces premium. C’est un aperçu : on travaille avec beaucoup plus de produits. Dis-nous ce que tu cherches et on te propose la meilleure option pour ton projet.',
-         '<a class="btn btn-w" href="/contact">Demander une soumission</a><a class="btn btn-g" href="/services">Nos services</a>', 'illustration-pinceau')}
+         '', None)}
   <section class="wrap cat-barre"><p class="rv">Livraison gratuite partout au Canada.</p>
     <div class="chips-cat" role="group" aria-label="Filtrer par catégorie">{puces}</div></section>
   {bloc('Promo / Basic', '21 produits favoris. Les essentiels, sans compromis sur le service.', promo)}
   {bloc('Premium', '12 produits favoris. Des vêtements qui méritent ton logo.', prem)}
   <section class="sec wrap"><div class="cat-fin rv"><h2 class="h2">Tu cherches autre chose?</h2>
     <p>Ces produits sont nos favoris, mais on en a beaucoup plus. Parle-nous de ton projet et on te trouve le bon produit.</p>
-    <a class="btn btn-w" href="/contact">Demander une soumission <span class="arr">→</span></a></div></section>
+    <div class="ctas"><a class="btn btn-w" href="/contact">Demander une soumission <span class="arr">→</span></a><a class="btn btn-g" href="/services">Nos services</a></div></div></section>
 </main>
 {hesite()}
 {pied()}'''

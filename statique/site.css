@@ -682,3 +682,5 @@ html:not(.js) .words .line .mini{opacity:1;transform:none}
   .ptxt{padding:14px 14px 16px;gap:8px}
   .ptxt dl div{grid-template-columns:64px 1fr}
 }
+
+.cat-fin .ctas{display:flex;gap:10px;flex-wrap:wrap}
