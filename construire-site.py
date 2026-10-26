@@ -608,7 +608,7 @@ def guide_casquettes():
     return out
 
 def service(s, i):
-    photos = reals_de(s)
+    photos = []   # 2026-10-26 (Alex Moite) : plus de photos d'exemple sur les pages de services, seulement la liste d'exemples
     exemples = ''.join(f'<figure class="rv">{photo_real(r)}<figcaption>{r["titre"]}</figcaption></figure>' for r in photos[1:7])
     exemples = (f'<div class="ex">{exemples}</div>' if exemples else '') + \
         '<ul class="ex-liste rv">' + ''.join(f'<li>{x}</li>' for x in s['exemples']) + '</ul>'
