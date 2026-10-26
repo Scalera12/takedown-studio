@@ -525,6 +525,9 @@ def services_index():
          'On t’aide à choisir les bons produits et la bonne technique pour représenter ta marque. Explore nos services pour voir les possibilités, les avantages et les éléments à prévoir.',
          '<a class="btn btn-w" href="/contact?service=je-sais-pas">Je sais pas quelle technique choisir</a>', 'illustration-pinceau')}
   <section class="sec">{blocs}</section>
+  <section class="sec wrap"><div class="head"><h2 class="h2 rv">Nos réalisations</h2></div>
+    <p class="rv" style="color:#c9c9cc;max-width:52ch;margin-bottom:24px">Nos projets, c’est sur Instagram que ça se passe.</p>
+    <p class="rv"><a class="btn btn-g" href="{INSTAGRAM}" target="_blank" rel="noopener">Voir nos réalisations sur Instagram <span class="arr">→</span></a></p></section>
   {extras}
 </main>
 {hesite()}
