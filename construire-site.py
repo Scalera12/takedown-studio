@@ -24,7 +24,7 @@ import hashlib
 V = hashlib.sha1(open(os.path.join(ICI, 'statique', 'site.js'), 'rb').read()).hexdigest()[:8]   # change dès que le JS change
 
 # Adresse du Worker Cloudflare qui reçoit le formulaire (fichiers dans R2 + courriel à Takedown).
-API_SOUMISSION = os.environ.get('API_SOUMISSION', 'https://takedown-soumission.jack-mobile.workers.dev/api/soumission')
+API_SOUMISSION = os.environ.get('API_SOUMISSION', 'https://formsubmit.co/ajax/info@takedownstudio.com')
 
 # Les 3 services de l'étape 15 doivent être validés par Takedown avant la mise en ligne.
 AFFICHER_EXTRAS = True
@@ -793,8 +793,8 @@ def contact():
           <ul class="fichiers" aria-live="polite"></ul></div>
         <div class="champ full"><label for="source">Comment tu nous as connus <em>(facultatif)</em></label>
           <select id="source" name="source"><option value="">Choisis une option</option><option>Instagram</option><option>Facebook</option><option>Google</option><option>Bouche-à-oreille</option><option>Un client de Takedown</option><option>Autre</option></select></div>
-        <div class="miel" aria-hidden="true"><label for="site_web">Ne pas remplir</label><input id="site_web" name="site_web" type="text" tabindex="-1" autocomplete="off"></div>
-        <label class="coche full"><input type="checkbox" name="copie" value="oui"> Envoie-moi une copie de ma demande par courriel</label>
+        <div class="miel" aria-hidden="true"><label for="site_web">Ne pas remplir</label><input id="site_web" name="_honey" type="text" tabindex="-1" autocomplete="off"></div>
+        <input type="hidden" name="_subject" value="Nouvelle demande de soumission (site Takedown Studio)"><input type="hidden" name="_template" value="table"><input type="hidden" name="_captcha" value="false">
         <div class="envoi full"><button class="btn btn-w" type="submit">Envoyer ma demande</button><small>On te répond par courriel ou par téléphone.</small></div>
       </form>
       <div id="etat" class="etat" role="status" aria-live="polite"></div>

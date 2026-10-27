@@ -267,8 +267,8 @@
       liste.appendChild(li);
     });
   };
-  /* mêmes limites que le Worker : 8 fichiers, 10 Mo chacun, 25 Mo au total */
-  var MAX_N=8, MAX_UN=10485760, MAX_TOT=26214400, refus=[];
+  /* limite du service d'envoi : 8 fichiers, 10 Mo au total */
+  var MAX_N=8, MAX_UN=10485760, MAX_TOT=10485760, refus=[];
   var ajoute=function(fl){
     refus=[];
     Array.prototype.forEach.call(fl,function(f){
@@ -276,7 +276,7 @@
       var tot=choisis.reduce(function(a,c){return a+c.size},0);
       if(f.size>MAX_UN) refus.push(f.name+' dépasse 10 Mo');
       else if(choisis.length>=MAX_N) refus.push(f.name+' : maximum 8 fichiers');
-      else if(tot+f.size>MAX_TOT) refus.push(f.name+' : maximum 25 Mo au total');
+      else if(tot+f.size>MAX_TOT) refus.push(f.name+' : maximum 10 Mo au total');
       else choisis.push(f);
     });
     dessine();
@@ -311,10 +311,16 @@
     var fd=new FormData(form);
     fd.delete('fichiers');
     choisis.forEach(function(f){fd.append('fichiers',f,f.name)});
+    fd.append('_replyto',(form.querySelector('#courriel')||{}).value||'');
     fd.append('page',d.referrer||'');
     bouton.disabled=true; bouton.textContent='Envoi en cours…';
+    etat.className='etat'; etat.textContent='Envoi en cours, ça peut prendre jusqu’à une minute. Ne ferme pas la page.';
     fetch(form.action,{method:'POST',body:fd}).then(function(r){
       if(!r.ok) throw new Error(r.status);
+      return r.json();
+    }).then(function(j){
+      if(!j||String(j.success)!=='true') throw new Error('refus');
+      etat.textContent='';
       if(form.dataset.merci){location.href=form.dataset.merci;return}
       form.hidden=true;
       etat.className='etat ok';
@@ -322,7 +328,7 @@
       etat.scrollIntoView({behavior:'smooth',block:'center'});
     }).catch(function(err){
       etat.className='etat ko';
-      if(String(err&&err.message)==='413'){etat.textContent='Tes fichiers sont trop lourds (10 Mo par fichier, 25 Mo au total). Retire-en un ou envoie-le par courriel à info@takedownstudio.com.';return}
+      if(String(err&&err.message)==='413'){etat.textContent='Tes fichiers sont trop lourds (10 Mo au total). Retire-en un ou envoie-le par courriel à info@takedownstudio.com.';return}
       if(String(err&&err.message)==='429'){etat.textContent='Trop d’envois en peu de temps. Réessaie dans quelques minutes.';return}
       etat.innerHTML='L’envoi n’a pas fonctionné. Réessaie dans un instant ou écris-nous à <a href="mailto:info@takedownstudio.com" style="text-decoration:underline">info@takedownstudio.com</a>.';
     }).then(function(){bouton.disabled=false;bouton.textContent='Envoyer ma demande'});
