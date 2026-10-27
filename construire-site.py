@@ -38,6 +38,35 @@ ENTREPRISE = {
     'reseaux': ['https://www.instagram.com/takedownstudio/'],   # sameAs
 }
 
+# ---------------------------------------------------------------- langues
+# 2026-10-27 : version anglaise sous /en/. Les pages sont construites deux fois : L = 'fr' puis L = 'en'.
+# tr(fr, en) choisit le texte ; le français reste identique à avant.
+L = 'fr'          # langue de la page en construction
+PAGE_CLE = None   # clé de la page en construction (sélecteur FR / EN et hreflang)
+
+def tr(fr, en):
+    return en if L == 'en' else fr
+
+SLUG_EN = {'vetements-personnalises': 'custom-apparel', 'broderie': 'embroidery', 'serigraphie': 'screen-printing',
+           'impression-dtf': 'dtf-printing', 'casquettes-tuques': 'custom-caps-beanies', 'patches-ecussons': 'patches',
+           'autocollants': 'stickers', 'casquettes-100-personnalisees': '100-custom-caps'}
+ROUTES = {'accueil': ('/', '/en/'), 'agence': ('/agence-branding', '/en/agency'), 'services': ('/services', '/en/services'),
+          'catalogue': ('/catalogue', '/en/catalogue'), 'realisations': ('/realisations', '/en/our-work'),
+          'contact': ('/contact', '/en/contact'), 'merci': ('/merci', '/en/thank-you')}
+
+def route_de(cle, langue=None):
+    langue = langue or L
+    if cle.startswith('svc:'):
+        slug = cle[4:]
+        return '/en/services/' + SLUG_EN[slug] if langue == 'en' else '/services/' + slug
+    return ROUTES[cle][1 if langue == 'en' else 0]
+
+def url_p(cle):
+    return route_de(cle)
+
+def url_s(slug):
+    return route_de('svc:' + slug)
+
 def e(s):
     return H.escape(s, quote=True)
 
@@ -126,7 +155,14 @@ SERVICES = [
          desc='Casquettes 100 % personnalisées : forme, couleurs, tissu et logo, on la monte de A à Z selon ton choix. Demande ta soumission à Takedown Studio, Bromont.'),
 ]
 PAR_SLUG = {s['slug']: s for s in SERVICES}
+def loc(s):
+    return dict(s, **SERVICES_EN[s['slug']]) if L == 'en' else s
+
+def svcs():
+    return [loc(s) for s in SERVICES]
+
 def nom_court(s):
+    s = loc(s)
     return s.get('court_nom', s['nom'])
 
 EXTRAS = [
@@ -143,6 +179,9 @@ EXTRAS = [
          plus='Moins de zones grises et un document de référence pour le suivi du projet.',
          prevoir='Il faut confirmer les détails du produit. Une fiche technique ne remplace pas un échantillon lorsque celui-ci est nécessaire.'),
 ]
+
+def extras_l():
+    return [dict(x, **EXTRAS_EN[x['id']]) if L == 'en' else x for x in EXTRAS]
 
 # Réalisations : realisations.csv (une ligne par photo, la photo dans statique/img/photos/<photo>.jpg).
 # Pour en ajouter : déposer le JPG, ajouter la ligne, relancer. Les pages de services prennent
@@ -166,8 +205,10 @@ FILTRES = [('tous', 'Tous'), ('vetements', 'Vêtements'), ('broderie', 'Broderie
            ('dtf', 'DTF'), ('casquettes-tuques', 'Casquettes et tuques'), ('patches', 'Patches'), ('autocollants', 'Autocollants'),
            ('accessoires', 'Accessoires et sacs')]
 
-CHOIX_SERVICE = [('je-sais-pas', 'Je ne sais pas encore')] + [(s['slug'], s['nom']) for s in SERVICES] + \
-                [('vetements-sport-sublimation', 'Vêtements de sport et sublimation'), ('produits-sur-mesure', 'Produits sur mesure')]
+def choix_service():
+    return [('je-sais-pas', tr('Je ne sais pas encore', 'I don’t know yet'))] + [(s['slug'], s['nom']) for s in svcs()] + \
+           [('vetements-sport-sublimation', tr('Vêtements de sport et sublimation', 'Sportswear and sublimation')),
+            ('produits-sur-mesure', tr('Produits sur mesure', 'Made-to-order products'))]
 
 DESSINS = ['illustration-pinceau', 'illustration-encre', 'logo-complet-lutteurs']
 
@@ -208,41 +249,217 @@ def mots(petits=True):
               ('De l’encre.', 'serigraphie-racloir', 'Sérigraphie<br>En quantité', 'Sérigraphie'),
               ('De la chaleur.', 'presse-chaleur', 'Impression DTF<br>Petits lots', 'Impression DTF'),
               ('Ta marque.', None, 'Takedown Studio<br>Bromont', 'Takedown Studio')]
+    if L == 'en':
+        lignes = [('Thread.', 'fil-aiguille', 'Embroidery<br>Caps, polos', 'Embroidery'),
+                  ('Ink.', 'serigraphie-racloir', 'Screen printing<br>In volume', 'Screen printing'),
+                  ('Heat.', 'presse-chaleur', 'DTF printing<br>Small batches', 'DTF printing'),
+                  ('Your brand.', None, 'Takedown Studio<br>Bromont', 'Takedown Studio')]
     out = ''
     for txt, dessin, long_, court in lignes:
         img = (f'<img class="mini" src="/assets/img/dessins/{dessin}-blanc.png" sizes="160px" alt="" loading="lazy">' if dessin
                else '<img class="mini" src="/assets/img/bonhomme-goutte-blanc.png" sizes="120px" alt="" loading="lazy">')
         out += f'<div class="line x"><span>{txt}</span><span class="cote">{img}<small>{long_ if petits else court}</small></span></div>'
-    return f'<section class="words wrap" aria-label="Nos techniques">{out}</section>'
+    return f'<section class="words wrap" aria-label="{tr("Nos techniques", "Our techniques")}">{out}</section>'
+
+# ---------------------------------------------------------------- textes anglais (marché canadien, tutoiement devenu « you »)
+SERVICES_EN = {
+    'vetements-personnalises': dict(nom='Custom apparel', tag='T-shirts, hoodies, polos',
+        court='The right garments for your project, with your logo.',
+        texte='T-shirts, hoodies, crewnecks, polos or jackets: we help you pick the right garments for your project. We look at fit, comfort and budget, then add your logo with the technique that suits it best. Whether you are outfitting your team or creating merch, we guide you from start to finish.',
+        plus='Lots of choice, several price ranges and garments suited to how you plan to use them.',
+        prevoir='Sizes, colours and stock vary by style. A small order usually costs more per piece.',
+        exemples=['Company T-shirts', 'Branded hoodies', 'Embroidered polos', 'Workwear'],
+        bouton='Request a quote for custom apparel',
+        seo='Custom apparel with your logo in Bromont | Takedown Studio',
+        desc='Custom T-shirts, hoodies, polos and jackets with your logo. We help you choose the garments and the technique to fit your budget. Bromont and surrounding area.'),
+    'broderie': dict(nom='Embroidery', tag='Close-up · thread and texture',
+        court='Your logo stitched into the garment, with texture.',
+        texte='Embroidery is your logo stitched straight into the garment with thread. It gives texture and a clean finish. It is a great fit for caps, beanies, polos, crewnecks and jackets.',
+        plus='A polished look, a raised texture and good durability when the garment is cared for properly.',
+        prevoir='Small text and very fine details may need to be simplified. A large, filled-in logo takes more stitches and costs more. Some very thin fabrics are not a good match.',
+        exemples=['Logo on the chest', 'Embroidered cap', 'Beanie with embroidery', 'Embroidered polo', 'Custom jacket'],
+        bouton='Request a quote for embroidery',
+        seo='Custom embroidery in Bromont | Takedown Studio',
+        desc='Logo embroidery on caps, beanies, polos, crewnecks and jackets. A polished look with texture. Request your quote from Takedown Studio, Bromont.'),
+    'serigraphie': dict(nom='Screen printing', tag='Screen and ink',
+        court='A great finish that gets more affordable in volume.',
+        texte='Screen printing is ink printed straight onto the garment using screens. Each colour needs its own setup. It is a great option when you want several pieces with the same design, especially if your design has few colours.',
+        plus='A great finish, solid durability with proper care and a price per piece that gets attractive in volume.',
+        prevoir='Setup costs more on small orders. The number of colours and the print locations change the price.',
+        exemples=['Team T-shirts', 'Event merch', 'Printed hoodies', 'One-colour print', 'Multicolour print'],
+        bouton='Request a quote for screen printing',
+        seo='Screen printing on apparel in Bromont | Takedown Studio',
+        desc='Screen printing on T-shirts and hoodies for your team, your event or your merch. A great ink finish that gets attractive in volume. Takedown Studio, Bromont.'),
+    'impression-dtf': dict(nom='DTF digital printing', tag='Multicolour artwork',
+        court='Lots of colour and detail, even in small quantities.',
+        texte='DTF is your artwork printed on a film, then transferred onto the garment with a heat press. It works well for small quantities and for images with several colours and gradients.',
+        plus='Lots of colours in the same design, good reproduction of detail and a practical option for small projects.',
+        prevoir='You can feel the print on the fabric. A large solid design can be thicker and less breathable. File quality and following the washing instructions matter a lot.',
+        exemples=['Multicolour T-shirt', 'Small batch of garments', 'Sample before a bigger order', 'Design with a gradient', 'Detailed logo'],
+        bouton='Request a quote for DTF printing',
+        seo='DTF printing on apparel | Takedown Studio',
+        desc='DTF digital printing on apparel: lots of colour, gradients and detail, even for a small batch. Request your quote from Takedown Studio.'),
+    'casquettes-tuques': dict(nom='Custom caps and beanies', court_nom='Caps and beanies', tag='Embroidered dad cap',
+        court='Embroidered, with a patch or printed, depending on the style.',
+        texte='We help you pick the right cap or beanie for the style you want. Then we look at how to add your logo: embroidery, patch or printing when the style allows it.',
+        plus='An easy-to-wear accessory, a logo that stands out and plenty of styles to represent your brand.',
+        prevoir='Space for the logo is limited. Seams, the shape of the cap and the knit of a beanie may mean adapting the design. Minimums vary by method.',
+        exemples=['Dad caps', 'Structured caps', 'Custom beanies', 'Embroidered caps', 'Caps with a patch'],
+        bouton='Request a quote for caps or beanies',
+        seo='Custom caps and beanies | Takedown Studio',
+        desc='Caps and beanies with your logo: embroidery, patch or printing depending on the style. Dad caps, structured caps, beanies. Takedown Studio, Bromont.'),
+    'patches-ecussons': dict(nom='Custom patches', tag='Patch on a jacket',
+        court='Your logo or a name, as a badge.',
+        texte='A patch is a custom badge we add to a cap, a shirt, a jacket or another compatible product. It is a great way to give your logo a different look or to add a name to a garment.',
+        plus='A distinctive look, several finishing options and a good fit for names or logos in badge format.',
+        prevoir='Small details sometimes need to be adapted to the type of patch. Making and applying the patch are two steps to plan for in price and timeline.',
+        exemples=['Logo patch', 'Name badge', 'Cap with a patch', 'Iron-on patch', 'Sewn-on patch'],
+        bouton='Request a quote for patches',
+        seo='Custom patches | Takedown Studio',
+        desc='Custom patches for caps, shirts and jackets. Your logo or a name in badge format. Request your quote from Takedown Studio.'),
+    'autocollants': dict(nom='Custom stickers', tag='Stickers on packaging',
+        court='For your packaging, your orders and your events.',
+        texte='We have your stickers made with your logo or artwork. For packaging, orders or events, we help you pick the size and finish for how you will use them.',
+        plus='Easy to hand out, handy for personalizing your packaging and available in different sizes.',
+        prevoir='Size, material and finish affect the price. For outdoor use, water or a specific surface, you need a suitable material and adhesive.',
+        exemples=['Logo stickers', 'Packaging seals', 'Stickers included with an order', 'Event stickers', 'Outdoor-resistant stickers'],
+        bouton='Request a quote for stickers',
+        seo='Custom stickers with your logo | Takedown Studio',
+        desc='Custom stickers with your logo for your packaging, orders and events. We help you pick the size and finish. Bromont.'),
+    'casquettes-100-personnalisees': dict(nom='100% custom caps', tag='Made-to-order cap',
+        court='Shape, colours, fabric, logo: we build it from A to Z, your way.',
+        texte='Not just your logo on a ready-made cap. We start from scratch and you choose every piece: the shape, the colours, the fabric and the logo. We build the cap with you, from A to Z.',
+        plus='A one-of-a-kind cap designed for your brand, with the shape, colours, fabric and logo you choose.',
+        prevoir='A made-to-order project takes more preparation than a catalogue cap. Minimums, timelines and price depend on the shape, fabric and method you choose, and we confirm them in your quote.',
+        exemples=['Shape: structured, dad cap, trucker, five-panel', 'Colours of the crown, the visor and the stitching', 'Fabric: cotton, twill, mesh, corduroy', 'Logo embroidered, as a patch or printed', 'Details: under the visor, label, closure'],
+        bouton='Request a quote for a made-to-order cap',
+        seo='100% custom caps | Takedown Studio',
+        desc='100% custom caps: shape, colours, fabric and logo, we build it from A to Z your way. Request your quote from Takedown Studio, Bromont.'),
+}
+
+EXTRAS_EN = {
+    'sublimation': dict(titre='Sportswear and sublimation',
+        texte='For your sports team, we can help you order custom jerseys and sets from our partners. Sublimation works the colours and artwork into a compatible fabric, often polyester.',
+        plus='Lots of freedom in the design and a pattern that does not leave a thick layer on the fabric.',
+        prevoir='Fabrics, styles, minimums and timelines depend on the manufacturing program. This process is not suited to every garment.'),
+    'sur-mesure': dict(titre='Made-to-order products',
+        texte='Looking for something outside the usual catalogue? We can explore the options with our partners to develop a product that reflects you, like socks, sandals or custom accessories.',
+        plus='A product that stands out and more room for customization, depending on the manufacturer.',
+        prevoir='Often higher minimums, longer timelines and sometimes sample or development fees.'),
+    'fiches-techniques': dict(titre='Tech packs and production prep',
+        texte='We gather the information needed to explain your project to the manufacturer: dimensions, colours, placements and customization details. The goal is for everything to be clear before production.',
+        plus='Fewer grey areas and a reference document to follow the project.',
+        prevoir='Product details need to be confirmed. A tech pack does not replace a sample when one is needed.'),
+}
+
+TYPES_PATCHES_EN = [
+    dict(nom='Embroidered', en='', texte='Your logo stitched in thread on a fabric base. Texture, vivid colours and a crisp edge. The classic for caps and jackets.'),
+    dict(nom='Rubber / PVC', en='', texte='A moulded patch in soft rubber, with texture and a durable finish. Great for a modern look on a cap or a bag.'),
+]
+ETIQUETTE_EN = dict(nom='Woven label', en='',
+    texte='Not a patch: a thin, soft label woven with very fine threads. It is flatter than embroidery and small text stands out well. We sew it on at the collar, on a seam or at the bottom of a garment, to sign your brand like a clothing brand.')
+
+GUIDE_CASQUETTES_EN = [
+    ('Shapes', 'We start from the shape that suits you.', [
+        ('Shape', 'Dad cap', 'Low crown and curved visor, soft and relaxed. An easy-to-wear classic, great for embroidery.', None),
+        ('Shape', 'Structured cap', 'High, rigid crown that holds its shape. A sharp, confident look, ideal for a logo that stands out on the front.', None),
+        ('Shape', 'Trucker', 'Foam front panel and mesh back. Light and airy, with a streetwear look. The logo goes on the front panel.', None),
+        ('Shape', 'Five-panel', 'Low crown made of five panels, often with a flat visor. A more modern style, with lots of room to play with colour.', None)]),
+    ('Fabrics', 'Each fabric changes the look and the feel.', [
+        ('Fabric', 'Cotton', 'Soft, light and comfortable. A simple fabric that suits most styles.', None),
+        ('Fabric', 'Twill', 'Cotton woven on a diagonal, sturdier and more structured. Works well for embroidery.', None),
+        ('Fabric', 'Mesh', 'An open, breathable fabric for hot days. Mostly seen at the back of trucker caps.', None),
+        ('Fabric', 'Corduroy', 'Raised vertical lines and a retro look. A texture that stands out.', None)]),
+    ('Your logo', 'Three ways to put your brand on the cap.', [
+        ('Logo', 'Embroidered', 'Your logo stitched straight on with thread. Texture, a polished finish and good staying power.', None),
+        ('Logo', 'Patch', 'A badge made separately, then attached to the cap. A distinctive look, on the front or elsewhere.', 'See patches'),
+        ('Logo', 'Printed', 'Your artwork printed straight onto the cap, when the style allows it. Good for colour and detail.', None)]),
+    ('Colours and details', 'The little things that make the cap truly yours.', [
+        ('Colours', 'The colours', 'The crown, the visor, the button and the stitching can each have their own colour. We help you pick a palette that goes well with your logo.', None),
+        ('Details', 'The details', 'The closure (snapback, metal buckle, velcro), the underside of the visor, the woven label: we sort all that out with you.', None)]),
+]
+
+CAT_EN = {'T-shirt': 'T-shirt', 'Manches longues': 'Long sleeve', 'Crewneck': 'Crewneck', 'Hoodie': 'Hoodie', 'Veste': 'Jacket',
+          'Pantalon': 'Pants', 'Casquette': 'Cap', 'Tuque': 'Beanie', 'Accessoire': 'Accessory'}
+CAT_TITRES_EN = {'T-shirt': 'T-shirts', 'Manches longues': 'Long sleeves', 'Crewneck': 'Crewnecks', 'Hoodie': 'Hoodies', 'Veste': 'Jackets',
+                 'Pantalon': 'Pants', 'Casquette': 'Caps', 'Tuque': 'Beanies', 'Accessoire': 'Accessories'}
+CAT_FILTRES_EN = {'tous': 'All', 'tshirt': 'T-shirts', 'manches-longues': 'Long sleeves', 'crewneck': 'Crewnecks', 'hoodie': 'Hoodies',
+                  'veste': 'Jackets', 'pantalon': 'Pants', 'casquette': 'Caps', 'tuque': 'Beanies', 'accessoire': 'Accessories'}
+
+def t_tailles(t):
+    if L != 'en':
+        return t
+    return (t.replace(' à ', ' to ').replace('Taille unique', 'One size').replace('ajustable', 'adjustable')
+             .replace('dans certaines couleurs seulement', 'in some colours only'))
+
+def t_poids(p):
+    if L != 'en':
+        return p
+    p = re.sub(r'(\d),(\d)', r'\1.\2', p)
+    return (p.replace(' à ', ' to ').replace('g/m²', 'gsm').replace('oz/vg²', 'oz/yd²')
+             .replace('poids de l’article', 'item weight'))
+
+def t_nb(n):
+    return n.replace('Sélection de', 'Selection of').replace('Sélection', 'Selection') if L == 'en' else n
+
+def t_plus(p):
+    if L != 'en':
+        return p
+    m = re.match(r'(Plus de |Environ )?(\d+) couleurs offertes', p)
+    if not m:
+        return p
+    pre = {'Plus de ': '', 'Environ ': 'About '}.get(m.group(1) or '', '')
+    suf = '+' if m.group(1) == 'Plus de ' else ''
+    return f'{pre}{m.group(2)}{suf} colours available'
 
 # ---------------------------------------------------------------- morceaux communs
-MENU = [('/', 'Accueil'), ('/agence-branding', 'L’agence'), ('/services', 'Nos services'),
-        ('/services/casquettes-100-personnalisees', 'Casquettes custom'), ('/catalogue', 'Catalogue'), ('/realisations', 'Réalisations'), ('/contact', 'Contact')]
+MENU = [('accueil', 'Accueil', 'Home'), ('agence', 'L’agence', 'About'), ('services', 'Nos services', 'Services'),
+        ('svc:casquettes-100-personnalisees', 'Casquettes custom', 'Custom caps'), ('catalogue', 'Catalogue', 'Catalogue'),
+        ('realisations', 'Réalisations', 'Our work'), ('contact', 'Contact', 'Contact')]
 
 def soum(slug=None):
-    return '/contact' + (f'?service={slug}' if slug else '')
+    return url_p('contact') + (f'?service={slug}' if slug else '')
+
+def lien_langue():
+    # adresse de la même page dans l'autre langue (sélecteur FR / EN)
+    autre = 'fr' if L == 'en' else 'en'
+    cible = route_de(PAGE_CLE, autre) if PAGE_CLE else route_de('accueil', autre)
+    return cible, autre
 
 def nav(courant):
-    liens = ''.join(
-        f'<li><a href="{u}"{" aria-current=\"page\"" if u == courant else ""}{" class=\"rose\"" if "casquettes" in u else ""}>{t}</a></li>' for u, t in MENU)
-    mob = ''.join(f'<a href="{u}"{" class=\"rose\"" if "casquettes" in u else ""}>{t}</a>' for u, t in MENU)
-    return f'''<a class="skip" href="#contenu">Aller au contenu</a>
+    liens = ''
+    mob = ''
+    for cle, t_fr, t_en in MENU:
+        href = route_de(cle)
+        actif = ' aria-current="page"' if route_de(cle, 'fr') == courant else ''
+        rose = ' class="rose"' if 'casquettes' in cle else ''
+        titre = tr(t_fr, t_en)
+        liens += f'<li><a href="{href}"{actif}{rose}>{titre}</a></li>'
+        mob += f'<a href="{href}"{rose}>{titre}</a>'
+    cible, autre = lien_langue()
+    sel_h = f'<a class="lang" href="{cible}" hreflang="{autre}" lang="{autre}" aria-label="{tr("English version", "Version française")}">{autre.upper()}</a>'
+    sel_m = f'<a class="lang-m" href="{cible}" hreflang="{autre}" lang="{autre}">{tr("English", "Français")}</a>'
+    return f'''<a class="skip" href="#contenu">{tr('Aller au contenu', 'Skip to content')}</a>
 <header class="nav">
   <div class="wrap">
-    <a class="logo" href="/" aria-label="Takedown Studio, accueil"><img src="/assets/img/logo-texte-blanc.png" alt="Takedown Studio" width="130" height="17"></a>
-    <nav aria-label="Menu principal"><ul>{liens}</ul></nav>
-    <div class="right"><a class="btn btn-w" href="/contact"><span class="lg">Demander une&nbsp;</span>soumission</a><button class="burger" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="menu-m"><span></span><span></span></button></div>
+    <a class="logo" href="{url_p('accueil')}" aria-label="{tr('Takedown Studio, accueil', 'Takedown Studio, home')}"><img src="/assets/img/logo-texte-blanc.png" alt="Takedown Studio" width="130" height="17"></a>
+    <nav aria-label="{tr('Menu principal', 'Main menu')}"><ul>{liens}</ul></nav>
+    <div class="right">{sel_h}<a class="btn btn-w" href="{url_p('contact')}"><span class="lg">{tr('Demander une&nbsp;', 'Request a&nbsp;')}</span>{tr('soumission', 'quote')}</a><button class="burger" aria-label="{tr('Ouvrir le menu', 'Open the menu')}" aria-expanded="false" aria-controls="menu-m"><span></span><span></span></button></div>
   </div>
 </header>
-<nav class="menu-m" id="menu-m" aria-label="Menu cellulaire">{mob}<a class="btn btn-w" href="/contact">Demander une soumission</a></nav>'''
+<nav class="menu-m" id="menu-m" aria-label="{tr('Menu cellulaire', 'Mobile menu')}">{mob}{sel_m}<a class="btn btn-w" href="{url_p('contact')}">{tr('Demander une soumission', 'Request a quote')}</a></nav>'''
+
+def ville_cp():
+    return tr(f"{ENTREPRISE['ville']} (Québec) {ENTREPRISE['cp']}", f"{ENTREPRISE['ville']}, Quebec {ENTREPRISE['cp']}")
 
 def pied(court=False):
-    services = ''.join(f'<a href="/services/{s["slug"]}">{nom_court(s)}</a>' for s in SERVICES)
-    tete = '' if court else f'''<p class="mono" style="color:var(--mute)">Demander une soumission</p>
-        <h2 class="x rv"><span class="ind">On regarde ton</span><br>projet {encre('ensemble!')}</h2>'''
-    appel = '' if court else '''<div>
-            <p>Envoie-nous ton idée, ton logo et la quantité que tu as en tête. On va te guider pour la suite.</p>
-            <a class="btn btn-w" href="/contact">Demander une soumission <span class="arr">→</span></a>
+    services = ''.join(f'<a href="{url_s(s["slug"])}">{nom_court(s)}</a>' for s in svcs())
+    cible, autre = lien_langue()
+    tete = '' if court else f'''<p class="mono" style="color:var(--mute)">{tr('Demander une soumission', 'Request a quote')}</p>
+        <h2 class="x rv"><span class="ind">{tr('On regarde ton', 'Let’s look at your')}</span><br>{tr('projet', 'project')} {encre(tr('ensemble!', 'together!'))}</h2>'''
+    appel = '' if court else f'''<div>
+            <p>{tr('Envoie-nous ton idée, ton logo et la quantité que tu as en tête. On va te guider pour la suite.', 'Send us your idea, your logo and the quantity you have in mind. We will guide you from there.')}</p>
+            <a class="btn btn-w" href="{url_p('contact')}">{tr('Demander une soumission', 'Request a quote')} <span class="arr">→</span></a>
           </div>'''
     return f'''<footer class="foot{' court' if court else ''}">
   <div class="wrap">
@@ -253,16 +470,16 @@ def pied(court=False):
           {appel}
           <div class="cols">
             <div><h4>Services</h4>{services}</div>
-            <div><h4>Studio</h4><a href="/agence-branding">L’agence</a><a href="/catalogue">Catalogue</a><a href="/realisations">Réalisations</a><a href="/contact">Contact</a>
-              <h4 style="margin-top:22px">Nous joindre</h4><a href="tel:{ENTREPRISE['tel_intl']}">{ENTREPRISE['tel']}</a><a href="mailto:{ENTREPRISE['courriel']}">{ENTREPRISE['courriel']}</a><a href="{INSTAGRAM}" target="_blank" rel="noopener">Instagram</a></div>
+            <div><h4>Studio</h4><a href="{url_p('agence')}">{tr('L’agence', 'About')}</a><a href="{url_p('catalogue')}">Catalogue</a><a href="{url_p('realisations')}">{tr('Réalisations', 'Our work')}</a><a href="{url_p('contact')}">Contact</a><a href="{cible}" hreflang="{autre}" lang="{autre}">{tr('English version', 'Version française')}</a>
+              <h4 style="margin-top:22px">{tr('Nous joindre', 'Get in touch')}</h4><a href="tel:{ENTREPRISE['tel_intl']}">{ENTREPRISE['tel']}</a><a href="mailto:{ENTREPRISE['courriel']}">{ENTREPRISE['courriel']}</a><a href="{INSTAGRAM}" target="_blank" rel="noopener">Instagram</a></div>
           </div>
         </div>
       </div>
     </div>
     <div class="legal">
       <img src="/assets/img/logo-texte-blanc.png" alt="Takedown Studio" width="122" height="16" loading="lazy">
-      <span>{ENTREPRISE['rue']}, {ENTREPRISE['ville']} (Québec) {ENTREPRISE['cp']}</span>
-      <span>© {AUJ[:4]} Takedown Studio · Site par Scalera</span>
+      <span>{ENTREPRISE['rue']}, {ville_cp()}</span>
+      <span>© {AUJ[:4]} Takedown Studio{tr(' · Site par Scalera', '')}</span>
     </div>
   </div>
 </footer>'''
@@ -271,10 +488,10 @@ def hesite():
     return f'''<section class="hesite">
   {gouttes('coule gauche')}
   <div class="wrap">
-    <div><h2 class="x rv">Tu hésites entre plusieurs options?</h2>
-    <p class="rv">Envoie-nous ton idée et les informations que tu as. On va t’aider à choisir la bonne combinaison de produits et de techniques.</p></div>
+    <div><h2 class="x rv">{tr('Tu hésites entre plusieurs options?', 'Not sure which option to pick?')}</h2>
+    <p class="rv">{tr('Envoie-nous ton idée et les informations que tu as. On va t’aider à choisir la bonne combinaison de produits et de techniques.', 'Send us your idea and whatever information you have. We will help you choose the right mix of products and techniques.')}</p></div>
     <img class="duo rv" src="/assets/img/dessins/deux-tuques-blanc.png" alt="" loading="lazy" width="1000" height="640">
-    <a class="btn btn-w rv" href="/contact">Demander une soumission <span class="arr">→</span></a>
+    <a class="btn btn-w rv" href="{url_p('contact')}">{tr('Demander une soumission', 'Request a quote')} <span class="arr">→</span></a>
   </div>
 </section>'''
 
@@ -306,8 +523,9 @@ def ph(tag, ton, cls='', style=''):
 
 def tuile(s, titre_tag='h3'):
     # Dessin du client (WhatsApp, 7 oct.) qui correspond au service
+    s = loc(s)
     casq = ' casq' if s.get('rose') else ''
-    return (f'<a class="tile dessin{casq} rv" href="/services/{s["slug"]}">'
+    return (f'<a class="tile dessin{casq} rv" href="{url_s(s["slug"])}">'
             f'<div class="art"><img src="/assets/img/{DESSIN_TUILE[s["slug"]]}-blanc.png" alt="" loading="lazy"></div>'
             f'<div class="lab"><div><{titre_tag}>{nom_court(s)}</{titre_tag}><p>{s["court"]}</p></div>'
             f'<span class="go" aria-hidden="true">→</span></div></a>')
@@ -316,31 +534,31 @@ def tuile_aide():
     return '''<a class="tile help rv" href="/contact?service=je-sais-pas"><div><h3>Tu sais pas quelle technique choisir?</h3><p>Envoie-nous ton idée. On t’aide à trouver la bonne combinaison de produits et de techniques.</p></div><div class="bas"><span class="go" aria-hidden="true">→</span><img src="/assets/img/illustration-encre-noir.png" alt="" loading="lazy" width="300" height="230"></div></a>'''
 
 def casquettes_custom():
-    choix = [('La forme', 'Structurée, dad cap, trucker, cinq panneaux.'),
-             ('Les couleurs', 'La couronne, la visière, le bouton, les coutures.'),
-             ('Le tissu', 'Coton, sergé, maille, velours côtelé.'),
-             ('Ton logo', 'Brodé, en patch ou imprimé, devant, sur le côté ou derrière.'),
-             ('Les détails', 'Le dessous de la visière, l’étiquette, la fermeture.')]
+    choix = [(tr('La forme', 'The shape'), tr('Structurée, dad cap, trucker, cinq panneaux.', 'Structured, dad cap, trucker, five-panel.')),
+             (tr('Les couleurs', 'The colours'), tr('La couronne, la visière, le bouton, les coutures.', 'The crown, the visor, the button, the stitching.')),
+             (tr('Le tissu', 'The fabric'), tr('Coton, sergé, maille, velours côtelé.', 'Cotton, twill, mesh, corduroy.')),
+             (tr('Ton logo', 'Your logo'), tr('Brodé, en patch ou imprimé, devant, sur le côté ou derrière.', 'Embroidered, as a patch or printed, on the front, the side or the back.')),
+             (tr('Les détails', 'The details'), tr('Le dessous de la visière, l’étiquette, la fermeture.', 'Under the visor, the label, the closure.'))]
     lis = ''.join(f'<li class="rv"><b>{t}</b><span>{d}</span></li>' for t, d in choix)
     return f'''<section class="casq-custom" id="casquettes-custom" aria-labelledby="t-casq">
     <div class="wrap cc">
       <div class="txt">
-        <p class="mono rv">Casquettes custom</p>
-        <h2 class="h2 rv" id="t-casq">Ta casquette.<br><span class="rose">100 % à ton choix.</span></h2>
-        <p class="big rv">Pas juste ton logo sur une casquette déjà faite. On part de zéro et tu choisis chaque morceau.</p>
+        <p class="mono rv">{tr('Casquettes custom', 'Custom caps')}</p>
+        <h2 class="h2 rv" id="t-casq">{tr('Ta casquette.', 'Your cap.')}<br><span class="rose">{tr('100 % à ton choix.', '100% your choice.')}</span></h2>
+        <p class="big rv">{tr('Pas juste ton logo sur une casquette déjà faite. On part de zéro et tu choisis chaque morceau.', 'Not just your logo on a ready-made cap. We start from scratch and you choose every piece.')}</p>
         <ul class="choix">{lis}</ul>
-        <a class="btn btn-rose rv" href="/contact?service=casquettes-tuques">On monte ta casquette <span class="arr">→</span></a>
+        <a class="btn btn-rose rv" href="{url_p('contact')}?service=casquettes-tuques">{tr('On monte ta casquette', 'We build your cap')} <span class="arr">→</span></a>
       </div>
       <div class="art rv"><img src="/assets/img/dessins/bonhomme-casquette-blanc.png" alt="" loading="lazy" width="908" height="1000"></div>
     </div>
   </section>'''
 
 def crumb(chemin):
-    morceaux = ['<a href="/">Accueil</a>']
+    morceaux = [f'<a href="{url_p("accueil")}">{tr("Accueil", "Home")}</a>']
     for u, t in chemin[:-1]:
         morceaux.append(f'<a href="{u}">{t}</a>')
     morceaux.append(f'<span aria-current="page">{chemin[-1][1]}</span>')
-    return '<nav class="crumb mono" aria-label="Fil d’Ariane">' + '<span aria-hidden="true">/</span>'.join(morceaux) + '</nav>'
+    return f'<nav class="crumb mono" aria-label="{tr("Fil d’Ariane", "Breadcrumb")}">' + '<span aria-hidden="true">/</span>'.join(morceaux) + '</nav>'
 
 def phead(chemin, titre, intro, ctas='', dessin=None, rose=False):
     fig = f'<img class="fig" src="/assets/img/{dessin}-blanc.png" alt="" aria-hidden="true">' if dessin else ''
@@ -360,21 +578,21 @@ def phead(chemin, titre, intro, ctas='', dessin=None, rose=False):
 
 def plus_prevoir(plus, prevoir):
     return f'''<div class="pp rv">
-      <div class="plus"><span class="lbl mono"><i>+</i>Les plus</span><p>{plus}</p></div>
-      <div><span class="lbl mono"><i>!</i>À prévoir</span><p>{prevoir}</p></div>
+      <div class="plus"><span class="lbl mono"><i>+</i>{tr('Les plus', 'The upsides')}</span><p>{plus}</p></div>
+      <div><span class="lbl mono"><i>!</i>{tr('À prévoir', 'Keep in mind')}</span><p>{prevoir}</p></div>
     </div>'''
 
 def etapes():
     return f'''<section class="how wrap">
     <div class="top">
-      <div><p class="mono rv" style="color:var(--mute)">Le processus</p><h2 class="h2 rv" style="margin-top:12px">Comment ça {encre('fonctionne')}</h2>
-      <p class="rv">Tu nous expliques ton projet. On choisit les produits et on prépare la soumission. Tu approuves le visuel. On lance la production selon les conditions confirmées.</p></div>
+      <div><p class="mono rv" style="color:var(--mute)">{tr('Le processus', 'The process')}</p><h2 class="h2 rv" style="margin-top:12px">{tr('Comment ça', 'How it')} {encre(tr('fonctionne', 'works'))}</h2>
+      <p class="rv">{tr('Tu nous expliques ton projet. On choisit les produits et on prépare la soumission. Tu approuves le visuel. On lance la production selon les conditions confirmées.', 'You tell us about your project. We pick the products and prepare the quote. You approve the visual. We start production under the confirmed terms.')}</p></div>
     </div>
     <ol class="steps" style="list-style:none">
-      <li style="display:contents"><div class="rv"><span class="dessin"><img src="/assets/img/dessins/bonhomme-surpris-blanc.png" alt="" loading="lazy" width="548" height="1000"></span><b>01</b><p>Tu nous expliques ton projet.</p></div></li>
-      <li style="display:contents"><div class="rv"><span class="dessin"><img src="/assets/img/dessins/casquettes-tuques-pile-blanc.png" alt="" loading="lazy" width="1000" height="769"></span><b>02</b><p>On choisit les produits et la technique.</p></div></li>
-      <li style="display:contents"><div class="rv"><span class="dessin"><img src="/assets/img/dessins/chandail-loupe-blanc.png" alt="" loading="lazy" width="1000" height="670"></span><b>03</b><p>Tu approuves le visuel et la soumission.</p></div></li>
-      <li style="display:contents"><div class="rv"><span class="dessin"><img src="/assets/img/dessins/bonhomme-casquette-blanc.png" alt="" loading="lazy" width="908" height="1000"></span><b>04</b><p>On lance la production.</p></div></li>
+      <li style="display:contents"><div class="rv"><span class="dessin"><img src="/assets/img/dessins/bonhomme-surpris-blanc.png" alt="" loading="lazy" width="548" height="1000"></span><b>01</b><p>{tr('Tu nous expliques ton projet.', 'You tell us about your project.')}</p></div></li>
+      <li style="display:contents"><div class="rv"><span class="dessin"><img src="/assets/img/dessins/casquettes-tuques-pile-blanc.png" alt="" loading="lazy" width="1000" height="769"></span><b>02</b><p>{tr('On choisit les produits et la technique.', 'We pick the products and the technique.')}</p></div></li>
+      <li style="display:contents"><div class="rv"><span class="dessin"><img src="/assets/img/dessins/chandail-loupe-blanc.png" alt="" loading="lazy" width="1000" height="670"></span><b>03</b><p>{tr('Tu approuves le visuel et la soumission.', 'You approve the visual and the quote.')}</p></div></li>
+      <li style="display:contents"><div class="rv"><span class="dessin"><img src="/assets/img/dessins/bonhomme-casquette-blanc.png" alt="" loading="lazy" width="908" height="1000"></span><b>04</b><p>{tr('On lance la production.', 'We start production.')}</p></div></li>
     </ol>
   </section>'''
 
@@ -382,7 +600,7 @@ def etapes():
 def entreprise_ld():
     return {
         '@type': 'ProfessionalService', '@id': BASE + '/#entreprise', 'name': ENTREPRISE['nom'],
-        'description': 'Agence de branding spécialisée en vêtements et produits personnalisés à Bromont.',
+        'description': tr('Agence de branding spécialisée en vêtements et produits personnalisés à Bromont.', 'Branding agency specializing in custom apparel and products in Bromont.'),
         'url': BASE + '/', 'logo': BASE + '/assets/img/icone-512.png', 'image': BASE + '/assets/img/partage.png',
         'telephone': ENTREPRISE['tel_intl'], 'email': ENTREPRISE['courriel'],
         'address': {'@type': 'PostalAddress', 'streetAddress': ENTREPRISE['rue'], 'addressLocality': ENTREPRISE['ville'],
@@ -391,41 +609,47 @@ def entreprise_ld():
         'hasMap': 'https://www.google.com/maps/search/?api=1&query=' + 'Takedown+Studio+50+chemin+de+Gasp%C3%A9+Bromont',
         'areaServed': [{'@type': 'City', 'name': 'Bromont'}, {'@type': 'AdministrativeArea', 'name': 'Estrie'}],   # régions à confirmer (étape 20)
         **({'sameAs': ENTREPRISE['reseaux']} if ENTREPRISE['reseaux'] else {}),
-        'knowsAbout': [s['nom'] for s in SERVICES],
+        'knowsAbout': [s['nom'] for s in svcs()],
     }
 
 def page(chemin_url, titre_seo, desc, corps, fil=None, extra_ld=None, js=True):
     url = BASE + (chemin_url if chemin_url != '/' else '/')
     graph = [entreprise_ld(), {'@type': 'WebPage', '@id': url + '#page', 'url': url, 'name': titre_seo,
-                                'description': desc, 'inLanguage': 'fr-CA', 'isPartOf': {'@id': BASE + '/#site'},
+                                'description': desc, 'inLanguage': tr('fr-CA', 'en-CA'), 'isPartOf': {'@id': BASE + '/#site'},
                                 'about': {'@id': BASE + '/#entreprise'}},
-             {'@type': 'WebSite', '@id': BASE + '/#site', 'url': BASE + '/', 'name': 'Takedown Studio', 'inLanguage': 'fr-CA'}]
+             {'@type': 'WebSite', '@id': BASE + '/#site', 'url': BASE + '/', 'name': 'Takedown Studio', 'inLanguage': tr('fr-CA', 'en-CA')}]
     if fil:
-        items = [{'@type': 'ListItem', 'position': 1, 'name': 'Accueil', 'item': BASE + '/'}]
+        items = [{'@type': 'ListItem', 'position': 1, 'name': tr('Accueil', 'Home'), 'item': BASE + url_p('accueil')}]
         for i, (u, t) in enumerate(fil, start=2):
             items.append({'@type': 'ListItem', 'position': i, 'name': H.unescape(t), 'item': BASE + u})
         graph.append({'@type': 'BreadcrumbList', 'itemListElement': items})
     if extra_ld:
         graph += extra_ld
     ld = json.dumps({'@context': 'https://schema.org', '@graph': graph}, ensure_ascii=False)
+    alternates = ''
+    if PAGE_CLE:
+        alternates = (f'<link rel="alternate" hreflang="fr-CA" href="{BASE}{route_de(PAGE_CLE, "fr")}">'
+                      f'<link rel="alternate" hreflang="en-CA" href="{BASE}{route_de(PAGE_CLE, "en")}">'
+                      f'<link rel="alternate" hreflang="x-default" href="{BASE}{route_de(PAGE_CLE, "fr")}">')
     return f'''<!doctype html>
-<html lang="fr-CA">
+<html lang="{tr('fr-CA', 'en-CA')}">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{e(titre_seo)}</title>
 <meta name="description" content="{e(desc)}">
-<link rel="canonical" href="{url}">
+<link rel="canonical" href="{url}">{alternates}
 <meta name="theme-color" content="#000000">
 <meta property="og:type" content="website">
-<meta property="og:locale" content="fr_CA">
+<meta property="og:locale" content="{tr('fr_CA', 'en_CA')}">
+<meta property="og:locale:alternate" content="{tr('en_CA', 'fr_CA')}">
 <meta property="og:site_name" content="Takedown Studio">
 <meta property="og:title" content="{e(titre_seo)}">
 <meta property="og:description" content="{e(desc)}">
 <meta property="og:url" content="{url}">
 <meta property="og:image" content="{BASE}/assets/img/partage.png">
 <meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Logo de Takedown Studio, agence de branding à Bromont">
+<meta property="og:image:alt" content="{tr('Logo de Takedown Studio, agence de branding à Bromont', 'Takedown Studio logo, a branding agency in Bromont')}">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="/favicon.ico" sizes="48x48">
 <link rel="icon" href="/assets/img/icone-192.png" type="image/png" sizes="192x192">
@@ -449,17 +673,17 @@ def accueil():
 <main id="contenu">
   <section class="hero hero-dessins" data-intro="/assets/img/logo-complet-lutteurs-blanc-1000.webp">
     <div class="defile" aria-hidden="true"><div class="piste"><div class="groupe"><span class="p p1" style="--n:6;--ar:0.7287;--t:0.72s"><img src="/assets/img/marche/bonhomme-casquette-blanc.png" alt="" width="1311" height="300" loading="lazy"></span><span class="p p2" style="--n:4;--ar:1.2559;--t:0.62s"><img src="/assets/img/marche/deux-tuques-blanc.png" alt="" width="1507" height="300" loading="lazy"></span><span class="p p3" style="--n:6;--ar:0.5248;--t:0.66s"><img src="/assets/img/marche/bonhomme-surpris-blanc.png" alt="" width="944" height="300" loading="lazy"></span><span class="p p4" style="--n:4;--ar:2.1714;--t:0.9s"><img src="/assets/img/marche/bonhomme-couche-blanc.png" alt="" width="2605" height="300" loading="lazy"></span><span class="p p1" style="--n:6;--ar:0.7287;--t:0.72s"><img src="/assets/img/marche/bonhomme-casquette-blanc.png" alt="" width="1311" height="300" loading="lazy"></span><span class="p p2" style="--n:4;--ar:1.2559;--t:0.62s"><img src="/assets/img/marche/deux-tuques-blanc.png" alt="" width="1507" height="300" loading="lazy"></span><span class="p p3" style="--n:6;--ar:0.5248;--t:0.66s"><img src="/assets/img/marche/bonhomme-surpris-blanc.png" alt="" width="944" height="300" loading="lazy"></span><span class="p p4" style="--n:4;--ar:2.1714;--t:0.9s"><img src="/assets/img/marche/bonhomme-couche-blanc.png" alt="" width="2605" height="300" loading="lazy"></span></div><div class="groupe"><span class="p p1" style="--n:6;--ar:0.7287;--t:0.72s"><img src="/assets/img/marche/bonhomme-casquette-blanc.png" alt="" width="1311" height="300" loading="lazy"></span><span class="p p2" style="--n:4;--ar:1.2559;--t:0.62s"><img src="/assets/img/marche/deux-tuques-blanc.png" alt="" width="1507" height="300" loading="lazy"></span><span class="p p3" style="--n:6;--ar:0.5248;--t:0.66s"><img src="/assets/img/marche/bonhomme-surpris-blanc.png" alt="" width="944" height="300" loading="lazy"></span><span class="p p4" style="--n:4;--ar:2.1714;--t:0.9s"><img src="/assets/img/marche/bonhomme-couche-blanc.png" alt="" width="2605" height="300" loading="lazy"></span><span class="p p1" style="--n:6;--ar:0.7287;--t:0.72s"><img src="/assets/img/marche/bonhomme-casquette-blanc.png" alt="" width="1311" height="300" loading="lazy"></span><span class="p p2" style="--n:4;--ar:1.2559;--t:0.62s"><img src="/assets/img/marche/deux-tuques-blanc.png" alt="" width="1507" height="300" loading="lazy"></span><span class="p p3" style="--n:6;--ar:0.5248;--t:0.66s"><img src="/assets/img/marche/bonhomme-surpris-blanc.png" alt="" width="944" height="300" loading="lazy"></span><span class="p p4" style="--n:4;--ar:2.1714;--t:0.9s"><img src="/assets/img/marche/bonhomme-couche-blanc.png" alt="" width="2605" height="300" loading="lazy"></span></div></div></div>
-    <h1 class="titre-h1 fade"><span class="l1 x">Agence de branding</span> <span class="l2 mono">Bromont</span></h1>
+    <h1 class="titre-h1 fade"><span class="l1 x">{tr('Agence de branding', 'Branding agency')}</span> <span class="l2 mono">Bromont</span></h1>
     <div class="difficiles fade">
-      <h2 class="t">On est {encre('difficiles')}.<br><span class="t2">Pour que vous n’ayez pas à l’être.</span></h2>
+      <h2 class="t">{tr('On est', 'We are')} {encre(tr('difficiles', 'picky'))}.<br><span class="t2">{tr('Pour que vous n’ayez pas à l’être.', 'So you don’t have to be.')}</span></h2>
     </div>
-    <p class="sr">Vêtements et produits personnalisés à Bromont. Agence de branding spécialisée en vêtements et produits personnalisés.</p>
+    <p class="sr">{tr('Vêtements et produits personnalisés à Bromont. Agence de branding spécialisée en vêtements et produits personnalisés.', 'Custom apparel and products in Bromont. A branding agency specializing in custom apparel and products.')}</p>
   </section>
 
   <section class="sec wrap" id="services" aria-labelledby="t-services">
     <div class="head">
-      <h2 class="h2 rv" id="t-services">Nos {encre('services')}</h2>
-      <div class="links rv"><a href="/services">Tous les services <span class="arr">→</span></a></div>
+      <h2 class="h2 rv" id="t-services">{tr('Nos', 'Our')} {encre('services')}</h2>
+      <div class="links rv"><a href="{url_p('services')}">{tr('Tous les services', 'All services')} <span class="arr">→</span></a></div>
     </div>
     <div class="grid">{tuiles}</div>
   </section>
@@ -471,39 +695,42 @@ def accueil():
   {mots()}
 
   <section class="mission" aria-labelledby="t-presentation">
-    {photo(4, 'L’atelier de Takedown Studio à Bromont, avec les presses à chaleur et le séchoir de sérigraphie', pos='50% 62%')}
+    {photo(4, tr('L’atelier de Takedown Studio à Bromont, avec les presses à chaleur et le séchoir de sérigraphie', 'The Takedown Studio workshop in Bromont, with the heat presses and the screen printing dryer'), pos='50% 62%')}
     <div class="wrap in">
-      <h2 class="sr" id="t-presentation">L’agence</h2>
-      <p class="big rv">On t’aide à mettre ta marque sur des vêtements et des produits que les gens vont aimer utiliser.</p>
-      <p class="small rv">Du choix du modèle au placement de ton logo, on te conseille selon ton idée, ton budget et la quantité dont tu as besoin. Broderie, sérigraphie ou impression numérique : on trouve la bonne option pour ton projet.</p>
-      <a class="lien rv" href="/agence-branding">Découvrir l’agence <span class="arr">→</span></a>
+      <h2 class="sr" id="t-presentation">{tr('L’agence', 'About')}</h2>
+      <p class="big rv">{tr('On t’aide à mettre ta marque sur des vêtements et des produits que les gens vont aimer utiliser.', 'We help you put your brand on apparel and products people will love to use.')}</p>
+      <p class="small rv">{tr('Du choix du modèle au placement de ton logo, on te conseille selon ton idée, ton budget et la quantité dont tu as besoin. Broderie, sérigraphie ou impression numérique : on trouve la bonne option pour ton projet.', 'From choosing the style to placing your logo, we advise you based on your idea, your budget and the quantity you need. Embroidery, screen printing or digital printing: we find the right option for your project.')}</p>
+      <a class="lien rv" href="{url_p('agence')}">{tr('Découvrir l’agence', 'Discover the agency')} <span class="arr">→</span></a>
     </div>
   </section>
 </main>
 {pied()}'''
-    return page('/', 'Takedown Studio | Vêtements et produits personnalisés à Bromont',
-                'Agence de branding à Bromont. On met ta marque sur des vêtements et des produits : broderie, sérigraphie, DTF, casquettes, patches et autocollants.',
+    return page(url_p('accueil'), tr('Takedown Studio | Vêtements et produits personnalisés à Bromont', 'Takedown Studio | Custom apparel and products in Bromont'),
+                tr('Agence de branding à Bromont. On met ta marque sur des vêtements et des produits : broderie, sérigraphie, DTF, casquettes, patches et autocollants.',
+                   'Branding agency in Bromont. We put your brand on apparel and products: embroidery, screen printing, DTF, caps, patches and stickers.'),
                 corps)
 
 def agence():
     corps = f'''{nav('/agence-branding')}
 <main id="contenu">
-  {phead([('/agence-branding', 'L’agence')], 'Agence de branding à Bromont',
-         'Chez Takedown Studio, on t’aide à donner une image cohérente à tes vêtements et à tes produits. Que ce soit pour ton entreprise, ton équipe, un événement ou ta propre marque, on prend le temps de comprendre ce que tu cherches. On t’accompagne dans le choix des produits, des couleurs, des placements et de la bonne méthode de personnalisation.',
-         '<a class="btn btn-w" href="/contact">Parle-nous de ton projet</a><a class="btn btn-g" href="/services">Nos services</a>',
+  {phead([(url_p('agence'), tr('L’agence', 'About'))], tr('Agence de branding à Bromont', 'Branding agency in Bromont'),
+         tr('Chez Takedown Studio, on t’aide à donner une image cohérente à tes vêtements et à tes produits. Que ce soit pour ton entreprise, ton équipe, un événement ou ta propre marque, on prend le temps de comprendre ce que tu cherches. On t’accompagne dans le choix des produits, des couleurs, des placements et de la bonne méthode de personnalisation.',
+            'At Takedown Studio, we help you give your apparel and products a consistent image. Whether it is for your business, your team, an event or your own brand, we take the time to understand what you are after. We guide you through the choice of products, colours, placements and the right customization method.'),
+         f'<a class="btn btn-w" href="{url_p("contact")}">{tr("Parle-nous de ton projet", "Tell us about your project")}</a><a class="btn btn-g" href="{url_p("services")}">{tr("Nos services", "Our services")}</a>',
          'logo-complet-lutteurs')}
   <section class="sec wrap">
-    {plus_prevoir('Un même contact pour ton projet, des conseils concrets et des produits qui vont bien ensemble.',
-                  'Un projet qui regroupe plusieurs produits demande plus de préparation. Le budget et les délais dépendent des articles choisis.')}
+    {plus_prevoir(tr('Un même contact pour ton projet, des conseils concrets et des produits qui vont bien ensemble.', 'One point of contact for your project, practical advice and products that work well together.'),
+                  tr('Un projet qui regroupe plusieurs produits demande plus de préparation. Le budget et les délais dépendent des articles choisis.', 'A project that combines several products takes more preparation. Budget and timelines depend on the items you choose.'))}
   </section>
   {mots(False)}
   {etapes()}
 </main>
 {hesite()}
 {pied()}'''
-    return page('/agence-branding', 'Agence de branding à Bromont | Takedown Studio',
-                'Takedown Studio t’aide à donner une image cohérente à tes vêtements et à tes produits : choix des produits, des couleurs, des placements, de la technique.',
-                corps, fil=[('/agence-branding', 'L’agence')])
+    return page(url_p('agence'), tr('Agence de branding à Bromont | Takedown Studio', 'Branding agency in Bromont | Takedown Studio'),
+                tr('Takedown Studio t’aide à donner une image cohérente à tes vêtements et à tes produits : choix des produits, des couleurs, des placements, de la technique.',
+                   'Takedown Studio helps you give your apparel and products a consistent image: choosing products, colours, placements and the technique.'),
+                corps, fil=[(url_p('agence'), tr('L’agence', 'About'))])
 
 # logo Instagram dessiné en SVG (trait blanc, taille remplacée au besoin)
 LOGO_INSTA = ('<svg class="ig-ico" viewBox="0 0 24 24" width="__T__" height="__T__" aria-hidden="true" focusable="false">'
@@ -513,38 +740,40 @@ LOGO_INSTA = ('<svg class="ig-ico" viewBox="0 0 24 24" width="__T__" height="__T
 
 def services_index():
     blocs = ''
-    for s in SERVICES:
+    for s in svcs():
         phrase = s['texte'].split('. ')[0].rstrip('.') + '.'
         blocs += f'''<article class="svc{' rose' if s.get('rose') else ''} rv">
-      <a class="ph art" href="/services/{s['slug']}" tabindex="-1" aria-hidden="true"><img src="/assets/img/{DESSIN_TUILE[s['slug']]}-blanc.png" alt="" loading="lazy"></a>
+      <a class="ph art" href="{url_s(s['slug'])}" tabindex="-1" aria-hidden="true"><img src="/assets/img/{DESSIN_TUILE[s['slug']]}-blanc.png" alt="" loading="lazy"></a>
       <div class="txt"><span class="mono" style="color:var(--mute)">{e(s['court'])}</span><h2>{s['nom']}</h2><p>{phrase}</p>
-      <div><a class="btn btn-g" href="/services/{s['slug']}">Découvrir le service <span class="arr">→</span></a></div></div>
+      <div><a class="btn btn-g" href="{url_s(s['slug'])}">{tr('Découvrir le service', 'See the service')} <span class="arr">→</span></a></div></div>
     </article>'''
     extras = ''
     if AFFICHER_EXTRAS:
-        liens = ''.join(f'<a class="lien" href="/services/vetements-personnalises#{x["id"]}">{x["titre"]} <span class="arr">→</span></a>' for x in EXTRAS)
-        extras = f'''<section class="sec wrap"><div class="head"><h2 class="h2 rv">Aussi possible</h2></div>
+        liens = ''.join(f'<a class="lien" href="{url_s("vetements-personnalises")}#{x["id"]}">{x["titre"]} <span class="arr">→</span></a>' for x in extras_l())
+        extras = f'''<section class="sec wrap"><div class="head"><h2 class="h2 rv">{tr('Aussi possible', 'Also possible')}</h2></div>
       <div class="rv" style="display:flex;gap:28px;flex-wrap:wrap">{liens}</div></section>'''
     corps = f'''{nav('/services')}
 <main id="contenu">
-  {phead([('/services', 'Nos services')], 'Nos services',
-         'On t’aide à choisir les bons produits et la bonne technique pour représenter ta marque. Explore nos services pour voir les possibilités, les avantages et les éléments à prévoir.',
-         '<a class="btn btn-w" href="/contact?service=je-sais-pas">Je sais pas quelle technique choisir</a>', 'illustration-pinceau')}
+  {phead([(url_p('services'), tr('Nos services', 'Services'))], tr('Nos services', 'Our services'),
+         tr('On t’aide à choisir les bons produits et la bonne technique pour représenter ta marque. Explore nos services pour voir les possibilités, les avantages et les éléments à prévoir.',
+            'We help you choose the right products and the right technique to represent your brand. Explore our services to see the possibilities, the upsides and what to keep in mind.'),
+         f'<a class="btn btn-w" href="{url_p("contact")}?service=je-sais-pas">{tr("Je sais pas quelle technique choisir", "I don’t know which technique to pick")}</a>', 'illustration-pinceau')}
   <section class="sec">{blocs}</section>
   {extras}
   <section class="wrap ig-section"><hr class="ig-sep">
     <div class="ig-bloc"><div class="ig-txt">
-      <div class="ig-ligne rv">{LOGO_INSTA.replace('__T__', '44')}<p>Nos derniers projets, tu les trouves sur Instagram.</p></div>
-      <p class="rv"><a class="btn btn-g" href="{INSTAGRAM}" target="_blank" rel="noopener">{LOGO_INSTA.replace('__T__', '18')} Voir nos réalisations sur Instagram <span class="arr">→</span></a></p></div>
+      <div class="ig-ligne rv">{LOGO_INSTA.replace('__T__', '44')}<p>{tr('Nos derniers projets, tu les trouves sur Instagram.', 'You can find our latest projects on Instagram.')}</p></div>
+      <p class="rv"><a class="btn btn-g" href="{INSTAGRAM}" target="_blank" rel="noopener">{LOGO_INSTA.replace('__T__', '18')} {tr('Voir nos réalisations sur Instagram', 'See our work on Instagram')} <span class="arr">→</span></a></p></div>
       <img class="ig-dessin rv" src="/assets/img/dessins/chandail-loupe-blanc.png" sizes="(max-width:820px) 62vw, 380px" alt="" width="1000" height="670" loading="lazy"></div></section>
 </main>
 {hesite()}
 {pied()}'''
-    ld = [{'@type': 'ItemList', 'name': 'Nos services', 'itemListElement': [
-        {'@type': 'ListItem', 'position': i + 1, 'name': s['nom'], 'url': f'{BASE}/services/{s["slug"]}'} for i, s in enumerate(SERVICES)]}]
-    return page('/services', 'Vêtements et produits personnalisés | Takedown Studio',
-                'Vêtements personnalisés, broderie, sérigraphie, impression DTF, casquettes et tuques, patches et autocollants. Découvre nos services à Bromont.',
-                corps, fil=[('/services', 'Nos services')], extra_ld=ld)
+    ld = [{'@type': 'ItemList', 'name': tr('Nos services', 'Our services'), 'itemListElement': [
+        {'@type': 'ListItem', 'position': i + 1, 'name': s['nom'], 'url': BASE + url_s(s['slug'])} for i, s in enumerate(svcs())]}]
+    return page(url_p('services'), tr('Vêtements et produits personnalisés | Takedown Studio', 'Custom apparel and products | Takedown Studio'),
+                tr('Vêtements personnalisés, broderie, sérigraphie, impression DTF, casquettes et tuques, patches et autocollants. Découvre nos services à Bromont.',
+                   'Custom apparel, embroidery, screen printing, DTF printing, caps and beanies, patches and stickers. Explore our services in Bromont.'),
+                corps, fil=[(url_p('services'), tr('Nos services', 'Services'))], extra_ld=ld)
 
 # Types de patches (demande de Takedown, 2026-10-07) : brodé, caoutchouc (rubber / PVC).
 # L'étiquette tissée (woven label) est présentée À PART : « pas patch, c'est une étiquette mince » (Takedown, WhatsApp).
@@ -565,17 +794,20 @@ def photo_patch(nom, alt):
 
 def types_patches():
     cartes = ''
-    for t in TYPES_PATCHES:
-        visuel = (photo_patch(t['photos'][0], f'Exemple de patch {t["nom"].lower()}') if t['photos']
-                  else ph('Photo à venir', '#2a2420'))
+    for i, t0 in enumerate(TYPES_PATCHES):
+        t = dict(t0, **TYPES_PATCHES_EN[i]) if L == 'en' else t0
+        visuel = (photo_patch(t['photos'][0], tr(f'Exemple de patch {t["nom"].lower()}', f'Example of a {t["nom"].lower()} patch')) if t['photos']
+                  else ph(tr('Photo à venir', 'Photo coming soon'), '#2a2420'))
+        sous = f' <span class="mono">{t["en"]}</span>' if t['en'] else ''
         cartes += f'''<article class="type-patch rv">{visuel}
-        <div class="txt"><h3>{t['nom']} <span class="mono">{t['en']}</span></h3><p>{t['texte']}</p></div></article>'''
-    x = ETIQUETTE
-    etiq = f'''<article class="etiquette rv">{photo_patch(x['photo'], 'Exemple d’étiquette tissée Takedown Studio, une étiquette mince')}
-      <div class="txt"><span class="mono">Aussi possible</span><h3>{x['nom']} <span class="mono">{x['en']}</span></h3><p>{x['texte']}</p>
-      <p><a class="lien" href="{soum('patches-ecussons')}">Demander une soumission <span class="arr">→</span></a></p></div></article>'''
-    return f'''<section class="sec wrap"><div class="head"><h2 class="h2 rv">Les types de patches</h2>
-    <p class="note rv">On t’aide à choisir selon ton logo, ton produit et le look que tu veux.</p></div>
+        <div class="txt"><h3>{t['nom']}{sous}</h3><p>{t['texte']}</p></div></article>'''
+    x = dict(ETIQUETTE, **ETIQUETTE_EN) if L == 'en' else ETIQUETTE
+    sous_x = f' <span class="mono">{x["en"]}</span>' if x['en'] else ''
+    etiq = f'''<article class="etiquette rv">{photo_patch(x['photo'], tr('Exemple d’étiquette tissée Takedown Studio, une étiquette mince', 'Example of a Takedown Studio woven label, a thin label'))}
+      <div class="txt"><span class="mono">{tr('Aussi possible', 'Also possible')}</span><h3>{x['nom']}{sous_x}</h3><p>{x['texte']}</p>
+      <p><a class="lien" href="{soum('patches-ecussons')}">{tr('Demander une soumission', 'Request a quote')} <span class="arr">→</span></a></p></div></article>'''
+    return f'''<section class="sec wrap"><div class="head"><h2 class="h2 rv">{tr('Les types de patches', 'Patch types')}</h2>
+    <p class="note rv">{tr('On t’aide à choisir selon ton logo, ton produit et le look que tu veux.', 'We help you choose based on your logo, your product and the look you want.')}</p></div>
     <div class="types-patches">{cartes}</div>{etiq}</section>'''
 
 # 2026-10-24 (Takedown via Alex) : guide de la page Casquettes 100 % personnalisées, un bloc par info
@@ -603,11 +835,16 @@ GUIDE_CASQUETTES = [
 def guide_casquettes():
     # Chaque section est un carrousel : un bloc à la fois, qui change aux 3 s (menu défilant, léger sur cell).
     out = ''
-    for titre, note, blocs in GUIDE_CASQUETTES:
+    for gi, (titre, note, blocs) in enumerate(GUIDE_CASQUETTES):
+        if L == 'en':
+            titre, note, blocs_e = GUIDE_CASQUETTES_EN[gi]
         arts = ''
         puces = ''
         for n, (dessin, tag, nom, texte, lien) in enumerate(blocs):
-            btn = f'<div><a class="btn btn-g" href="/services/{lien[0]}">{lien[1]} <span class="arr">→</span></a></div>' if lien else ''
+            if L == 'en':
+                tag, nom, texte, lien_e = blocs_e[n]
+                lien = (lien[0], lien_e) if lien else None
+            btn = f'<div><a class="btn btn-g" href="{url_s(lien[0])}">{lien[1]} <span class="arr">→</span></a></div>' if lien else ''
             arts += f'''<article class="carte-casq">
         <div class="art"><img src="/assets/img/{dessin}-blanc.png" alt="" loading="lazy"></div>
         <div class="lab"><span class="mono">{tag}</span><h3>{nom}</h3><p>{texte}</p>{btn}</div>
@@ -619,6 +856,7 @@ def guide_casquettes():
     return out
 
 def service(s, i):
+    s = loc(s)
     photos = []   # 2026-10-26 (Alex Moite) : plus de photos d'exemple sur les pages de services, seulement la liste d'exemples
     exemples = ''.join(f'<figure class="rv">{photo_real(r)}<figcaption>{r["titre"]}</figcaption></figure>' for r in photos[1:7])
     exemples = (f'<div class="ex">{exemples}</div>' if exemples else '') + \
@@ -627,35 +865,35 @@ def service(s, i):
               f'<figcaption class="mono">{photos[0]["titre"]} · {photos[0]["tech"]}</figcaption></figure></section>') if photos else ''
     extras = ''
     if s['slug'] == 'vetements-personnalises' and AFFICHER_EXTRAS:
-        extras = '<section class="sec wrap"><div class="head"><h2 class="h2 rv">Aussi possible</h2><p class="note rv">Avec nos partenaires, pour les projets qui sortent de l’ordinaire.</p></div>' + ''.join(f'''
+        extras = f'<section class="sec wrap"><div class="head"><h2 class="h2 rv">{tr("Aussi possible", "Also possible")}</h2><p class="note rv">{tr("Avec nos partenaires, pour les projets qui sortent de l’ordinaire.", "With our partners, for projects that go beyond the ordinary.")}</p></div>' + ''.join(f'''
       <article class="extra rv" id="{x['id']}">
-        <div><span class="mono">Sur demande</span><h3>{x['titre']}</h3></div>
+        <div><span class="mono">{tr('Sur demande', 'On request')}</span><h3>{x['titre']}</h3></div>
         <div><p>{x['texte']}</p>
-          <dl><div><dt>Les plus</dt><dd>{x['plus']}</dd></div><div><dt>À prévoir</dt><dd>{x['prevoir']}</dd></div></dl>
-          <p style="margin-top:22px"><a class="lien" href="{soum(x['val'])}">Demander une soumission <span class="arr">→</span></a></p></div>
-      </article>''' for x in EXTRAS) + '</section>'
+          <dl><div><dt>{tr('Les plus', 'The upsides')}</dt><dd>{x['plus']}</dd></div><div><dt>{tr('À prévoir', 'Keep in mind')}</dt><dd>{x['prevoir']}</dd></div></dl>
+          <p style="margin-top:22px"><a class="lien" href="{soum(x['val'])}">{tr('Demander une soumission', 'Request a quote')} <span class="arr">→</span></a></p></div>
+      </article>''' for x in extras_l()) + '</section>'
     assoc = ''
     if s['liens']:
-        assoc = f'''<section class="sec wrap"><div class="head"><h2 class="h2 rv">Services associés</h2>
-      <div class="links rv"><a href="/services">Tous les services <span class="arr">→</span></a></div></div>
+        assoc = f'''<section class="sec wrap"><div class="head"><h2 class="h2 rv">{tr('Services associés', 'Related services')}</h2>
+      <div class="links rv"><a href="{url_p('services')}">{tr('Tous les services', 'All services')} <span class="arr">→</span></a></div></div>
       <div class="grid g3">{''.join(tuile(PAR_SLUG[l]) for l in s['liens'][:3])}</div>
-      {('<div class="rv" style="display:flex;gap:28px;flex-wrap:wrap;margin-top:24px">' + ''.join(f'<a class="lien" href="/services/{l}">{nom_court(PAR_SLUG[l])} <span class="arr">→</span></a>' for l in s['liens'][3:]) + '</div>') if len(s['liens']) > 3 else ''}
+      {('<div class="rv" style="display:flex;gap:28px;flex-wrap:wrap;margin-top:24px">' + ''.join(f'<a class="lien" href="{url_s(l)}">{nom_court(PAR_SLUG[l])} <span class="arr">→</span></a>' for l in s['liens'][3:]) + '</div>') if len(s['liens']) > 3 else ''}
     </section>'''
     pp = f'<section class="sec wrap">{plus_prevoir(s["plus"], s["prevoir"])}</section>'
     pp_haut = '' if s.get('rose') else pp   # pour les casquettes 100 % : « Les plus / À prévoir » passent sous le guide
     if s.get('rose'):
         bloc_exemples = guide_casquettes() + pp + f'''<section class="sec wrap"><p class="rv"><a class="btn btn-w" href="{soum(s['slug'])}">{s['bouton']} <span class="arr">→</span></a></p></section>'''
     else:
-        bloc_exemples = f'''<section class="sec wrap"><div class="head"><h2 class="h2 rv">Exemples</h2>
-    <div class="links rv"><a href="/realisations?f={s['filtre']}">Voir les réalisations <span class="arr">→</span></a></div></div>
+        bloc_exemples = f'''<section class="sec wrap"><div class="head"><h2 class="h2 rv">{tr('Exemples', 'Examples')}</h2>
+    <div class="links rv"><a href="{url_p('realisations')}?f={s['filtre']}">{tr('Voir les réalisations', 'See our work')} <span class="arr">→</span></a></div></div>
     {exemples}
     <p class="rv" style="margin-top:40px"><a class="btn btn-w" href="{soum(s['slug'])}">{s['bouton']} <span class="arr">→</span></a></p>
   </section>'''
     ctas = (f'<a class="btn btn-w" href="{soum(s["slug"])}">{s["bouton"]}</a>'
-            f'<a class="btn btn-g" href="/realisations?f={s["filtre"]}">Voir les réalisations</a>')
+            f'<a class="btn btn-g" href="{url_p("realisations")}?f={s["filtre"]}">{tr("Voir les réalisations", "See our work")}</a>')
     corps = f'''{nav('/services')}
 <main id="contenu">
-  {phead([('/services', 'Nos services'), ('/services/' + s['slug'], s['nom'])], s['nom'], s['texte'], ctas, DESSIN_SERVICE.get(s['slug'], DESSINS[i % 3]), rose=bool(s.get('rose')))}
+  {phead([(url_p('services'), tr('Nos services', 'Services')), (url_s(s['slug']), s['nom'])], s['nom'], s['texte'], ctas, DESSIN_SERVICE.get(s['slug'], DESSINS[i % 3]), rose=bool(s.get('rose')))}
   {grande}
   {pp_haut}
   {types_patches() if s['slug'] == 'patches-ecussons' else ''}
@@ -667,9 +905,9 @@ def service(s, i):
 {pied()}'''
     ld = [{'@type': 'Service', 'name': s['nom'], 'serviceType': s['nom'], 'description': s['texte'],
            'provider': {'@id': BASE + '/#entreprise'}, 'areaServed': {'@type': 'City', 'name': 'Bromont'},
-           'url': f'{BASE}/services/{s["slug"]}'}]
-    return page('/services/' + s['slug'], s['seo'], s['desc'], corps,
-                fil=[('/services', 'Nos services'), ('/services/' + s['slug'], s['nom'])], extra_ld=ld)
+           'url': BASE + url_s(s['slug'])}]
+    return page(url_s(s['slug']), s['seo'], s['desc'], corps,
+                fil=[(url_p('services'), tr('Nos services', 'Services')), (url_s(s['slug']), s['nom'])], extra_ld=ld)
 
 # 2026-10-26 (Takedown via Alex Moite) : page Catalogue, les produits favoris (promo / basic et premium)
 CATALOGUE = json.load(io.open(os.path.join(ICI, 'contenu', 'catalogue.json'), encoding='utf-8'))
@@ -681,46 +919,52 @@ CAT_TITRES = {'T-shirt': 'T-shirts', 'Manches longues': 'Manches longues', 'Crew
               'Pantalon': 'Pantalons', 'Casquette': 'Casquettes', 'Tuque': 'Tuques', 'Accessoire': 'Accessoires'}
 
 def carte_produit(x):
+    cat = tr(x['categorie'], CAT_EN.get(x['categorie'], x['categorie']))
+    tailles, poids, couleurs_plus = t_tailles(x['tailles']), t_poids(x['poids']), t_plus(x['couleurs_plus'])
     ligne_ref = e(x['marque']) + (' · ' + e(x['ref']) if x['ref'] else '')
-    lignes = f'<div><dt>Catégorie</dt><dd>{e(x["categorie"])}</dd></div>'
-    if x['poids']:
-        lignes += f'<div><dt>Poids</dt><dd>{e(x["poids"])}</dd></div>'
-    if x['tailles']:
-        lignes += f'<div><dt>Tailles</dt><dd>{e(x["tailles"])}</dd></div>'
-    plus = f' <em>{e(x["couleurs_plus"])}.</em>' if x['couleurs_plus'] else ''
-    court_t = x['tailles'].split(' (')[0] if x['tailles'] else ''
-    court_p = x['poids'].split(' (')[0] if x['poids'] else ''
-    pres = f'<p class="pres">{e(x["categorie"])}{" · " + e(court_t) if court_t else ""}{" · " + e(court_p) if court_p else ""}</p>'
+    lignes = f'<div><dt>{tr("Catégorie", "Category")}</dt><dd>{e(cat)}</dd></div>'
+    if poids:
+        lignes += f'<div><dt>{tr("Poids", "Weight")}</dt><dd>{e(poids)}</dd></div>'
+    if tailles:
+        lignes += f'<div><dt>{tr("Tailles", "Sizes")}</dt><dd>{e(tailles)}</dd></div>'
+    plus = f' <em>{e(couleurs_plus)}.</em>' if couleurs_plus else ''
+    court_t = tailles.split(' (')[0] if tailles else ''
+    court_p = poids.split(' (')[0] if poids else ''
+    pres = f'<p class="pres">{e(cat)}{" · " + e(court_t) if court_t else ""}{" · " + e(court_p) if court_p else ""}</p>'
     return (f'<article class="pcat rv" data-cat="{CAT_SLUG.get(x["categorie"], "autre")}">'
             f'<div class="pimg" style="background:{x.get("fond", "#fff")}"><img src="/assets/img/{x["image"]}" alt="{e(x["nom"])}, {e(x["marque"])}" width="720" height="900" loading="lazy"></div>'
             f'<div class="ptxt"><p class="mono">{ligne_ref}</p><h3>{e(x["nom"])}</h3>{pres}<dl>{lignes}</dl>'
-            f'<details><summary>Couleurs ({e(x["couleurs_nb"])})</summary><p>{e(x["couleurs"])}.{plus}</p></details></div></article>')
+            f'<details><summary>{tr("Couleurs", "Colours")} ({e(t_nb(x["couleurs_nb"]))})</summary><p>{e(x["couleurs"])}.{plus}</p></details></div></article>')
 
 def catalogue():
-    puces = ''.join(f'<button type="button" class="chip" data-cat="{k}" aria-pressed="{"true" if k == "tous" else "false"}">{t}</button>' for k, t in CAT_FILTRES)
+    puces = ''.join(f'<button type="button" class="chip" data-cat="{k}" aria-pressed="{"true" if k == "tous" else "false"}">{tr(t, CAT_FILTRES_EN[k])}</button>' for k, t in CAT_FILTRES)
     def bloc(titre, liste):
         cartes = ''.join(carte_produit(x) for x in liste)
         n = len(liste)
-        return (f'<section class="sec wrap cat-section"><div class="head"><h2 class="h2 rv">{titre}</h2><p class="note rv">{n} produit{"s" if n > 1 else ""}.</p></div>'
+        return (f'<section class="sec wrap cat-section"><div class="head"><h2 class="h2 rv">{titre}</h2><p class="note rv">{n} {tr("produit", "product")}{"s" if n > 1 else ""}.</p></div>'
                 f'<div class="cat-grid">{cartes}</div></section>')
-    blocs = ''.join(bloc(CAT_TITRES[t], [x for x in CATALOGUE if x['categorie'] == t]) for t in CAT_TITRES if any(x['categorie'] == t for x in CATALOGUE))
+    blocs = ''.join(bloc(tr(CAT_TITRES[t], CAT_TITRES_EN[t]), [x for x in CATALOGUE if x['categorie'] == t]) for t in CAT_TITRES if any(x['categorie'] == t for x in CATALOGUE))
+    # le PDF du catalogue est en français : on ne le propose pas sur la page anglaise
+    pdf_lien = tr(' <a class="lien" href="/assets/documents/catalogue-takedown-studio.pdf" download>Télécharger le catalogue (PDF) <span class="arr">↓</span></a>', '')
     corps = f'''{nav('/catalogue')}
 <main id="contenu">
-  {phead([('/catalogue', 'Catalogue')], 'Notre catalogue',
-         'Nos produits favoris, du promo au premium.<span class="cat-plus">On en a ' + encre('beaucoup plus') + '.</span>Dis-nous ce que tu cherches.',
+  {phead([(url_p('catalogue'), 'Catalogue')], tr('Notre catalogue', 'Our catalogue'),
+         tr('Nos produits favoris, du promo au premium.<span class="cat-plus">On en a ' + encre('beaucoup plus') + '.</span>Dis-nous ce que tu cherches.',
+            'Our favourite products, from budget to premium.<span class="cat-plus">We have ' + encre('a lot more') + '.</span>Tell us what you are looking for.'),
          '', 'illustration-pinceau')}
-  <section class="wrap cat-barre"><p class="rv">Livraison gratuite partout au Canada. <a class="lien" href="/assets/documents/catalogue-takedown-studio.pdf" download>Télécharger le catalogue (PDF) <span class="arr">↓</span></a></p>
-    <div class="chips-cat" role="group" aria-label="Filtrer par catégorie">{puces}</div></section>
+  <section class="wrap cat-barre"><p class="rv">{tr('Livraison gratuite partout au Canada.', 'Free shipping anywhere in Canada.')}{pdf_lien}</p>
+    <div class="chips-cat" role="group" aria-label="{tr('Filtrer par catégorie', 'Filter by category')}">{puces}</div></section>
   {blocs}
-  <section class="sec wrap"><div class="cat-fin rv"><h2 class="h2">Tu cherches autre chose?</h2>
-    <p>Ces produits sont nos favoris, mais on en a beaucoup plus. Parle-nous de ton projet et on te trouve le bon produit.</p>
-    <div class="ctas"><a class="btn btn-w" href="/contact">Demander une soumission <span class="arr">→</span></a><a class="btn btn-g" href="/services">Nos services</a></div></div></section>
+  <section class="sec wrap"><div class="cat-fin rv"><h2 class="h2">{tr('Tu cherches autre chose?', 'Looking for something else?')}</h2>
+    <p>{tr('Ces produits sont nos favoris, mais on en a beaucoup plus. Parle-nous de ton projet et on te trouve le bon produit.', 'These products are our favourites, but we have a lot more. Tell us about your project and we will find you the right product.')}</p>
+    <div class="ctas"><a class="btn btn-w" href="{url_p('contact')}">{tr('Demander une soumission', 'Request a quote')} <span class="arr">→</span></a><a class="btn btn-g" href="{url_p('services')}">{tr('Nos services', 'Our services')}</a></div></div></section>
 </main>
 {hesite()}
 {pied()}'''
-    return page('/catalogue', 'Catalogue de vêtements et de produits personnalisés | Takedown Studio',
-                'Les produits favoris de Takedown Studio : t-shirts, crewnecks, hoodies, casquettes, tuques, du promo au premium. On en a beaucoup plus. Demande ta soumission.',
-                corps, fil=[('/catalogue', 'Catalogue')])
+    return page(url_p('catalogue'), tr('Catalogue de vêtements et de produits personnalisés | Takedown Studio', 'Catalogue of custom apparel and products | Takedown Studio'),
+                tr('Les produits favoris de Takedown Studio : t-shirts, crewnecks, hoodies, casquettes, tuques, du promo au premium. On en a beaucoup plus. Demande ta soumission.',
+                   'Takedown Studio favourites: T-shirts, crewnecks, hoodies, caps, beanies, from budget to premium. We have a lot more. Request your quote.'),
+                corps, fil=[(url_p('catalogue'), 'Catalogue')])
 
 def realisations():
     presents = {'tous'} | {c for r in REALISATIONS for c in r['categories'].split()}
@@ -731,85 +975,89 @@ def realisations():
       {photo_real(r)}
       <h3>{r['titre']}</h3>
       <div class="meta mono"><span>{r['produit']}</span><span>{r['tech']}</span></div>
-      <a class="lien" href="/services/{r['service']}">{nom_court(PAR_SLUG[r['service']])} <span class="arr">→</span></a>
+      <a class="lien" href="{url_s(r['service'])}">{nom_court(PAR_SLUG[r['service']])} <span class="arr">→</span></a>
     </article>''' for r in REALISATIONS if AFFICHER_PHOTOS)
     insta = f'''<a class="real insta rv" href="{INSTAGRAM}" target="_blank" rel="noopener" data-c="tous">
       <div class="ph"><span class="ig">@takedownstudio</span></div>
-      <h3>Nos derniers projets sur Instagram <span class="arr">→</span></h3>
-      <div class="meta mono"><span>Broderie</span><span>Sérigraphie</span><span>DTF</span></div>
+      <h3>{tr('Nos derniers projets sur Instagram', 'Our latest projects on Instagram')} <span class="arr">→</span></h3>
+      <div class="meta mono"><span>{tr('Broderie', 'Embroidery')}</span><span>{tr('Sérigraphie', 'Screen printing')}</span><span>DTF</span></div>
     </a>'''
     corps = f'''{nav('/realisations')}
 <main id="contenu">
-  {phead([('/realisations', 'Réalisations')], 'Nos réalisations',
-         'Découvre quelques projets réalisés par Takedown Studio. Chaque projet est différent, et la technique utilisée dépend du produit, du visuel, de la quantité et du résultat recherché.',
+  {phead([(url_p('realisations'), tr('Réalisations', 'Our work'))], tr('Nos réalisations', 'Our work'),
+         tr('Découvre quelques projets réalisés par Takedown Studio. Chaque projet est différent, et la technique utilisée dépend du produit, du visuel, de la quantité et du résultat recherché.',
+            'Discover a few projects completed by Takedown Studio. Every project is different, and the technique used depends on the product, the artwork, the quantity and the result you want.'),
          '', 'dessins/bonhomme-aiguille')}
   <section class="sec wrap">
     {f'<div class="chips" role="group" aria-label="Filtrer par technique">{chips}</div>' if chips else ''}
     <div class="reals">{items}{insta}</div>
-    <p style="margin-top:56px"><a class="btn btn-w" href="/contact">Parle-nous de ton projet <span class="arr">→</span></a></p>
+    <p style="margin-top:56px"><a class="btn btn-w" href="{url_p('contact')}">{tr('Parle-nous de ton projet', 'Tell us about your project')} <span class="arr">→</span></a></p>
   </section>
 </main>
 {hesite()}
 {pied()}'''
-    return page('/realisations', 'Nos réalisations | Takedown Studio',
-                'Des projets de Takedown Studio : vêtements brodés, t-shirts en sérigraphie, impression DTF, casquettes, patches et autocollants personnalisés.',
-                corps, fil=[('/realisations', 'Réalisations')])
+    return page(url_p('realisations'), tr('Nos réalisations | Takedown Studio', 'Our work | Takedown Studio'),
+                tr('Des projets de Takedown Studio : vêtements brodés, t-shirts en sérigraphie, impression DTF, casquettes, patches et autocollants personnalisés.',
+                   'Takedown Studio projects: embroidered apparel, screen-printed T-shirts, DTF printing, caps, patches and custom stickers.'),
+                corps, fil=[(url_p('realisations'), tr('Réalisations', 'Our work'))])
 
 def contact():
-    options = ''.join(f'<option value="{v}">{t}</option>' for v, t in CHOIX_SERVICE)
+    options = ''.join(f'<option value="{v}">{t}</option>' for v, t in choix_service())
     def champ(id_, lab, typ='text', req=True, full=False, extra='', ph_=''):
-        opt = '' if req else ' <em>(facultatif)</em>'
+        opt = '' if req else ' <em>' + tr('(facultatif)', '(optional)') + '</em>'
         r = ' required aria-required="true"' if req else ''
         return (f'<div class="champ{" full" if full else ""}"><label for="{id_}">{lab}{opt}</label>'
                 f'<input id="{id_}" name="{id_}" type="{typ}"{r}{extra}{f" placeholder=\"{ph_}\"" if ph_ else ""}>'
-                f'<span class="msg">Ce champ est obligatoire.</span></div>')
+                f'<span class="msg">{tr("Ce champ est obligatoire.", "This field is required.")}</span></div>')
     corps = f'''{nav('/contact')}
 <main id="contenu">
-  {phead([('/contact', 'Contact')], 'Demander une soumission',
-         'Envoie-nous ton idée, ton logo et la quantité que tu as en tête. On va regarder les possibilités avec toi et te guider vers les bons produits et la bonne technique.',
+  {phead([(url_p('contact'), 'Contact')], tr('Demander une soumission', 'Request a quote'),
+         tr('Envoie-nous ton idée, ton logo et la quantité que tu as en tête. On va regarder les possibilités avec toi et te guider vers les bons produits et la bonne technique.',
+            'Send us your idea, your logo and the quantity you have in mind. We will look at the options with you and guide you to the right products and technique.'),
          dessin='dessins/chandail-tache')}
   <section class="wrap formgrid">
     <div>
-      <form id="soumission" class="form" action="{API_SOUMISSION}" data-merci="/merci" method="post" enctype="multipart/form-data" novalidate>
-        {champ('nom', 'Nom', extra=' autocomplete="name"')}
-        {champ('entreprise', 'Entreprise', req=False, extra=' autocomplete="organization"')}
-        {champ('courriel', 'Courriel', 'email', extra=' autocomplete="email" inputmode="email"')}
-        {champ('telephone', 'Téléphone', 'tel', req=False, extra=' autocomplete="tel" inputmode="tel"')}
-        <div class="champ full"><label for="service">Service recherché</label>
-          <select id="service" name="service" required aria-required="true"><option value="">Choisis un service</option>{options}</select>
-          <span class="msg">Choisis un service, ou coche la case en dessous.</span>
-          <label class="coche" style="margin-top:12px;text-transform:none;letter-spacing:0;font-family:inherit;font-size:15px;color:#d6d6d9"><input type="checkbox" id="sais-pas"> Je ne sais pas quelle technique choisir</label>
+      <form id="soumission" class="form" action="{API_SOUMISSION}" data-merci="{url_p('merci')}" method="post" enctype="multipart/form-data" novalidate>
+        {champ('nom', tr('Nom', 'Name'), extra=' autocomplete="name"')}
+        {champ('entreprise', tr('Entreprise', 'Company'), req=False, extra=' autocomplete="organization"')}
+        {champ('courriel', tr('Courriel', 'Email'), 'email', extra=' autocomplete="email" inputmode="email"')}
+        {champ('telephone', tr('Téléphone', 'Phone'), 'tel', req=False, extra=' autocomplete="tel" inputmode="tel"')}
+        <div class="champ full"><label for="service">{tr('Service recherché', 'Service needed')}</label>
+          <select id="service" name="service" required aria-required="true"><option value="">{tr('Choisis un service', 'Choose a service')}</option>{options}</select>
+          <span class="msg">{tr('Choisis un service, ou coche la case en dessous.', 'Choose a service, or tick the box below.')}</span>
+          <label class="coche" style="margin-top:12px;text-transform:none;letter-spacing:0;font-family:inherit;font-size:15px;color:#d6d6d9"><input type="checkbox" id="sais-pas"> {tr('Je ne sais pas quelle technique choisir', 'I don’t know which technique to pick')}</label>
         </div>
-        {champ('produit', 'Produit recherché', ph_='Ex. hoodies, casquettes, autocollants')}
-        {champ('quantite', 'Quantité approximative', ph_='Ex. 50 morceaux', extra=' inputmode="numeric"')}
-        {champ('date', 'Date souhaitée', 'date')}
-        {champ('budget', 'Budget approximatif', req=False)}
-        <div class="champ full"><label for="description">Description du projet</label>
-          <textarea id="description" name="description" required aria-required="true" placeholder="Ton idée, les couleurs, les placements, l’utilisation prévue…"></textarea>
-          <span class="msg">Décris-nous ton projet en quelques mots.</span></div>
-        <div class="champ full"><span class="lab">Tes fichiers <em style="color:var(--mute);text-transform:none;letter-spacing:0">(logo, visuel, croquis)</em></span>
+        {champ('produit', tr('Produit recherché', 'Product you want'), ph_=tr('Ex. hoodies, casquettes, autocollants', 'e.g. hoodies, caps, stickers'))}
+        {champ('quantite', tr('Quantité approximative', 'Approximate quantity'), ph_=tr('Ex. 50 morceaux', 'e.g. 50 pieces'), extra=' inputmode="numeric"')}
+        {champ('date', tr('Date souhaitée', 'Date needed'), 'date')}
+        {champ('budget', tr('Budget approximatif', 'Approximate budget'), req=False)}
+        <div class="champ full"><label for="description">{tr('Description du projet', 'Project description')}</label>
+          <textarea id="description" name="description" required aria-required="true" placeholder="{tr('Ton idée, les couleurs, les placements, l’utilisation prévue…', 'Your idea, the colours, the placements, how it will be used…')}"></textarea>
+          <span class="msg">{tr('Décris-nous ton projet en quelques mots.', 'Tell us about your project in a few words.')}</span></div>
+        <div class="champ full"><span class="lab">{tr('Tes fichiers', 'Your files')} <em style="color:var(--mute);text-transform:none;letter-spacing:0">{tr('(logo, visuel, croquis)', '(logo, artwork, sketch)')}</em></span>
           <label class="depot" tabindex="0" for="fichiers"><input id="fichiers" name="fichiers" type="file" multiple accept=".ai,.eps,.pdf,.svg,.png,.jpg,.jpeg,.webp,.heic,.psd,image/*,application/pdf">
-            <b>Glisse tes fichiers ici</b> ou clique pour les choisir</label>
+            <b>{tr('Glisse tes fichiers ici', 'Drag your files here')}</b> {tr('ou clique pour les choisir', 'or click to choose them')}</label>
           <ul class="fichiers" aria-live="polite"></ul></div>
-        <div class="champ full"><label for="source">Comment tu nous as connus <em>(facultatif)</em></label>
-          <select id="source" name="source"><option value="">Choisis une option</option><option>Instagram</option><option>Facebook</option><option>Google</option><option>Bouche-à-oreille</option><option>Un client de Takedown</option><option>Autre</option></select></div>
-        <div class="miel" aria-hidden="true"><label for="site_web">Ne pas remplir</label><input id="site_web" name="_honey" type="text" tabindex="-1" autocomplete="off"></div>
-        <input type="hidden" name="_subject" value="Nouvelle demande de soumission (site Takedown Studio)"><input type="hidden" name="_template" value="table"><input type="hidden" name="_captcha" value="false">
-        <div class="envoi full"><button class="btn btn-w" type="submit">Envoyer ma demande</button><small>On te répond par courriel ou par téléphone.</small></div>
+        <div class="champ full"><label for="source">{tr('Comment tu nous as connus', 'How did you hear about us')} <em>{tr('(facultatif)', '(optional)')}</em></label>
+          <select id="source" name="source"><option value="">{tr('Choisis une option', 'Choose an option')}</option><option>Instagram</option><option>Facebook</option><option>Google</option><option value="Bouche-à-oreille">{tr('Bouche-à-oreille', 'Word of mouth')}</option><option value="Un client de Takedown">{tr('Un client de Takedown', 'A Takedown client')}</option><option value="Autre">{tr('Autre', 'Other')}</option></select></div>
+        <div class="miel" aria-hidden="true"><label for="site_web">{tr('Ne pas remplir', 'Do not fill in')}</label><input id="site_web" name="_honey" type="text" tabindex="-1" autocomplete="off"></div>
+        <input type="hidden" name="_subject" value="{tr('Nouvelle demande de soumission (site Takedown Studio)', 'New quote request (Takedown Studio website, EN)')}"><input type="hidden" name="_template" value="table"><input type="hidden" name="_captcha" value="false">
+        <div class="envoi full"><button class="btn btn-w" type="submit">{tr('Envoyer ma demande', 'Send my request')}</button><small>{tr('On te répond par courriel ou par téléphone.', 'We will reply by email or by phone.')}</small></div>
       </form>
       <div id="etat" class="etat" role="status" aria-live="polite"></div>
     </div>
     <aside class="aside">
-      <div class="bloc"><h3>Pour aller plus vite</h3><ol><li>Ton logo ou ton visuel</li><li>La quantité que tu as en tête</li><li>La date où tu en as besoin</li></ol></div>
-      <div class="bloc"><h3>Nous joindre</h3><a href="mailto:{ENTREPRISE['courriel']}">{ENTREPRISE['courriel']}</a><a href="tel:{ENTREPRISE['tel_intl']}">{ENTREPRISE['tel']}</a></div>
-      <div class="bloc"><h3>Le studio</h3><p>{ENTREPRISE['rue']}<br>{ENTREPRISE['ville']} (Québec) {ENTREPRISE['cp']}</p></div>
+      <div class="bloc"><h3>{tr('Pour aller plus vite', 'To go faster')}</h3><ol><li>{tr('Ton logo ou ton visuel', 'Your logo or artwork')}</li><li>{tr('La quantité que tu as en tête', 'The quantity you have in mind')}</li><li>{tr('La date où tu en as besoin', 'The date you need it by')}</li></ol></div>
+      <div class="bloc"><h3>{tr('Nous joindre', 'Get in touch')}</h3><a href="mailto:{ENTREPRISE['courriel']}">{ENTREPRISE['courriel']}</a><a href="tel:{ENTREPRISE['tel_intl']}">{ENTREPRISE['tel']}</a></div>
+      <div class="bloc"><h3>{tr('Le studio', 'The studio')}</h3><p>{ENTREPRISE['rue']}<br>{ville_cp()}</p></div>
     </aside>
   </section>
 </main>
 {pied(court=True)}'''
-    return page('/contact', 'Demander une soumission | Takedown Studio',
-                'Envoie ton idée, ton logo et la quantité que tu as en tête. Takedown Studio te guide vers les bons produits et la bonne technique. Bromont.',
-                corps, fil=[('/contact', 'Contact')])
+    return page(url_p('contact'), tr('Demander une soumission | Takedown Studio', 'Request a quote | Takedown Studio'),
+                tr('Envoie ton idée, ton logo et la quantité que tu as en tête. Takedown Studio te guide vers les bons produits et la bonne technique. Bromont.',
+                   'Send your idea, your logo and the quantity you have in mind. Takedown Studio guides you to the right products and technique. Bromont.'),
+                corps, fil=[(url_p('contact'), 'Contact')])
 
 def construction():
     """Page « site en construction » pour www.takedownstudio.com, en attendant le vrai site.
@@ -836,12 +1084,14 @@ def construction():
 def merci():
     corps = f'''{nav('')}
 <main id="contenu">
-  {phead([('/merci', 'Demande envoyée')], 'Merci, on a reçu ta demande!',
-         'On regarde les informations et les fichiers que tu nous as envoyés, puis on te revient par courriel ou par téléphone pour discuter de ton projet.',
-         '<a class="btn btn-w" href="/realisations">Voir nos réalisations</a><a class="btn btn-g" href="/">Retour à l’accueil</a>', 'dessins/bonhomme-casquette')}
+  {phead([(url_p('merci'), tr('Demande envoyée', 'Request sent'))], tr('Merci, on a reçu ta demande!', 'Thank you, we got your request!'),
+         tr('On regarde les informations et les fichiers que tu nous as envoyés, puis on te revient par courriel ou par téléphone pour discuter de ton projet.',
+            'We will review the information and files you sent, then get back to you by email or phone to talk about your project.'),
+         f'<a class="btn btn-w" href="{url_p("realisations")}">{tr("Voir nos réalisations", "See our work")}</a><a class="btn btn-g" href="{url_p("accueil")}">{tr("Retour à l’accueil", "Back to home")}</a>', 'dessins/bonhomme-casquette')}
 </main>
 {pied(court=True)}'''
-    return page('/merci', 'Demande envoyée | Takedown Studio', 'Ta demande de soumission a bien été envoyée à Takedown Studio.', corps).replace(
+    return page(url_p('merci'), tr('Demande envoyée | Takedown Studio', 'Request sent | Takedown Studio'),
+                tr('Ta demande de soumission a bien été envoyée à Takedown Studio.', 'Your quote request has been sent to Takedown Studio.'), corps).replace(
         '<link rel="canonical"', '<meta name="robots" content="noindex"><link rel="canonical"')
 
 def introuvable():
@@ -971,19 +1221,34 @@ def construire():
 
     # Fichiers « page.html » : Cloudflare les sert à /page, sans barre oblique finale,
     # comme les adresses du plan de contenu (/services/broderie).
-    pages = {'index.html': accueil(), 'agence-branding.html': agence(), 'services.html': services_index(),
-             'catalogue.html': catalogue(), 'realisations.html': realisations(), 'contact.html': contact(), 'merci.html': merci(), '404.html': introuvable()}
-    for i, s in enumerate(SERVICES):
-        pages[f'services/{s["slug"]}.html'] = service(s, i)
+    gabarit = [('accueil', accueil, ()), ('agence', agence, ()), ('services', services_index, ()), ('catalogue', catalogue, ()),
+               ('realisations', realisations, ()), ('contact', contact, ()), ('merci', merci, ())]
+    for i, sv in enumerate(SERVICES):
+        gabarit.append(('svc:' + sv['slug'], service, (sv, i)))
+    global L, PAGE_CLE
+    pages = {}
+    for langue in ('fr', 'en'):
+        L = langue
+        for cle, fonction, args in gabarit:
+            PAGE_CLE = cle
+            r = route_de(cle, langue)
+            rel = 'index.html' if r == '/' else 'en/index.html' if r == '/en/' else r.lstrip('/') + '.html'
+            pages[rel] = fonction(*args)
+    L, PAGE_CLE = 'fr', None
+    pages['404.html'] = introuvable()
     for rel, html in pages.items():
         assert '—' not in html, f'tiret cadratin dans {rel}'
         ecrire(rel, html)
 
-    urls = ['/', '/agence-branding', '/services'] + [f'/services/{s["slug"]}' for s in SERVICES] + ['/catalogue', '/realisations', '/contact']
-    ecrire('sitemap.xml', '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
-           ''.join(f'  <url><loc>{BASE}{u}</loc><lastmod>{AUJ}</lastmod></url>\n' for u in urls) + '</urlset>\n')
+    cles = ['accueil', 'agence', 'services'] + ['svc:' + sv['slug'] for sv in SERVICES] + ['catalogue', 'realisations', 'contact']
+    def entree(cle, langue):
+        alt = ''.join(f'<xhtml:link rel="alternate" hreflang="{h}" href="{BASE}{route_de(cle, l)}"/>' for h, l in (('fr-CA', 'fr'), ('en-CA', 'en'), ('x-default', 'fr')))
+        return f'  <url><loc>{BASE}{route_de(cle, langue)}</loc><lastmod>{AUJ}</lastmod>{alt}</url>\n'
+    urls = [entree(cle, langue) for langue in ('fr', 'en') for cle in cles]
+    ecrire('sitemap.xml', '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n' +
+           ''.join(urls) + '</urlset>\n')
     ecrire('robots.txt', f'User-agent: *\nAllow: /\nDisallow: /api/\n\nSitemap: {BASE}/sitemap.xml\n')
-    print(f'✓ {len(pages)} fichiers HTML, {len(urls)} pages dans le sitemap → {SORTIE}')
+    print(f'✓ {len(pages)} fichiers HTML, {len(urls)} URL dans le sitemap → {SORTIE}')
     if os.environ.get('SANS_CONSTRUCTION'):
         print('· page en construction laissée telle quelle (SANS_CONSTRUCTION)')
     else:

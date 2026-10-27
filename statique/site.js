@@ -1,6 +1,7 @@
 /* Takedown Studio · comportements communs */
 (function(){
   var d=document, qsa=function(s,r){return Array.prototype.slice.call((r||d).querySelectorAll(s))};
+  var EN=(d.documentElement.lang||'').indexOf('en')===0, T=function(fr,en){return EN?en:fr};   /* textes du JS : français ou anglais selon la langue de la page */
 
   var calme=matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -90,11 +91,11 @@
   var deja=false; try{deja=stock&&stock.getItem('td-entree')==='vue'}catch(e){}
   if(marque&&!q.has('apercu')&&(q.has('intro')||!deja)&&scrollY<10){
     var html=d.documentElement; html.classList.add('splash-on','splash-vu');
-    var sp=d.createElement('div'); sp.className='splash'; sp.setAttribute('role','dialog'); sp.setAttribute('aria-label','Bienvenue chez Takedown Studio');
+    var sp=d.createElement('div'); sp.className='splash'; sp.setAttribute('role','dialog'); sp.setAttribute('aria-label',T('Bienvenue chez Takedown Studio','Welcome to Takedown Studio'));
     sp.innerHTML='<div class="haut mono"><span>Takedown Studio</span><span>Bromont, QC</span></div>'+
       '<div class="flotte"><img src="'+(marque.getAttribute('data-intro')||marque.currentSrc||marque.src)+'" alt="Takedown Studio"></div>'+
-      '<button class="entrer" type="button">Entrer <span aria-hidden="true">→</span></button>'+
-      '<div class="bas mono"><span>Agence de branding</span><span>Vêtements et produits personnalisés</span></div>';
+      '<button class="entrer" type="button">'+T('Entrer','Enter')+' <span aria-hidden="true">→</span></button>'+
+      '<div class="bas mono"><span>'+T('Agence de branding','Branding agency')+'</span><span>'+T('Vêtements et produits personnalisés','Custom apparel and products')+'</span></div>';
     d.body.appendChild(sp);
     var stop=flotter(sp.querySelector('.flotte'),1700);
     var stopNuee=nuee(sp,(marque.getAttribute('data-intro')||'').replace(/logo-complet[^\/]*$/,'')+'dessins/');
@@ -256,12 +257,12 @@
   /* fichiers */
   var depot=form.querySelector('.depot'), inp=form.querySelector('#fichiers'), liste=form.querySelector('.fichiers');
   var choisis=[];
-  var taille=function(n){return n>1048576?(n/1048576).toFixed(1)+' Mo':Math.max(1,Math.round(n/1024))+' Ko'};
+  var taille=function(n){return n>1048576?(n/1048576).toFixed(1)+T(' Mo',' MB'):Math.max(1,Math.round(n/1024))+T(' Ko',' KB')};
   var dessine=function(){
     liste.innerHTML='';
     choisis.forEach(function(f,i){
       var li=d.createElement('li');
-      li.innerHTML='<b></b><span></span><button type="button">Retirer</button>';
+      li.innerHTML='<b></b><span></span><button type="button">'+T('Retirer','Remove')+'</button>';
       li.querySelector('b').textContent=f.name; li.querySelector('span').textContent=taille(f.size);
       li.querySelector('button').addEventListener('click',function(){choisis.splice(i,1);dessine()});
       liste.appendChild(li);
@@ -274,14 +275,14 @@
     Array.prototype.forEach.call(fl,function(f){
       if(choisis.some(function(c){return c.name===f.name&&c.size===f.size}))return;
       var tot=choisis.reduce(function(a,c){return a+c.size},0);
-      if(f.size>MAX_UN) refus.push(f.name+' dépasse 10 Mo');
-      else if(choisis.length>=MAX_N) refus.push(f.name+' : maximum 8 fichiers');
-      else if(tot+f.size>MAX_TOT) refus.push(f.name+' : maximum 10 Mo au total');
+      if(f.size>MAX_UN) refus.push(f.name+T(' dépasse 10 Mo',' is over 10 MB'));
+      else if(choisis.length>=MAX_N) refus.push(f.name+T(' : maximum 8 fichiers',': maximum 8 files'));
+      else if(tot+f.size>MAX_TOT) refus.push(f.name+T(' : maximum 10 Mo au total',': maximum 10 MB in total'));
       else choisis.push(f);
     });
     dessine();
     var et=d.getElementById('etat');
-    if(refus.length){et.className='etat ko';et.textContent='Fichier refusé : '+refus.join(' · ')+'. Envoie-le par courriel à info@takedownstudio.com si tu en as besoin.'}
+    if(refus.length){et.className='etat ko';et.textContent=T('Fichier refusé : ','File rejected: ')+refus.join(' · ')+T('. Envoie-le par courriel à info@takedownstudio.com si tu en as besoin.','. Email it to info@takedownstudio.com if you need to send it.')}
     else if(et.className==='etat ko') {et.className='etat';et.textContent=''}
   };
   inp.addEventListener('change',function(){ajoute(inp.files);inp.value=''});
@@ -307,20 +308,20 @@
   form.addEventListener('submit',function(e){
     e.preventDefault();
     etat.className='etat'; etat.textContent='';
-    if(!valide()){etat.className='etat ko';etat.textContent='Il manque des informations. Regarde les champs en rouge.';return}
+    if(!valide()){etat.className='etat ko';etat.textContent=T('Il manque des informations. Regarde les champs en rouge.','Some information is missing. Check the fields in red.');return}
     var fd=new FormData(form);
     fd.delete('fichiers');
     choisis.forEach(function(f){fd.append('fichiers',f,f.name)});
     fd.append('_replyto',(form.querySelector('#courriel')||{}).value||'');
     fd.append('page',d.referrer||'');
-    bouton.disabled=true; bouton.textContent='Envoi en cours…';
-    etat.className='etat'; etat.textContent='Envoi en cours, ça peut prendre jusqu’à une minute. Ne ferme pas la page.';
+    bouton.disabled=true; bouton.textContent=T('Envoi en cours…','Sending…');
+    etat.className='etat'; etat.textContent=T('Envoi en cours, ça peut prendre jusqu’à une minute. Ne ferme pas la page.','Sending, this can take up to a minute. Do not close the page.');
     var fini=false, garde=function(ev){ev.preventDefault();ev.returnValue=''};
     var minuteur=setTimeout(function(){
       if(fini) return;
       form.hidden=true;
       etat.className='etat ok';
-      etat.textContent='Merci, on a reçu ta demande! Elle finit de partir : garde la page ouverte encore un instant.';
+      etat.textContent=T('Merci, on a reçu ta demande! Elle finit de partir : garde la page ouverte encore un instant.','Thank you, we got your request! It is still being sent: keep the page open for a moment.');
       window.addEventListener('beforeunload',garde);
     },300);
     fetch(form.action,{method:'POST',body:fd}).then(function(r){
@@ -333,14 +334,14 @@
       if(form.dataset.merci&&!form.hidden){location.href=form.dataset.merci;return}
       form.hidden=true;
       etat.className='etat ok';
-      etat.textContent='Merci pour ta demande. Nous allons regarder les informations reçues et te contacter pour discuter de ton projet.';
+      etat.textContent=T('Merci pour ta demande. Nous allons regarder les informations reçues et te contacter pour discuter de ton projet.','Thank you for your request. We will review the information we received and get in touch to talk about your project.');
       etat.scrollIntoView({behavior:'smooth',block:'center'});
     }).catch(function(err){
       fini=true; clearTimeout(minuteur); window.removeEventListener('beforeunload',garde); form.hidden=false;
       etat.className='etat ko';
-      if(String(err&&err.message)==='413'){etat.textContent='Tes fichiers sont trop lourds (10 Mo au total). Retire-en un ou envoie-le par courriel à info@takedownstudio.com.';return}
-      if(String(err&&err.message)==='429'){etat.textContent='Trop d’envois en peu de temps. Réessaie dans quelques minutes.';return}
-      etat.innerHTML='L’envoi n’a pas fonctionné. Réessaie dans un instant ou écris-nous à <a href="mailto:info@takedownstudio.com" style="text-decoration:underline">info@takedownstudio.com</a>.';
-    }).then(function(){bouton.disabled=false;bouton.textContent='Envoyer ma demande'});
+      if(String(err&&err.message)==='413'){etat.textContent=T('Tes fichiers sont trop lourds (10 Mo au total). Retire-en un ou envoie-le par courriel à info@takedownstudio.com.','Your files are too large (10 MB in total). Remove one or email it to info@takedownstudio.com.');return}
+      if(String(err&&err.message)==='429'){etat.textContent=T('Trop d’envois en peu de temps. Réessaie dans quelques minutes.','Too many submissions in a short time. Try again in a few minutes.');return}
+      etat.innerHTML=T('L’envoi n’a pas fonctionné. Réessaie dans un instant ou écris-nous à ','The submission did not go through. Try again in a moment or write to us at ')+'<a href="mailto:info@takedownstudio.com" style="text-decoration:underline">info@takedownstudio.com</a>.';
+    }).then(function(){bouton.disabled=false;bouton.textContent=T('Envoyer ma demande','Send my request')});
   });
 })();

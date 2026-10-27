@@ -35,6 +35,8 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:200;op
 .nav ul a{padding-bottom:7px;background:var(--vague) no-repeat 0 100%/0 6px;transition:background-size .45s var(--ease),color .3s}
 .nav ul a:hover,.nav ul a[aria-current]{background-size:100% 6px}
 .nav .right{display:flex;gap:10px;align-items:center}
+.nav .lang{font:500 12px/1 "IBM Plex Mono",monospace;letter-spacing:.1em;color:var(--mute);border:1px solid var(--line);padding:9px 10px;margin-right:4px;transition:color .3s,border-color .3s}
+.nav .lang:hover{color:#fff;border-color:#555}
 .burger{display:none;width:40px;height:40px}
 .burger span{display:block;width:20px;height:1.5px;background:#fff;margin:5px auto;transition:transform .3s var(--ease),opacity .3s}
 .nav.open .burger span:first-child{transform:translateY(3.25px) rotate(45deg)}
@@ -326,6 +328,7 @@ a:hover .arr{transform:translateX(5px)}
   .menu-m{display:block;position:fixed;inset:56px 0 0;background:#000;z-index:49;padding:30px var(--pad);transform:translateY(-8px);opacity:0;visibility:hidden;transition:opacity .3s,transform .3s var(--ease),visibility .3s}
   .nav.open + .menu-m{opacity:1;transform:none;visibility:visible}
   .menu-m a{display:block;font-variation-settings:"wdth" 125;font-weight:800;text-transform:uppercase;font-size:clamp(30px,8vw,46px);line-height:1.1;padding:10px 0;border-bottom:1px solid var(--line)}
+  .menu-m a.lang-m{font-family:"IBM Plex Mono",monospace;font-variation-settings:normal;font-weight:500;font-size:15px;letter-spacing:.08em;color:var(--mute);border-bottom:0;padding:22px 0 0}
   .menu-m .btn{margin-top:30px;width:100%;font-size:15px;border:0}
   .rail{grid-auto-columns:72%}
   .grid,.grid.g3,.svc,.pp,.extra,.formgrid{grid-template-columns:1fr}
@@ -710,6 +713,7 @@ html:not(.js) .words .line .mini{opacity:1;transform:none}
   .menu-m{display:block;position:fixed;inset:56px 0 0;background:#000;z-index:49;padding:30px var(--pad);transform:translateY(-8px);opacity:0;visibility:hidden;transition:opacity .3s,transform .3s var(--ease),visibility .3s}
   .nav.open + .menu-m{opacity:1;transform:none;visibility:visible}
   .menu-m a{display:block;font-variation-settings:"wdth" 125;font-weight:800;text-transform:uppercase;font-size:clamp(30px,8vw,46px);line-height:1.1;padding:10px 0;border-bottom:1px solid var(--line)}
+  .menu-m a.lang-m{font-family:"IBM Plex Mono",monospace;font-variation-settings:normal;font-weight:500;font-size:15px;letter-spacing:.08em;color:var(--mute);border-bottom:0;padding:22px 0 0}
   .menu-m .btn{margin-top:30px;width:100%;font-size:15px;border:0}
 }
 
