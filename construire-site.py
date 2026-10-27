@@ -803,7 +803,6 @@ def contact():
       <div class="bloc"><h3>Pour aller plus vite</h3><ol><li>Ton logo ou ton visuel</li><li>La quantité que tu as en tête</li><li>La date où tu en as besoin</li></ol></div>
       <div class="bloc"><h3>Nous joindre</h3><a href="mailto:{ENTREPRISE['courriel']}">{ENTREPRISE['courriel']}</a><a href="tel:{ENTREPRISE['tel_intl']}">{ENTREPRISE['tel']}</a></div>
       <div class="bloc"><h3>Le studio</h3><p>{ENTREPRISE['rue']}<br>{ENTREPRISE['ville']} (Québec) {ENTREPRISE['cp']}</p></div>
-      {photo(3, 'Le comptoir d’accueil de Takedown Studio, 50 chemin de Gaspé à Bromont', 'studio', sizes='(max-width:980px) 90vw, 420px')}
     </aside>
   </section>
 </main>
