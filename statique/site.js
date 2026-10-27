@@ -315,18 +315,28 @@
     fd.append('page',d.referrer||'');
     bouton.disabled=true; bouton.textContent='Envoi en cours…';
     etat.className='etat'; etat.textContent='Envoi en cours, ça peut prendre jusqu’à une minute. Ne ferme pas la page.';
+    var fini=false, garde=function(ev){ev.preventDefault();ev.returnValue=''};
+    var minuteur=setTimeout(function(){
+      if(fini) return;
+      form.hidden=true;
+      etat.className='etat ok';
+      etat.textContent='Merci, on a reçu ta demande! Elle finit de partir : garde la page ouverte encore un instant.';
+      window.addEventListener('beforeunload',garde);
+    },3000);
     fetch(form.action,{method:'POST',body:fd}).then(function(r){
       if(!r.ok) throw new Error(r.status);
       return r.json();
     }).then(function(j){
       if(!j||String(j.success)!=='true') throw new Error('refus');
+      fini=true; clearTimeout(minuteur); window.removeEventListener('beforeunload',garde);
       etat.textContent='';
-      if(form.dataset.merci){location.href=form.dataset.merci;return}
+      if(form.dataset.merci&&!form.hidden){location.href=form.dataset.merci;return}
       form.hidden=true;
       etat.className='etat ok';
       etat.textContent='Merci pour ta demande. Nous allons regarder les informations reçues et te contacter pour discuter de ton projet.';
       etat.scrollIntoView({behavior:'smooth',block:'center'});
     }).catch(function(err){
+      fini=true; clearTimeout(minuteur); window.removeEventListener('beforeunload',garde); form.hidden=false;
       etat.className='etat ko';
       if(String(err&&err.message)==='413'){etat.textContent='Tes fichiers sont trop lourds (10 Mo au total). Retire-en un ou envoie-le par courriel à info@takedownstudio.com.';return}
       if(String(err&&err.message)==='429'){etat.textContent='Trop d’envois en peu de temps. Réessaie dans quelques minutes.';return}
