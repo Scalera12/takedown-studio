@@ -674,9 +674,11 @@ def service(s, i):
 # 2026-10-26 (Takedown via Alex Moite) : page Catalogue, les produits favoris (promo / basic et premium)
 CATALOGUE = json.load(io.open(os.path.join(ICI, 'contenu', 'catalogue.json'), encoding='utf-8'))
 CAT_FILTRES = [('tous', 'Tous'), ('tshirt', 'T-shirts'), ('manches-longues', 'Manches longues'), ('crewneck', 'Crewnecks'),
-               ('hoodie', 'Hoodies'), ('casquette', 'Casquettes'), ('tuque', 'Tuques'), ('accessoire', 'Accessoires')]
+               ('hoodie', 'Hoodies'), ('veste', 'Vestes'), ('pantalon', 'Pantalons'), ('casquette', 'Casquettes'), ('tuque', 'Tuques'), ('accessoire', 'Accessoires')]
 CAT_SLUG = {'T-shirt': 'tshirt', 'Manches longues': 'manches-longues', 'Crewneck': 'crewneck', 'Hoodie': 'hoodie',
-            'Casquette': 'casquette', 'Tuque': 'tuque', 'Accessoire': 'accessoire'}
+            'Casquette': 'casquette', 'Tuque': 'tuque', 'Accessoire': 'accessoire', 'Veste': 'veste', 'Pantalon': 'pantalon'}
+CAT_TITRES = {'T-shirt': 'T-shirts', 'Manches longues': 'Manches longues', 'Crewneck': 'Crewnecks', 'Hoodie': 'Hoodies', 'Veste': 'Vestes',
+              'Pantalon': 'Pantalons', 'Casquette': 'Casquettes', 'Tuque': 'Tuques', 'Accessoire': 'Accessoires'}
 
 def carte_produit(x):
     ligne_ref = e(x['marque']) + (' · ' + e(x['ref']) if x['ref'] else '')
@@ -696,12 +698,12 @@ def carte_produit(x):
 
 def catalogue():
     puces = ''.join(f'<button type="button" class="chip" data-cat="{k}" aria-pressed="{"true" if k == "tous" else "false"}">{t}</button>' for k, t in CAT_FILTRES)
-    promo = [x for x in CATALOGUE if x['section'] == 'promo']
-    prem = [x for x in CATALOGUE if x['section'] == 'premium']
-    def bloc(titre, note, liste):
+    def bloc(titre, liste):
         cartes = ''.join(carte_produit(x) for x in liste)
-        return (f'<section class="sec wrap cat-section"><div class="head"><h2 class="h2 rv">{titre}</h2><p class="note rv">{note}</p></div>'
+        n = len(liste)
+        return (f'<section class="sec wrap cat-section"><div class="head"><h2 class="h2 rv">{titre}</h2><p class="note rv">{n} produit{"s" if n > 1 else ""}.</p></div>'
                 f'<div class="cat-grid">{cartes}</div></section>')
+    blocs = ''.join(bloc(CAT_TITRES[t], [x for x in CATALOGUE if x['categorie'] == t]) for t in CAT_TITRES if any(x['categorie'] == t for x in CATALOGUE))
     corps = f'''{nav('/catalogue')}
 <main id="contenu">
   {phead([('/catalogue', 'Catalogue')], 'Notre catalogue',
@@ -709,8 +711,7 @@ def catalogue():
          '', 'illustration-pinceau')}
   <section class="wrap cat-barre"><p class="rv">Livraison gratuite partout au Canada. <a class="lien" href="/assets/documents/catalogue-takedown-studio.pdf" download>Télécharger le catalogue (PDF) <span class="arr">↓</span></a></p>
     <div class="chips-cat" role="group" aria-label="Filtrer par catégorie">{puces}</div></section>
-  {bloc('Promo / Basic', '21 produits favoris. Les essentiels, sans compromis sur le service.', promo)}
-  {bloc('Premium', '12 produits favoris. Des vêtements qui méritent ton logo.', prem)}
+  {blocs}
   <section class="sec wrap"><div class="cat-fin rv"><h2 class="h2">Tu cherches autre chose?</h2>
     <p>Ces produits sont nos favoris, mais on en a beaucoup plus. Parle-nous de ton projet et on te trouve le bon produit.</p>
     <div class="ctas"><a class="btn btn-w" href="/contact">Demander une soumission <span class="arr">→</span></a><a class="btn btn-g" href="/services">Nos services</a></div></div></section>
