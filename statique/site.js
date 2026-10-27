@@ -322,7 +322,7 @@
       etat.className='etat ok';
       etat.textContent='Merci, on a reçu ta demande! Elle finit de partir : garde la page ouverte encore un instant.';
       window.addEventListener('beforeunload',garde);
-    },3000);
+    },300);
     fetch(form.action,{method:'POST',body:fd}).then(function(r){
       if(!r.ok) throw new Error(r.status);
       return r.json();
