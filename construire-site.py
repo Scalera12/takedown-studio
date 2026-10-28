@@ -1184,11 +1184,11 @@ def mini_form():
         f'<div id="etat-legal" class="etat" role="status" aria-live="polite"></div></div>')
 
 def lien_ecrire():
-    return f'<p><a class="btn btn-w" href="{url_p("ecrire")}">{tr("Nous écrire", "Write to us")}</a></p>'
+    return f'<p><a class="btn btn-w" href="{url_p("ecrire")}">{tr("Nous joindre", "Contact us")}</a></p>'
 
 def ecrire_page():
     """Page dédiée au mini formulaire (nom, courriel, message), liée depuis les pages légales."""
-    titre = tr('Nous écrire', 'Write to us')
+    titre = tr('Nous joindre', 'Contact us')
     corps = f'''{nav('')}
 <main id="contenu">
   {phead([(url_p('ecrire'), titre)], titre, tr('Une question sur tes renseignements personnels ou sur nos conditions? Dis-nous ce qui se passe, on te répond par courriel.', 'A question about your personal information or our terms? Tell us what is going on and we will reply by email.'))}
@@ -1233,7 +1233,7 @@ def confidentialite():
       (tr('Personne responsable', 'Person in charge'),
        tr(f'<!-- À CONFIRMER PAR TAKEDOWN : nom de la personne responsable de la protection des renseignements personnels (Loi 25). En attendant, la boîte générale sert de point de contact. --><p>Pour toute question sur la protection de tes renseignements, écris à la personne responsable de la protection des renseignements personnels de Takedown Studio : <a href="{url_p('ecrire')}">utilise le formulaire « Nous écrire »</a>.</p>',
           f'<!-- TO BE CONFIRMED BY TAKEDOWN: name of the person responsible for the protection of personal information (Law 25). Until then, the general inbox is the contact point. --><p>For any question about the protection of your information, write to Takedown Studio’s person responsible for the protection of personal information: <a href="{url_p('ecrire')}">use the “Write to us” form</a>.</p>')),
-      (tr('Nous écrire', 'Write to us'), lien_ecrire()),
+      (tr('Nous joindre', 'Contact us'), lien_ecrire()),
       (tr('Changements à cette politique', 'Changes to this policy'),
        tr('<p>On peut mettre cette politique à jour. La date de la dernière version est indiquée en haut de la page.</p>',
           '<p>We may update this policy. The date of the latest version is shown at the top of the page.</p>')),
