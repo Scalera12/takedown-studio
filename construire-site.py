@@ -52,7 +52,8 @@ SLUG_EN = {'vetements-personnalises': 'custom-apparel', 'broderie': 'embroidery'
            'autocollants': 'stickers', 'casquettes-100-personnalisees': '100-custom-caps'}
 ROUTES = {'accueil': ('/', '/en/'), 'agence': ('/agence-branding', '/en/agency'), 'services': ('/services', '/en/services'),
           'catalogue': ('/catalogue', '/en/catalogue'), 'realisations': ('/realisations', '/en/our-work'),
-          'contact': ('/contact', '/en/contact'), 'merci': ('/merci', '/en/thank-you')}
+          'contact': ('/contact', '/en/contact'), 'merci': ('/merci', '/en/thank-you'),
+          'confidentialite': ('/politique-de-confidentialite', '/en/privacy-policy'), 'conditions': ('/conditions-dutilisation', '/en/terms')}
 
 def route_de(cle, langue=None):
     langue = langue or L
@@ -479,6 +480,7 @@ def pied(court=False):
     <div class="legal">
       <img src="/assets/img/logo-texte-blanc.png" alt="Takedown Studio" width="122" height="16" loading="lazy">
       <span>{ENTREPRISE['rue']}, {ville_cp()}</span>
+      <span class="liens-legaux"><a href="{url_p('confidentialite')}">{tr('Politique de confidentialité', 'Privacy policy')}</a> · <a href="{url_p('conditions')}">{tr('Conditions d’utilisation', 'Terms of use')}</a></span>
       <span>© {AUJ[:4]} Takedown Studio{tr(' · Site par Scalera', ' · Website by Scalera')}</span>
     </div>
   </div>
@@ -1138,7 +1140,8 @@ def contact():
           <select id="source" name="source"><option value="">{tr('Choisis une option', 'Choose an option')}</option><option>Instagram</option><option>Facebook</option><option>Google</option><option value="Bouche-à-oreille">{tr('Bouche-à-oreille', 'Word of mouth')}</option><option value="Un client de Takedown">{tr('Un client de Takedown', 'A Takedown client')}</option><option value="Autre">{tr('Autre', 'Other')}</option></select></div>
         <div class="miel" aria-hidden="true"><label for="site_web">{tr('Ne pas remplir', 'Do not fill in')}</label><input id="site_web" name="_honey" type="text" tabindex="-1" autocomplete="off"></div>
         <input type="hidden" name="_subject" value="{tr('Nouvelle demande de soumission (site Takedown Studio)', 'New quote request (Takedown Studio website, EN)')}"><input type="hidden" name="_template" value="table"><input type="hidden" name="_captcha" value="false">
-        <div class="envoi full"><button class="btn btn-w" type="submit">{tr('Envoyer ma demande', 'Send my request')}</button><small>{tr('On te répond par courriel ou par téléphone.', 'We will reply by email or by phone.')}</small></div>
+        <div class="envoi full"><button class="btn btn-w" type="submit">{tr('Envoyer ma demande', 'Send my request')}</button><small>{tr('On te répond par courriel ou par téléphone.', 'We will reply by email or by phone.')}</small>
+          <small class="consent">{tr('En envoyant ce formulaire, tu acceptes notre', 'By sending this form, you agree to our')} <a href="{url_p('confidentialite')}">{tr('politique de confidentialité', 'privacy policy')}</a>.</small></div>
       </form>
       <div id="etat" class="etat" role="status" aria-live="polite"></div>
     </div>
@@ -1154,6 +1157,94 @@ def contact():
                 tr('Envoie ton idée, ton logo et la quantité que tu as en tête. Takedown Studio te guide vers les bons produits et la bonne technique. Bromont.',
                    'Send your idea, your logo and the quantity you have in mind. Takedown Studio guides you to the right products and technique. Bromont.'),
                 corps, fil=[(url_p('contact'), 'Contact')])
+
+def page_texte(cle, titre, intro, sections, desc):
+    """Page de texte légal : en-tête sobre + sections numérotées. sections = [(titre, html)]."""
+    corps_s = ''.join(f'<section class="pol-s">{"<h2>" + t + "</h2>" if t else ""}{h}</section>' for t, h in sections)
+    corps = f'''{nav('')}
+<main id="contenu">
+  {phead([(url_p(cle), titre)], titre, intro)}
+  <section class="sec wrap pol">
+    {corps_s}
+  </section>
+</main>
+{pied(court=True)}'''
+    return page(url_p(cle), f'{titre} | Takedown Studio', desc, corps, fil=[(url_p(cle), titre)])
+
+def confidentialite():
+    c = ENTREPRISE['courriel']
+    adr = f"{ENTREPRISE['rue']}, {ville_cp()}"
+    maj = tr('Dernière mise à jour : ', 'Last updated: ') + AUJ
+    secs = [
+      (tr('Qui on est', 'Who we are'),
+       tr(f'<p>Le site takedownstudio.com est exploité par Takedown Studio, {adr}. Cette politique explique quels renseignements personnels on recueille quand tu utilises le site ou que tu nous envoies une demande, pourquoi, et comment tu peux exercer tes droits (notamment en vertu de la Loi 25 du Québec).</p>',
+          f'<p>The takedownstudio.com website is operated by Takedown Studio, {adr}. This policy explains what personal information we collect when you use the site or send us a request, why we collect it, and how you can exercise your rights (including under Quebec’s Law 25).</p>')),
+      (tr('Les renseignements qu’on recueille', 'What we collect'),
+       tr('<p>On recueille seulement ce que tu nous donnes toi-même dans le formulaire de soumission :</p><ul><li>ton nom, et le nom de ton entreprise si tu le donnes</li><li>ton adresse courriel et, si tu veux, ton numéro de téléphone</li><li>les détails de ton projet : service, produit, quantité, date souhaitée, budget, description</li><li>les fichiers que tu joins (logo, visuel, croquis)</li><li>la façon dont tu nous as connus, si tu choisis de le dire</li></ul><p>Tu peux aussi nous écrire directement par courriel ou par téléphone : on garde alors les renseignements que tu nous donnes dans ces échanges.</p>',
+          '<p>We only collect what you give us yourself in the quote form:</p><ul><li>your name, and your company name if you give it</li><li>your email address and, if you wish, your phone number</li><li>your project details: service, product, quantity, date needed, budget, description</li><li>the files you attach (logo, artwork, sketch)</li><li>how you heard about us, if you choose to say</li></ul><p>You can also write to us directly by email or phone, in which case we keep the information you give us in those exchanges.</p>')),
+      (tr('Pourquoi on les utilise', 'Why we use it'),
+       tr('<p>On utilise ces renseignements uniquement pour répondre à ta demande, préparer une soumission, discuter de ton projet et assurer le suivi avec toi. On ne les vend pas et on ne s’en sert pas pour de l’envoi de masse sans ton accord.</p>',
+          '<p>We use this information only to answer your request, prepare a quote, discuss your project and follow up with you. We do not sell it and we do not use it for mass mailing without your agreement.</p>')),
+      (tr('Ton consentement', 'Your consent'),
+       tr('<p>En envoyant le formulaire, tu acceptes que Takedown Studio utilise les renseignements fournis pour les fins décrites ci-dessus. Tu peux retirer ton consentement en tout temps en nous écrivant à l’adresse indiquée plus bas.</p>',
+          '<p>By sending the form, you agree that Takedown Studio may use the information you provide for the purposes described above. You can withdraw your consent at any time by writing to the address given below.</p>')),
+      (tr('Avec qui on les partage', 'Who we share it with'),
+       tr('<p>Pour que le site fonctionne, certains fournisseurs techniques traitent des renseignements en notre nom :</p><ul><li>le service d’envoi de formulaires FormSubmit, qui transmet le contenu du formulaire et tes fichiers à notre boîte courriel</li><li>GitHub Pages, qui héberge le site (comme tout hébergeur, il peut enregistrer des données techniques de visite, par exemple l’adresse IP)</li><li>notre fournisseur de courriel, qui reçoit ta demande</li></ul><p>Ces fournisseurs peuvent être situés à l’extérieur du Québec ou du Canada, ce qui veut dire que tes renseignements peuvent être traités ailleurs. On ne les communique à personne d’autre, sauf si la loi l’exige.</p>',
+          '<p>To make the site work, some technical providers process information on our behalf:</p><ul><li>the FormSubmit form service, which forwards the form content and your files to our email inbox</li><li>GitHub Pages, which hosts the site (like any host, it may log technical visit data such as the IP address)</li><li>our email provider, which receives your request</li></ul><p>These providers may be located outside Quebec or Canada, which means your information may be processed elsewhere. We do not share it with anyone else, unless the law requires it.</p>')),
+      (tr('Témoins et suivi', 'Cookies and tracking'),
+       tr('<p>Le site ne dépose pas de témoins (cookies) et n’utilise pas, pour l’instant, d’outil de mesure d’audience ni de pixel publicitaire. Ton navigateur garde seulement, sur ton appareil, ta préférence de langue (FR ou EN) et un indicateur pour ne pas rejouer l’introduction de l’accueil. Ces données ne nous sont pas transmises. Si on ajoute un outil de mesure, cette politique sera mise à jour avant.</p>',
+          '<p>The site does not set cookies and does not currently use an analytics tool or an advertising pixel. Your browser only keeps, on your device, your language preference (FR or EN) and a flag so the home page intro is not replayed. This data is not sent to us. If we add an analytics tool, this policy will be updated first.</p>')),
+      (tr('Combien de temps on les garde', 'How long we keep it'),
+       tr('<p>On garde tes renseignements le temps nécessaire pour répondre à ta demande et assurer le suivi de ton projet, puis le temps requis par nos obligations légales et comptables si un contrat est conclu. Après, ils sont supprimés ou rendus anonymes.</p>',
+          '<p>We keep your information as long as needed to answer your request and follow up on your project, then for as long as our legal and accounting obligations require if a contract is signed. After that, it is deleted or anonymized.</p>')),
+      (tr('Tes droits', 'Your rights'),
+       tr(f'<p>Tu peux demander en tout temps :</p><ul><li>de savoir quels renseignements on détient sur toi et d’en recevoir une copie</li><li>de faire corriger un renseignement inexact</li><li>de faire supprimer tes renseignements ou de retirer ton consentement</li></ul><p>Écris-nous à <a href="mailto:{c}">{c}</a>. Si tu estimes que tes droits ne sont pas respectés, tu peux aussi t’adresser à la Commission d’accès à l’information du Québec.</p>',
+          f'<p>You can ask at any time to:</p><ul><li>know what information we hold about you and receive a copy</li><li>have inaccurate information corrected</li><li>have your information deleted or withdraw your consent</li></ul><p>Write to us at <a href="mailto:{c}">{c}</a>. If you believe your rights are not being respected, you can also contact the Commission d’accès à l’information du Québec.</p>')),
+      (tr('Personne responsable', 'Person in charge'),
+       tr(f'<!-- À CONFIRMER PAR TAKEDOWN : nom de la personne responsable de la protection des renseignements personnels (Loi 25). En attendant, la boîte générale sert de point de contact. --><p>Pour toute question sur la protection de tes renseignements, écris à la personne responsable de la protection des renseignements personnels de Takedown Studio : <a href="mailto:{c}">{c}</a>.</p>',
+          f'<!-- TO BE CONFIRMED BY TAKEDOWN: name of the person responsible for the protection of personal information (Law 25). Until then, the general inbox is the contact point. --><p>For any question about the protection of your information, write to Takedown Studio’s person responsible for the protection of personal information: <a href="mailto:{c}">{c}</a>.</p>')),
+      (tr('Changements à cette politique', 'Changes to this policy'),
+       tr('<p>On peut mettre cette politique à jour. La date de la dernière version est indiquée en haut de la page.</p>',
+          '<p>We may update this policy. The date of the latest version is shown at the top of the page.</p>')),
+    ]
+    secs.insert(0, ('', f'<p class="maj">{maj}</p>'))
+    return page_texte('confidentialite', tr('Politique de confidentialité', 'Privacy policy'),
+                      tr('Voici comment Takedown Studio traite les renseignements personnels que tu nous donnes.', 'Here is how Takedown Studio handles the personal information you give us.'),
+                      secs,
+                      tr('Politique de confidentialité de Takedown Studio : renseignements recueillis, utilisation, partage, conservation et droits (Loi 25).',
+                         'Takedown Studio privacy policy: information collected, use, sharing, retention and your rights (Quebec Law 25).'))
+
+def conditions():
+    c = ENTREPRISE['courriel']
+    maj = tr('Dernière mise à jour : ', 'Last updated: ') + AUJ
+    secs = [
+      ('', f'<p class="maj">{maj}</p>'),
+      (tr('Utilisation du site', 'Using the site'),
+       tr('<p>Le site takedownstudio.com présente les services et les produits de Takedown Studio. En l’utilisant, tu acceptes ces conditions. Tu t’engages à l’utiliser de façon légale et à ne pas tenter de nuire à son fonctionnement.</p>',
+          '<p>The takedownstudio.com website presents Takedown Studio’s services and products. By using it, you accept these terms. You agree to use it lawfully and not to try to disrupt its operation.</p>')),
+      (tr('Propriété intellectuelle', 'Intellectual property'),
+       tr('<p>Les textes, images, illustrations, logos et le design du site appartiennent à Takedown Studio ou sont utilisés avec permission. Tu ne peux pas les copier ni les réutiliser sans notre accord écrit. Les marques et les modèles de produits du catalogue appartiennent à leurs propriétaires respectifs.</p>',
+          '<p>The text, images, illustrations, logos and design of the site belong to Takedown Studio or are used with permission. You may not copy or reuse them without our written consent. The brands and product models in the catalogue belong to their respective owners.</p>')),
+      (tr('Fichiers que tu nous envoies', 'Files you send us'),
+       tr('<p>Si tu nous envoies un logo, un visuel ou une idée, tu confirmes avoir le droit de les utiliser et de nous demander de les reproduire sur des produits. Takedown Studio peut refuser un projet qui contrevient aux droits d’autrui.</p>',
+          '<p>If you send us a logo, artwork or an idea, you confirm that you have the right to use it and to ask us to reproduce it on products. Takedown Studio may decline a project that infringes the rights of others.</p>')),
+      (tr('Soumissions et information du site', 'Quotes and site information'),
+       tr('<p>Une demande envoyée par le formulaire n’est pas un contrat. Les prix, délais, produits et disponibilités présentés sur le site sont donnés à titre indicatif et peuvent changer. Un projet est confirmé seulement par une soumission ou une entente écrite avec Takedown Studio.</p>',
+          '<p>A request sent through the form is not a contract. The prices, timelines, products and availability shown on the site are indicative and may change. A project is confirmed only by a written quote or agreement with Takedown Studio.</p>')),
+      (tr('Limitation de responsabilité', 'Limitation of liability'),
+       tr('<p>On fait de notre mieux pour que l’information du site soit exacte et à jour, mais on ne garantit pas qu’elle soit exempte d’erreurs ni que le site soit toujours disponible. Dans la mesure permise par la loi, Takedown Studio n’est pas responsable des dommages liés à l’utilisation du site ou de sites tiers vers lesquels il renvoie.</p>',
+          '<p>We do our best to keep the site information accurate and up to date, but we do not guarantee it is free of errors or that the site is always available. To the extent permitted by law, Takedown Studio is not liable for damages related to the use of the site or of third-party sites it links to.</p>')),
+      (tr('Droit applicable', 'Governing law'),
+       tr('<p>Ces conditions sont régies par les lois du Québec et les lois du Canada qui s’y appliquent. Les tribunaux du district judiciaire de Bedford sont compétents, sous réserve de tes droits de consommateur.</p>',
+          '<p>These terms are governed by the laws of Quebec and the federal laws of Canada applicable therein. The courts of the judicial district of Bedford have jurisdiction, subject to your consumer rights.</p>')),
+      (tr('Nous joindre', 'Contact us'),
+       tr(f'<p>Une question sur ces conditions? Écris-nous à <a href="mailto:{c}">{c}</a>.</p>', f'<p>Questions about these terms? Write to us at <a href="mailto:{c}">{c}</a>.</p>')),
+    ]
+    return page_texte('conditions', tr('Conditions d’utilisation', 'Terms of use'),
+                      tr('Les règles simples qui encadrent l’utilisation du site de Takedown Studio.', 'The simple rules that apply to using the Takedown Studio website.'),
+                      secs,
+                      tr('Conditions d’utilisation du site de Takedown Studio : usage du site, propriété intellectuelle, soumissions, responsabilité et droit applicable.',
+                         'Terms of use for the Takedown Studio website: site use, intellectual property, quotes, liability and governing law.'))
 
 def construction():
     """Page « site en construction » pour www.takedownstudio.com, en attendant le vrai site.
@@ -1318,7 +1409,8 @@ def construire():
     # Fichiers « page.html » : Cloudflare les sert à /page, sans barre oblique finale,
     # comme les adresses du plan de contenu (/services/broderie).
     gabarit = [('accueil', accueil, ()), ('agence', agence, ()), ('services', services_index, ()), ('catalogue', catalogue, ()),
-               ('realisations', realisations, ()), ('contact', contact, ()), ('merci', merci, ())]
+               ('realisations', realisations, ()), ('contact', contact, ()), ('merci', merci, ()),
+               ('confidentialite', confidentialite, ()), ('conditions', conditions, ())]
     for i, sv in enumerate(SERVICES):
         gabarit.append(('svc:' + sv['slug'], service, (sv, i)))
     global L, PAGE_CLE
@@ -1336,7 +1428,7 @@ def construire():
         assert '—' not in html, f'tiret cadratin dans {rel}'
         ecrire(rel, html)
 
-    cles = ['accueil', 'agence', 'services'] + ['svc:' + sv['slug'] for sv in SERVICES] + ['catalogue', 'realisations', 'contact']
+    cles = ['accueil', 'agence', 'services'] + ['svc:' + sv['slug'] for sv in SERVICES] + ['catalogue', 'realisations', 'contact', 'confidentialite', 'conditions']
     def entree(cle, langue):
         alt = ''.join(f'<xhtml:link rel="alternate" hreflang="{h}" href="{BASE}{route_de(cle, l)}"/>' for h, l in (('fr-CA', 'fr'), ('en-CA', 'en'), ('x-default', 'fr')))
         return f'  <url><loc>{BASE}{route_de(cle, langue)}</loc><lastmod>{AUJ}</lastmod>{alt}</url>\n'
