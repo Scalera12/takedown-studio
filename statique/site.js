@@ -5,6 +5,14 @@
 
   var calme=matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  /* sélecteur FR / EN : on retient le choix du visiteur, la détection automatique de la langue (page d'accueil française) ne le dérange plus */
+  d.addEventListener('click',function(ev){
+    var a=ev.target.closest&&ev.target.closest('a[hreflang]');
+    var l=a&&a.getAttribute('lang');
+    if(l!=='fr'&&l!=='en') return;
+    try{localStorage.setItem('langue',l)}catch(x){}
+  });
+
   /* logo qui flotte : une fois dessiné, il dérive et tourne lentement, comme s'il flottait.
      Somme de sinus à fréquences différentes = mouvement organique qui ne se répète pas. */
   var flotter=function(el,attente){

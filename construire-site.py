@@ -612,6 +612,16 @@ def entreprise_ld():
         'knowsAbout': [s['nom'] for s in svcs()],
     }
 
+DETECTION_LANGUE = """<script>(function(){try{
+if(/bot|crawl|spider|slurp|facebookexternalhit|lighthouse|preview/i.test(navigator.userAgent))return;
+if(location.search)return;
+if(localStorage.getItem('langue'))return;
+var l=navigator.languages&&navigator.languages.length?navigator.languages:[navigator.language||''];
+for(var i=0;i<l.length;i++){var c=String(l[i]).toLowerCase().slice(0,2);
+if(c==='fr')return;
+if(c==='en'){var a=document.querySelector('link[hreflang="en-CA"]');if(a)location.replace(a.href);return}}
+}catch(x){}})()</script>"""
+
 def page(chemin_url, titre_seo, desc, corps, fil=None, extra_ld=None, js=True):
     url = BASE + (chemin_url if chemin_url != '/' else '/')
     graph = [entreprise_ld(), {'@type': 'WebPage', '@id': url + '#page', 'url': url, 'name': titre_seo,
@@ -626,6 +636,7 @@ def page(chemin_url, titre_seo, desc, corps, fil=None, extra_ld=None, js=True):
     if extra_ld:
         graph += extra_ld
     ld = json.dumps({'@context': 'https://schema.org', '@graph': graph}, ensure_ascii=False)
+    detection = DETECTION_LANGUE if (PAGE_CLE == 'accueil' and L == 'fr') else ''
     alternates = ''
     if PAGE_CLE:
         alternates = (f'<link rel="alternate" hreflang="fr-CA" href="{BASE}{route_de(PAGE_CLE, "fr")}">'
@@ -657,6 +668,7 @@ def page(chemin_url, titre_seo, desc, corps, fil=None, extra_ld=None, js=True):
 <link rel="preload" href="/assets/polices/archivo-400-800.woff2" as="font" type="font/woff2" crossorigin>
 <style>{CSS}</style>
 <script>if(!location.search.includes('apercu'))document.documentElement.classList.add('js')</script>
+{detection}
 <script type="application/ld+json">{ld}</script>
 </head>
 <body>
@@ -918,6 +930,89 @@ CAT_SLUG = {'T-shirt': 'tshirt', 'Manches longues': 'manches-longues', 'Crewneck
 CAT_TITRES = {'T-shirt': 'T-shirts', 'Manches longues': 'Manches longues', 'Crewneck': 'Crewnecks', 'Hoodie': 'Hoodies', 'Veste': 'Vestes',
               'Pantalon': 'Pantalons', 'Casquette': 'Casquettes', 'Tuque': 'Tuques', 'Accessoire': 'Accessoires'}
 
+# 2026-10-28 : noms de produits en anglais (page /en/ et PDF anglais), par id du catalogue
+NOMS_EN = {
+    1: 'Heavyweight Cotton T-shirt',
+    2: 'Parkour T-shirt',
+    3: 'Everyday Cotton T-shirt',
+    4: 'Fine Jersey T-shirt',
+    5: 'Cotton T-shirt',
+    6: 'Heavy Cotton T-shirt',
+    7: 'Heavyweight Cotton Long Sleeve',
+    8: 'Breeze Long Sleeve',
+    9: 'Heavy Blend Crewneck',
+    10: 'Midweight Crewneck',
+    11: 'Crew Sweatshirt',
+    12: 'Everyday Fleece Hoodie',
+    13: 'Midweight Hoodie',
+    14: 'Element CFF Hoodie',
+    15: 'Heavy Blend Hoodie',
+    16: 'Vault Hoodie',
+    17: 'Classic Dad Cap',
+    18: 'Trucker Cap',
+    19: 'Ribbed Cuffed Beanie',
+    20: 'Polar Beanie',
+    21: 'Core Tote Bag',
+    22: 'Garment-Dyed Heavyweight T-shirt',
+    23: 'The 1801, Garment Dyed',
+    24: 'Max Heavyweight Oversized Tee',
+    25: 'Super Heavy Oversized Tee',
+    26: 'Urban 280 T-shirt',
+    27: 'Garment-Dyed Heavyweight Long Sleeve',
+    28: 'Premium Crewneck',
+    29: 'Boulevard Heavyweight Hoodie',
+    30: 'Pigment-Dyed Cap',
+    31: 'Washed Dad Cap',
+    32: 'Accent Beanie',
+    33: 'Fisherman Beanie',
+    34: 'Cozy Beanie',
+    35: 'Tofino Beanie',
+    36: 'Mountain Beanie',
+    37: 'OG Beanie',
+    38: 'Fundy Beanie',
+    39: 'Trail Beanie (Recycled Cotton)',
+    40: 'Mesh Trucker Cap',
+    41: 'Cotton Trucker Cap',
+    42: 'Foam Trucker Cap',
+    43: 'Nylon Rope Cap',
+    44: 'Dad Cap Classic',
+    45: 'Grid Tote Bag',
+    46: 'Cargo Tote Bag',
+    47: 'Windbreaker Anorak Jacket',
+    48: 'Hooded Windbreaker Coach Jacket',
+    49: 'Windbreaker Coach Jacket',
+    50: 'Avenue Midweight Hoodie',
+    51: 'Heavyweight Original Hoodie',
+    52: 'Heavyweight Zip Hoodie',
+    53: 'Mainstreet Hoodie',
+    54: 'Mainstreet Zip Hoodie',
+    55: 'Premium 180 Long Sleeve',
+    56: 'Premium 180 Pigment-Dyed T-shirt',
+    57: 'Max Heavyweight Garment-Dyed T-shirt',
+    58: 'Garment-Dyed Cropped T-shirt',
+    59: 'Thermal Long Sleeve',
+    60: 'Garment-Dyed Long Sleeve',
+    61: 'Premium Core Hoodie',
+    62: 'Premium Zip Hoodie',
+    63: 'Straight-Leg Jogger Pants',
+    64: 'Urban Hoodie',
+    65: 'Urban Crewneck',
+    66: 'Heavy Core Hoodie',
+    67: 'Heavyweight Pullover Hoodie',
+    68: 'Heavy Crewneck',
+    69: 'Thermal Crewneck',
+    70: 'Thermal Hoodie',
+    71: 'Urban Heavy T-shirt',
+    72: 'Women’s Cropped T-shirt',
+    73: 'Women’s Relaxed T-shirt',
+    74: 'Women’s Ribbed Tank',
+    75: 'Women’s Garment-Dyed Cropped T-shirt',
+    76: 'Heavy Core T-shirt',
+}
+
+def nom_produit(x):
+    return NOMS_EN.get(x['id'], x['nom']) if L == 'en' else x['nom']
+
 def carte_produit(x):
     cat = tr(x['categorie'], CAT_EN.get(x['categorie'], x['categorie']))
     tailles, poids, couleurs_plus = t_tailles(x['tailles']), t_poids(x['poids']), t_plus(x['couleurs_plus'])
@@ -932,8 +1027,8 @@ def carte_produit(x):
     court_p = poids.split(' (')[0] if poids else ''
     pres = f'<p class="pres">{e(cat)}{" · " + e(court_t) if court_t else ""}{" · " + e(court_p) if court_p else ""}</p>'
     return (f'<article class="pcat rv" data-cat="{CAT_SLUG.get(x["categorie"], "autre")}">'
-            f'<div class="pimg" style="background:{x.get("fond", "#fff")}"><img src="/assets/img/{x["image"]}" alt="{e(x["nom"])}, {e(x["marque"])}" width="720" height="900" loading="lazy"></div>'
-            f'<div class="ptxt"><p class="mono">{ligne_ref}</p><h3>{e(x["nom"])}</h3>{pres}<dl>{lignes}</dl>'
+            f'<div class="pimg" style="background:{x.get("fond", "#fff")}"><img src="/assets/img/{x["image"]}" alt="{e(nom_produit(x))}, {e(x["marque"])}" width="720" height="900" loading="lazy"></div>'
+            f'<div class="ptxt"><p class="mono">{ligne_ref}</p><h3>{e(nom_produit(x))}</h3>{pres}<dl>{lignes}</dl>'
             f'<details><summary>{tr("Couleurs", "Colours")} ({e(t_nb(x["couleurs_nb"]))})</summary><p>{e(x["couleurs"])}.{plus}</p></details></div></article>')
 
 def catalogue():
@@ -944,8 +1039,9 @@ def catalogue():
         return (f'<section class="sec wrap cat-section"><div class="head"><h2 class="h2 rv">{titre}</h2><p class="note rv">{n} {tr("produit", "product")}{"s" if n > 1 else ""}.</p></div>'
                 f'<div class="cat-grid">{cartes}</div></section>')
     blocs = ''.join(bloc(tr(CAT_TITRES[t], CAT_TITRES_EN[t]), [x for x in CATALOGUE if x['categorie'] == t]) for t in CAT_TITRES if any(x['categorie'] == t for x in CATALOGUE))
-    # le PDF du catalogue est en français : on ne le propose pas sur la page anglaise
-    pdf_lien = tr(' <a class="lien" href="/assets/documents/catalogue-takedown-studio.pdf" download>Télécharger le catalogue (PDF) <span class="arr">↓</span></a>', '')
+    # un PDF par langue : le français et l'anglais ont chacun leur lien de téléchargement
+    pdf_lien = tr(' <a class="lien" href="/assets/documents/catalogue-takedown-studio.pdf" download>Télécharger le catalogue (PDF) <span class="arr">↓</span></a>',
+                  ' <a class="lien" href="/assets/documents/takedown-studio-catalog.pdf" download>Download the catalogue (PDF) <span class="arr">↓</span></a>')
     corps = f'''{nav('/catalogue')}
 <main id="contenu">
   {phead([(url_p('catalogue'), 'Catalogue')], tr('Notre catalogue', 'Our catalogue'),
