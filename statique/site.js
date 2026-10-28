@@ -248,6 +248,51 @@
     var f=params.get('f'); if(f&&chips.some(function(c){return c.dataset.f===f}))filtrer(f);
   }
 
+  /* mini formulaire des pages légales (nom, courriel, message) */
+  var fl=d.getElementById('form-legal');
+  if(fl){
+    var etatL=d.getElementById('etat-legal'), boutonL=fl.querySelector('button[type=submit]');
+    qsa('[required]',fl).forEach(function(ch){ch.addEventListener('input',function(){ch.closest('.champ').classList.remove('err')})});
+    fl.addEventListener('submit',function(e){
+      e.preventDefault();
+      etatL.className='etat'; etatL.textContent='';
+      var premier=null;
+      qsa('[required]',fl).forEach(function(ch){
+        var ok=ch.value.trim()!=='' && (ch.type!=='email'||/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(ch.value.trim()));
+        ch.closest('.champ').classList.toggle('err',!ok);
+        if(!ok&&!premier) premier=ch;
+      });
+      if(premier){premier.focus();etatL.className='etat ko';etatL.textContent=T('Il manque des informations. Regarde les champs en rouge.','Some information is missing. Check the fields in red.');return}
+      var fd=new FormData(fl);
+      fd.append('_replyto',(fl.querySelector('#lg-courriel')||{}).value||'');
+      fd.append('page',location.pathname);
+      boutonL.disabled=true; boutonL.textContent=T('Envoi en cours…','Sending…');
+      var fini=false, garde=function(ev){ev.preventDefault();ev.returnValue=''};
+      var minuteur=setTimeout(function(){
+        if(fini) return;
+        fl.hidden=true;
+        etatL.className='etat ok';
+        etatL.textContent=T('Merci, on a reçu ton message! Il finit de partir : garde la page ouverte encore un instant.','Thank you, we got your message! It is still being sent: keep the page open for a moment.');
+        window.addEventListener('beforeunload',garde);
+      },300);
+      fetch(fl.action,{method:'POST',body:fd}).then(function(r){
+        if(!r.ok) throw new Error(r.status);
+        return r.json();
+      }).then(function(j){
+        if(!j||String(j.success)!=='true') throw new Error('refus');
+        fini=true; clearTimeout(minuteur); window.removeEventListener('beforeunload',garde);
+        fl.hidden=true;
+        etatL.className='etat ok';
+        etatL.textContent=T('Merci pour ton message. On va te répondre par courriel.','Thank you for your message. We will reply by email.');
+      }).catch(function(err){
+        fini=true; clearTimeout(minuteur); window.removeEventListener('beforeunload',garde); fl.hidden=false;
+        etatL.className='etat ko';
+        if(String(err&&err.message)==='429'){etatL.textContent=T('Trop d’envois en peu de temps. Réessaie dans quelques minutes.','Too many submissions in a short time. Try again in a few minutes.');return}
+        etatL.textContent=T('L’envoi n’a pas fonctionné. Réessaie dans un instant.','The message did not go through. Try again in a moment.');
+      }).then(function(){boutonL.disabled=false;boutonL.textContent=T('Envoyer','Send')});
+    });
+  }
+
   /* formulaire de soumission */
   var form=d.getElementById('soumission');
   if(!form) return;

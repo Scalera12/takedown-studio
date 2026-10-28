@@ -453,7 +453,7 @@ def nav(courant):
 def ville_cp():
     return tr(f"{ENTREPRISE['ville']} (Québec) {ENTREPRISE['cp']}", f"{ENTREPRISE['ville']}, Quebec {ENTREPRISE['cp']}")
 
-def pied(court=False):
+def pied(court=False, lien_courriel=None):
     services = ''.join(f'<a href="{url_s(s["slug"])}">{nom_court(s)}</a>' for s in svcs())
     cible, autre = lien_langue()
     tete = '' if court else f'''<p class="mono" style="color:var(--mute)">{tr('Demander une soumission', 'Request a quote')}</p>
@@ -472,7 +472,7 @@ def pied(court=False):
           <div class="cols">
             <div><h4>Services</h4>{services}</div>
             <div><h4>Studio</h4><a href="{url_p('agence')}">{tr('L’agence', 'About')}</a><a href="{url_p('catalogue')}">Catalogue</a><a href="{url_p('realisations')}">{tr('Réalisations', 'Our work')}</a><a href="{url_p('contact')}">Contact</a><a href="{cible}" hreflang="{autre}" lang="{autre}">{tr('English version', 'Version française')}</a>
-              <h4 style="margin-top:22px">{tr('Nous joindre', 'Get in touch')}</h4><a href="tel:{ENTREPRISE['tel_intl']}">{ENTREPRISE['tel']}</a><a href="mailto:{ENTREPRISE['courriel']}">{ENTREPRISE['courriel']}</a><a href="{INSTAGRAM}" target="_blank" rel="noopener">Instagram</a></div>
+              <h4 style="margin-top:22px">{tr('Nous joindre', 'Get in touch')}</h4><a href="tel:{ENTREPRISE['tel_intl']}">{ENTREPRISE['tel']}</a><a href="{lien_courriel or 'mailto:' + ENTREPRISE['courriel']}">{ENTREPRISE['courriel']}</a><a href="{INSTAGRAM}" target="_blank" rel="noopener">Instagram</a></div>
           </div>
         </div>
       </div>
@@ -1168,8 +1168,19 @@ def page_texte(cle, titre, intro, sections, desc):
     {corps_s}
   </section>
 </main>
-{pied(court=True)}'''
+{pied(court=True, lien_courriel='#contact-confidentialite')}'''
     return page(url_p(cle), f'{titre} | Takedown Studio', desc, corps, fil=[(url_p(cle), titre)])
+
+def mini_form():
+    """Mini formulaire (nom, courriel, message) des pages légales : remplace les liens mailto."""
+    return (f'<div id="contact-confidentialite"><form id="form-legal" class="form form-legal" action="{API_SOUMISSION}" method="post" novalidate>'
+        f'<div class="champ full"><label for="lg-nom">{tr("Nom", "Name")}</label><input id="lg-nom" name="nom" type="text" required aria-required="true" autocomplete="name"><span class="msg">{tr("Ce champ est obligatoire.", "This field is required.")}</span></div>'
+        f'<div class="champ full"><label for="lg-courriel">{tr("Courriel", "Email")}</label><input id="lg-courriel" name="courriel" type="email" required aria-required="true" autocomplete="email" inputmode="email"><span class="msg">{tr("Ce champ est obligatoire.", "This field is required.")}</span></div>'
+        f'<div class="champ full"><label for="lg-message">{tr("Ton problème ou ta question", "Your issue or question")}</label><textarea id="lg-message" name="message" required aria-required="true"></textarea><span class="msg">{tr("Ce champ est obligatoire.", "This field is required.")}</span></div>'
+        f'<div class="miel" aria-hidden="true"><label for="lg-site">{tr("Ne pas remplir", "Do not fill in")}</label><input id="lg-site" name="_honey" type="text" tabindex="-1" autocomplete="off"></div>'
+        f'<input type="hidden" name="_subject" value="{tr("Demande de confidentialité / conditions (site Takedown Studio)", "Privacy / terms request (Takedown Studio website, EN)")}"><input type="hidden" name="_template" value="table"><input type="hidden" name="_captcha" value="false">'
+        f'<div class="envoi full"><button class="btn btn-w" type="submit">{tr("Envoyer", "Send")}</button></div></form>'
+        f'<div id="etat-legal" class="etat" role="status" aria-live="polite"></div></div>')
 
 def confidentialite():
     c = ENTREPRISE['courriel']
@@ -1198,11 +1209,12 @@ def confidentialite():
        tr('<p>On garde tes renseignements le temps nécessaire pour répondre à ta demande et assurer le suivi de ton projet, puis le temps requis par nos obligations légales et comptables si un contrat est conclu. Après, ils sont supprimés ou rendus anonymes.</p>',
           '<p>We keep your information as long as needed to answer your request and follow up on your project, then for as long as our legal and accounting obligations require if a contract is signed. After that, it is deleted or anonymized.</p>')),
       (tr('Tes droits', 'Your rights'),
-       tr(f'<p>Tu peux demander en tout temps :</p><ul><li>de savoir quels renseignements on détient sur toi et d’en recevoir une copie</li><li>de faire corriger un renseignement inexact</li><li>de faire supprimer tes renseignements ou de retirer ton consentement</li></ul><p>Écris-nous à <a href="mailto:{c}">{c}</a>. Si tu estimes que tes droits ne sont pas respectés, tu peux aussi t’adresser à la Commission d’accès à l’information du Québec.</p>',
-          f'<p>You can ask at any time to:</p><ul><li>know what information we hold about you and receive a copy</li><li>have inaccurate information corrected</li><li>have your information deleted or withdraw your consent</li></ul><p>Write to us at <a href="mailto:{c}">{c}</a>. If you believe your rights are not being respected, you can also contact the Commission d’accès à l’information du Québec.</p>')),
+       tr(f'<p>Tu peux demander en tout temps :</p><ul><li>de savoir quels renseignements on détient sur toi et d’en recevoir une copie</li><li>de faire corriger un renseignement inexact</li><li>de faire supprimer tes renseignements ou de retirer ton consentement</li></ul><p>Utilise le formulaire en bas de cette page : <a href="#contact-confidentialite">nous écrire</a>. Si tu estimes que tes droits ne sont pas respectés, tu peux aussi t’adresser à la Commission d’accès à l’information du Québec.</p>',
+          f'<p>You can ask at any time to:</p><ul><li>know what information we hold about you and receive a copy</li><li>have inaccurate information corrected</li><li>have your information deleted or withdraw your consent</li></ul><p>Use the form at the bottom of this page: <a href="#contact-confidentialite">write to us</a>. If you believe your rights are not being respected, you can also contact the Commission d’accès à l’information du Québec.</p>')),
       (tr('Personne responsable', 'Person in charge'),
-       tr(f'<!-- À CONFIRMER PAR TAKEDOWN : nom de la personne responsable de la protection des renseignements personnels (Loi 25). En attendant, la boîte générale sert de point de contact. --><p>Pour toute question sur la protection de tes renseignements, écris à la personne responsable de la protection des renseignements personnels de Takedown Studio : <a href="mailto:{c}">{c}</a>.</p>',
-          f'<!-- TO BE CONFIRMED BY TAKEDOWN: name of the person responsible for the protection of personal information (Law 25). Until then, the general inbox is the contact point. --><p>For any question about the protection of your information, write to Takedown Studio’s person responsible for the protection of personal information: <a href="mailto:{c}">{c}</a>.</p>')),
+       tr(f'<!-- À CONFIRMER PAR TAKEDOWN : nom de la personne responsable de la protection des renseignements personnels (Loi 25). En attendant, la boîte générale sert de point de contact. --><p>Pour toute question sur la protection de tes renseignements, écris à la personne responsable de la protection des renseignements personnels de Takedown Studio : <a href="#contact-confidentialite">utilise le formulaire en bas de cette page</a>.</p>',
+          f'<!-- TO BE CONFIRMED BY TAKEDOWN: name of the person responsible for the protection of personal information (Law 25). Until then, the general inbox is the contact point. --><p>For any question about the protection of your information, write to Takedown Studio’s person responsible for the protection of personal information: <a href="#contact-confidentialite">use the form at the bottom of this page</a>.</p>')),
+      (tr('Nous écrire', 'Write to us'), mini_form()),
       (tr('Changements à cette politique', 'Changes to this policy'),
        tr('<p>On peut mettre cette politique à jour. La date de la dernière version est indiquée en haut de la page.</p>',
           '<p>We may update this policy. The date of the latest version is shown at the top of the page.</p>')),
@@ -1238,7 +1250,7 @@ def conditions():
        tr('<p>Ces conditions sont régies par les lois du Québec et les lois du Canada qui s’y appliquent. Les tribunaux du district judiciaire de Bedford sont compétents, sous réserve de tes droits de consommateur.</p>',
           '<p>These terms are governed by the laws of Quebec and the federal laws of Canada applicable therein. The courts of the judicial district of Bedford have jurisdiction, subject to your consumer rights.</p>')),
       (tr('Nous joindre', 'Contact us'),
-       tr(f'<p>Une question sur ces conditions? Écris-nous à <a href="mailto:{c}">{c}</a>.</p>', f'<p>Questions about these terms? Write to us at <a href="mailto:{c}">{c}</a>.</p>')),
+       tr('<p>Une question sur ces conditions? Écris-nous avec le formulaire ci-dessous.</p>', '<p>Questions about these terms? Write to us using the form below.</p>') + mini_form()),
     ]
     return page_texte('conditions', tr('Conditions d’utilisation', 'Terms of use'),
                       tr('Les règles simples qui encadrent l’utilisation du site de Takedown Studio.', 'The simple rules that apply to using the Takedown Studio website.'),
