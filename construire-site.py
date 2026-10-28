@@ -687,13 +687,13 @@ def page(chemin_url, titre_seo, desc, corps, fil=None, extra_ld=None, js=True):
 def zones(riche=False):
     """SEO local : zones desservies (texte visible, sans changer la mise en page). riche=True sur l'accueil."""
     if riche:
-        p1 = tr('Takedown Studio est à Bromont, en Estrie. On peut accompagner des équipes, des entreprises, des clubs, des commerces et des organismes de la région, et aussi de plus loin : Granby, Sherbrooke, Magog, Montréal et partout au Québec.',
-                'Takedown Studio is based in Bromont, in the Eastern Townships (Estrie). We can support teams, businesses, clubs, shops and organizations from the region, and from farther away: Granby, Sherbrooke, Magog, Montréal and across Québec.')
+        p1 = tr('Takedown Studio est à Bromont, en Estrie. On peut accompagner des équipes, des entreprises, des clubs, des commerces et des organismes de la région, et aussi de plus loin : Granby, Sherbrooke, Magog, Montréal et partout au Canada.',
+                'Takedown Studio is based in Bromont, in the Eastern Townships (Estrie). We can support teams, businesses, clubs, shops and organizations from the region, and from farther away: Granby, Sherbrooke, Magog, Montréal and across Canada.')
         p2 = tr('Que tu cherches des vêtements de travail, des hoodies pour ton équipe, des casquettes pour ta marque ou des autocollants pour un événement, dis-nous où tu es et ce que tu as en tête. On s’occupe du reste.',
                 'Whether you need work clothes, hoodies for your team, caps for your brand or stickers for an event, tell us where you are and what you have in mind. We take care of the rest.')
         corps = f'<p class="note rv">{p1}</p><p class="note rv">{p2}</p>'
     else:
-        corps = f'<p class="note rv">{tr("Takedown Studio est à Bromont. On sert l’Estrie, dont Granby, Sherbrooke et Magog, ainsi que Montréal et partout au Québec. Dis-nous où tu es, on s’occupe du reste.", "Takedown Studio is based in Bromont. We serve the Eastern Townships, including Granby, Sherbrooke and Magog, as well as Montréal and clients all across Québec. Tell us where you are and we will take care of the rest.")}</p>'
+        corps = f'<p class="note rv">{tr("Takedown Studio est à Bromont. On sert l’Estrie, dont Granby, Sherbrooke et Magog, ainsi que Montréal et partout au Canada. Dis-nous où tu es, on s’occupe du reste.", "Takedown Studio is based in Bromont. We serve the Eastern Townships, including Granby, Sherbrooke and Magog, as well as Montréal and clients all across Canada. Tell us where you are and we will take care of the rest.")}</p>'
     return f'''<section class="sec wrap" aria-labelledby="t-zones">
     <div class="head"><h2 class="h2 rv" id="t-zones">{tr('Zones desservies', 'Areas we serve')}</h2>
       <div class="links rv"><a href="{url_p('zones')}">{tr('Voir toutes les zones', 'See all areas')} <span class="arr">→</span></a></div></div>
@@ -1232,8 +1232,8 @@ def zones_page():
     intro = tr('Takedown Studio est à Bromont. On sert l’Estrie, Granby, Sherbrooke, Magog et Montréal.', 'Takedown Studio is based in Bromont. We serve the Eastern Townships (Estrie), Granby, Sherbrooke, Magog and Montréal.')
     p1 = tr('Takedown Studio est une agence de branding qui met ta marque sur des vêtements et des produits : broderie, sérigraphie, impression DTF, casquettes, tuques, patches et autocollants. Notre atelier est à Bromont, en Estrie, et on peut accompagner des équipes, des entreprises, des commerces, des clubs et des organismes de la région.',
             'Takedown Studio is a branding agency that puts your brand on apparel and products: embroidery, screen printing, DTF printing, caps, beanies, patches and stickers. Our workshop is in Bromont, in the Eastern Townships (Estrie), and we can support teams, businesses, shops, clubs and organizations in the region.')
-    p2 = tr('On ne s’arrête pas là. Que ton projet soit à Granby, à Sherbrooke, à Magog, à Montréal ou ailleurs au Québec, la démarche est la même : tu nous expliques ton idée, on te propose des options selon ton budget et ta quantité, puis on te guide jusqu’au résultat final. Voici comment on peut t’aider selon l’endroit où tu es.',
-            'We do not stop there. Whether your project is in Granby, Sherbrooke, Magog, Montréal or elsewhere in Québec, the process is the same: you explain your idea, we suggest options that fit your budget and quantity, then we guide you to the final result. Here is how we can help depending on where you are.')
+    p2 = tr('On ne s’arrête pas là. Que ton projet soit à Granby, à Sherbrooke, à Magog, à Montréal ou ailleurs au Canada, la démarche est la même : tu nous expliques ton idée, on te propose des options selon ton budget et ta quantité, puis on te guide jusqu’au résultat final. Voici comment on peut t’aider selon l’endroit où tu es.',
+            'We do not stop there. Whether your project is in Granby, Sherbrooke, Magog, Montréal or elsewhere in Canada, the process is the same: you explain your idea, we suggest options that fit your budget and quantity, then we guide you to the final result. Here is how we can help depending on where you are.')
     secs = [(tr('Où on travaille', 'Where we work'), f'<p>{p1}</p><p>{p2}</p>')]
     for cle, ftitre, etitre, ftexte, etexte in VILLES:
         secs.append((tr(ftitre, etitre), f'<p>{tr(ftexte, etexte)}</p>'))
