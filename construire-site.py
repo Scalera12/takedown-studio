@@ -83,7 +83,7 @@ SERVICES = [
          bouton='Demander une soumission pour des vêtements personnalisés',
          liens=['broderie', 'serigraphie', 'impression-dtf', 'casquettes-tuques', 'patches-ecussons'],
          seo='Vêtements personnalisés avec ton logo à Bromont | Takedown Studio',
-         desc='T-shirts, hoodies, polos et manteaux personnalisés avec ton logo. On t’aide à choisir les vêtements et la technique selon ton budget. Bromont et environs.'),
+         desc='T-shirts, hoodies, polos et manteaux personnalisés avec ton logo. On t’aide à choisir les vêtements et la technique selon ton budget. Bromont, Estrie, Granby, Sherbrooke, Magog, Montréal.'),
     dict(slug='broderie', nom='Broderie', filtre='broderie', ton='#3b4634',
          tag='Gros plan · fil et relief', court='Ton logo cousu dans le vêtement, avec du relief.',
          texte='La broderie, c’est ton logo cousu directement dans le vêtement avec du fil. Ça donne du relief et une belle finition. C’est une bonne option pour les casquettes, les tuques, les polos, les crewnecks et les manteaux.',
@@ -274,7 +274,7 @@ SERVICES_EN = {
         exemples=['Company T-shirts', 'Branded hoodies', 'Embroidered polos', 'Workwear'],
         bouton='Request a quote for custom apparel',
         seo='Custom apparel with your logo in Bromont | Takedown Studio',
-        desc='Custom T-shirts, hoodies, polos and jackets with your logo. We help you choose the garments and the technique to fit your budget. Bromont and surrounding area.'),
+        desc='Custom T-shirts, hoodies, polos and jackets with your logo. We help you choose the garments and the technique to fit your budget. Bromont, Eastern Townships, Granby, Sherbrooke, Magog, Montréal.'),
     'broderie': dict(nom='Embroidery', tag='Close-up · thread and texture',
         court='Your logo stitched into the garment, with texture.',
         texte='Embroidery is your logo stitched straight into the garment with thread. It gives texture and a clean finish. It is a great fit for caps, beanies, polos, crewnecks and jackets.',
@@ -611,7 +611,7 @@ def entreprise_ld():
                     'addressRegion': ENTREPRISE['region'], 'postalCode': ENTREPRISE['cp'], 'addressCountry': 'CA'},
         'geo': {'@type': 'GeoCoordinates', 'latitude': ENTREPRISE['geo'][0], 'longitude': ENTREPRISE['geo'][1]},
         'hasMap': 'https://www.google.com/maps/search/?api=1&query=' + 'Takedown+Studio+50+chemin+de+Gasp%C3%A9+Bromont',
-        'areaServed': [{'@type': 'City', 'name': 'Bromont'}, {'@type': 'AdministrativeArea', 'name': 'Estrie'}],   # régions à confirmer (étape 20)
+        'areaServed': [{'@type': 'City', 'name': 'Bromont'}, {'@type': 'AdministrativeArea', 'name': 'Estrie'}, {'@type': 'City', 'name': 'Granby'}, {'@type': 'City', 'name': 'Sherbrooke'}, {'@type': 'City', 'name': 'Magog'}, {'@type': 'City', 'name': 'Montréal'}],   # régions à confirmer (étape 20)
         **({'sameAs': ENTREPRISE['reseaux']} if ENTREPRISE['reseaux'] else {}),
         'knowsAbout': [s['nom'] for s in svcs()],
     }
@@ -683,6 +683,13 @@ def page(chemin_url, titre_seo, desc, corps, fil=None, extra_ld=None, js=True):
 '''
 
 # ---------------------------------------------------------------- pages
+def zones():
+    """SEO local : zones desservies (texte visible, sans changer la mise en page)."""
+    return f'''<section class="sec wrap" aria-labelledby="t-zones">
+    <div class="head"><h2 class="h2 rv" id="t-zones">{tr('Zones desservies', 'Areas we serve')}</h2></div>
+    <p class="note rv">{tr('Takedown Studio est à Bromont. On sert l’Estrie, dont Granby, Sherbrooke et Magog, ainsi que Montréal et partout au Québec. Dis-nous où tu es, on s’occupe du reste.', 'Takedown Studio is based in Bromont. We serve the Eastern Townships, including Granby, Sherbrooke and Magog, as well as Montréal and clients all across Québec. Tell us where you are and we will take care of the rest.')}</p>
+  </section>'''
+
 def accueil():
     tuiles = ''.join(tuile(s) for s in SERVICES)
     corps = f'''{nav('/')}
@@ -719,11 +726,12 @@ def accueil():
       <a class="lien rv" href="{url_p('agence')}">{tr('Découvrir l’agence', 'Discover the agency')} <span class="arr">→</span></a>
     </div>
   </section>
+  {zones()}
 </main>
 {pied()}'''
     return page(url_p('accueil'), tr('Takedown Studio | Vêtements et produits personnalisés à Bromont', 'Takedown Studio | Custom apparel and products in Bromont'),
-                tr('Agence de branding à Bromont. On met ta marque sur des vêtements et des produits : broderie, sérigraphie, DTF, casquettes, patches et autocollants.',
-                   'Branding agency in Bromont. We put your brand on apparel and products: embroidery, screen printing, DTF, caps, patches and stickers.'),
+                tr('Agence de branding à Bromont, pour l’Estrie, Granby, Sherbrooke, Magog et Montréal. On met ta marque sur des vêtements et des produits : broderie, sérigraphie, DTF, casquettes, patches et autocollants.',
+                   'Branding agency in Bromont, serving the Eastern Townships, Granby, Sherbrooke, Magog and Montréal. We put your brand on apparel and products: embroidery, screen printing, DTF, caps, patches and stickers.'),
                 corps)
 
 def agence():
@@ -916,6 +924,7 @@ def service(s, i):
   {bloc_exemples}
   {extras}
   {assoc}
+  {zones()}
 </main>
 {hesite()}
 {pied()}'''
