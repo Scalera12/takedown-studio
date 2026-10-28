@@ -479,7 +479,7 @@ def pied(court=False):
     <div class="legal">
       <img src="/assets/img/logo-texte-blanc.png" alt="Takedown Studio" width="122" height="16" loading="lazy">
       <span>{ENTREPRISE['rue']}, {ville_cp()}</span>
-      <span>© {AUJ[:4]} Takedown Studio{tr(' · Site par Scalera', '')}</span>
+      <span>© {AUJ[:4]} Takedown Studio{tr(' · Site par Scalera', ' · Website by Scalera')}</span>
     </div>
   </div>
 </footer>'''
