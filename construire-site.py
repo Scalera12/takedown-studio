@@ -53,7 +53,8 @@ SLUG_EN = {'vetements-personnalises': 'custom-apparel', 'broderie': 'embroidery'
 ROUTES = {'accueil': ('/', '/en/'), 'agence': ('/agence-branding', '/en/agency'), 'services': ('/services', '/en/services'),
           'catalogue': ('/catalogue', '/en/catalogue'), 'realisations': ('/realisations', '/en/our-work'),
           'contact': ('/contact', '/en/contact'), 'merci': ('/merci', '/en/thank-you'),
-          'confidentialite': ('/politique-de-confidentialite', '/en/privacy-policy'), 'conditions': ('/conditions-dutilisation', '/en/terms')}
+          'confidentialite': ('/politique-de-confidentialite', '/en/privacy-policy'), 'conditions': ('/conditions-dutilisation', '/en/terms'),
+          'ecrire': ('/nous-ecrire', '/en/write-to-us')}
 
 def route_de(cle, langue=None):
     langue = langue or L
@@ -1168,12 +1169,12 @@ def page_texte(cle, titre, intro, sections, desc):
     {corps_s}
   </section>
 </main>
-{pied(court=True, lien_courriel='#contact-confidentialite')}'''
+{pied(court=True, lien_courriel=url_p('ecrire'))}'''
     return page(url_p(cle), f'{titre} | Takedown Studio', desc, corps, fil=[(url_p(cle), titre)])
 
 def mini_form():
     """Mini formulaire (nom, courriel, message) des pages légales : remplace les liens mailto."""
-    return (f'<div id="contact-confidentialite"><form id="form-legal" class="form form-legal" action="{API_SOUMISSION}" method="post" novalidate>'
+    return (f'<div><form id="form-legal" class="form form-legal" action="{API_SOUMISSION}" method="post" novalidate>'
         f'<div class="champ full"><label for="lg-nom">{tr("Nom", "Name")}</label><input id="lg-nom" name="nom" type="text" required aria-required="true" autocomplete="name"><span class="msg">{tr("Ce champ est obligatoire.", "This field is required.")}</span></div>'
         f'<div class="champ full"><label for="lg-courriel">{tr("Courriel", "Email")}</label><input id="lg-courriel" name="courriel" type="email" required aria-required="true" autocomplete="email" inputmode="email"><span class="msg">{tr("Ce champ est obligatoire.", "This field is required.")}</span></div>'
         f'<div class="champ full"><label for="lg-message">{tr("Ton problème ou ta question", "Your issue or question")}</label><textarea id="lg-message" name="message" required aria-required="true"></textarea><span class="msg">{tr("Ce champ est obligatoire.", "This field is required.")}</span></div>'
@@ -1181,6 +1182,24 @@ def mini_form():
         f'<input type="hidden" name="_subject" value="{tr("Demande de confidentialité / conditions (site Takedown Studio)", "Privacy / terms request (Takedown Studio website, EN)")}"><input type="hidden" name="_template" value="table"><input type="hidden" name="_captcha" value="false">'
         f'<div class="envoi full"><button class="btn btn-w" type="submit">{tr("Envoyer", "Send")}</button></div></form>'
         f'<div id="etat-legal" class="etat" role="status" aria-live="polite"></div></div>')
+
+def lien_ecrire():
+    return f'<p><a class="btn btn-w" href="{url_p("ecrire")}">{tr("Nous écrire", "Write to us")}</a></p>'
+
+def ecrire_page():
+    """Page dédiée au mini formulaire (nom, courriel, message), liée depuis les pages légales."""
+    titre = tr('Nous écrire', 'Write to us')
+    corps = f'''{nav('')}
+<main id="contenu">
+  {phead([(url_p('ecrire'), titre)], titre, tr('Une question sur tes renseignements personnels ou sur nos conditions? Dis-nous ce qui se passe, on te répond par courriel.', 'A question about your personal information or our terms? Tell us what is going on and we will reply by email.'))}
+  <section class="sec wrap pol">
+    <section class="pol-s">{mini_form()}</section>
+  </section>
+</main>
+{pied(court=True)}'''
+    return page(url_p('ecrire'), f'{titre} | Takedown Studio',
+                tr('Écris à Takedown Studio : une question sur tes renseignements personnels ou sur les conditions du site.', 'Write to Takedown Studio: a question about your personal information or the site terms.'),
+                corps, fil=[(url_p('ecrire'), titre)])
 
 def confidentialite():
     c = ENTREPRISE['courriel']
@@ -1209,12 +1228,12 @@ def confidentialite():
        tr('<p>On garde tes renseignements le temps nécessaire pour répondre à ta demande et assurer le suivi de ton projet, puis le temps requis par nos obligations légales et comptables si un contrat est conclu. Après, ils sont supprimés ou rendus anonymes.</p>',
           '<p>We keep your information as long as needed to answer your request and follow up on your project, then for as long as our legal and accounting obligations require if a contract is signed. After that, it is deleted or anonymized.</p>')),
       (tr('Tes droits', 'Your rights'),
-       tr(f'<p>Tu peux demander en tout temps :</p><ul><li>de savoir quels renseignements on détient sur toi et d’en recevoir une copie</li><li>de faire corriger un renseignement inexact</li><li>de faire supprimer tes renseignements ou de retirer ton consentement</li></ul><p>Utilise le formulaire en bas de cette page : <a href="#contact-confidentialite">nous écrire</a>. Si tu estimes que tes droits ne sont pas respectés, tu peux aussi t’adresser à la Commission d’accès à l’information du Québec.</p>',
-          f'<p>You can ask at any time to:</p><ul><li>know what information we hold about you and receive a copy</li><li>have inaccurate information corrected</li><li>have your information deleted or withdraw your consent</li></ul><p>Use the form at the bottom of this page: <a href="#contact-confidentialite">write to us</a>. If you believe your rights are not being respected, you can also contact the Commission d’accès à l’information du Québec.</p>')),
+       tr(f'<p>Tu peux demander en tout temps :</p><ul><li>de savoir quels renseignements on détient sur toi et d’en recevoir une copie</li><li>de faire corriger un renseignement inexact</li><li>de faire supprimer tes renseignements ou de retirer ton consentement</li></ul><p>Utilise le formulaire : <a href="{url_p('ecrire')}">nous écrire</a>. Si tu estimes que tes droits ne sont pas respectés, tu peux aussi t’adresser à la Commission d’accès à l’information du Québec.</p>',
+          f'<p>You can ask at any time to:</p><ul><li>know what information we hold about you and receive a copy</li><li>have inaccurate information corrected</li><li>have your information deleted or withdraw your consent</li></ul><p>Use the form: <a href="{url_p('ecrire')}">write to us</a>. If you believe your rights are not being respected, you can also contact the Commission d’accès à l’information du Québec.</p>')),
       (tr('Personne responsable', 'Person in charge'),
-       tr(f'<!-- À CONFIRMER PAR TAKEDOWN : nom de la personne responsable de la protection des renseignements personnels (Loi 25). En attendant, la boîte générale sert de point de contact. --><p>Pour toute question sur la protection de tes renseignements, écris à la personne responsable de la protection des renseignements personnels de Takedown Studio : <a href="#contact-confidentialite">utilise le formulaire en bas de cette page</a>.</p>',
-          f'<!-- TO BE CONFIRMED BY TAKEDOWN: name of the person responsible for the protection of personal information (Law 25). Until then, the general inbox is the contact point. --><p>For any question about the protection of your information, write to Takedown Studio’s person responsible for the protection of personal information: <a href="#contact-confidentialite">use the form at the bottom of this page</a>.</p>')),
-      (tr('Nous écrire', 'Write to us'), mini_form()),
+       tr(f'<!-- À CONFIRMER PAR TAKEDOWN : nom de la personne responsable de la protection des renseignements personnels (Loi 25). En attendant, la boîte générale sert de point de contact. --><p>Pour toute question sur la protection de tes renseignements, écris à la personne responsable de la protection des renseignements personnels de Takedown Studio : <a href="{url_p('ecrire')}">utilise le formulaire « Nous écrire »</a>.</p>',
+          f'<!-- TO BE CONFIRMED BY TAKEDOWN: name of the person responsible for the protection of personal information (Law 25). Until then, the general inbox is the contact point. --><p>For any question about the protection of your information, write to Takedown Studio’s person responsible for the protection of personal information: <a href="{url_p('ecrire')}">use the “Write to us” form</a>.</p>')),
+      (tr('Nous écrire', 'Write to us'), lien_ecrire()),
       (tr('Changements à cette politique', 'Changes to this policy'),
        tr('<p>On peut mettre cette politique à jour. La date de la dernière version est indiquée en haut de la page.</p>',
           '<p>We may update this policy. The date of the latest version is shown at the top of the page.</p>')),
@@ -1250,7 +1269,7 @@ def conditions():
        tr('<p>Ces conditions sont régies par les lois du Québec et les lois du Canada qui s’y appliquent. Les tribunaux du district judiciaire de Bedford sont compétents, sous réserve de tes droits de consommateur.</p>',
           '<p>These terms are governed by the laws of Quebec and the federal laws of Canada applicable therein. The courts of the judicial district of Bedford have jurisdiction, subject to your consumer rights.</p>')),
       (tr('Nous joindre', 'Contact us'),
-       tr('<p>Une question sur ces conditions? Écris-nous avec le formulaire ci-dessous.</p>', '<p>Questions about these terms? Write to us using the form below.</p>') + mini_form()),
+       tr('<p>Une question sur ces conditions? Écris-nous avec notre petit formulaire.</p>', '<p>Questions about these terms? Write to us using our short form.</p>') + lien_ecrire()),
     ]
     return page_texte('conditions', tr('Conditions d’utilisation', 'Terms of use'),
                       tr('Les règles simples qui encadrent l’utilisation du site de Takedown Studio.', 'The simple rules that apply to using the Takedown Studio website.'),
@@ -1422,7 +1441,7 @@ def construire():
     # comme les adresses du plan de contenu (/services/broderie).
     gabarit = [('accueil', accueil, ()), ('agence', agence, ()), ('services', services_index, ()), ('catalogue', catalogue, ()),
                ('realisations', realisations, ()), ('contact', contact, ()), ('merci', merci, ()),
-               ('confidentialite', confidentialite, ()), ('conditions', conditions, ())]
+               ('confidentialite', confidentialite, ()), ('conditions', conditions, ()), ('ecrire', ecrire_page, ())]
     for i, sv in enumerate(SERVICES):
         gabarit.append(('svc:' + sv['slug'], service, (sv, i)))
     global L, PAGE_CLE
@@ -1440,7 +1459,7 @@ def construire():
         assert '—' not in html, f'tiret cadratin dans {rel}'
         ecrire(rel, html)
 
-    cles = ['accueil', 'agence', 'services'] + ['svc:' + sv['slug'] for sv in SERVICES] + ['catalogue', 'realisations', 'contact', 'confidentialite', 'conditions']
+    cles = ['accueil', 'agence', 'services'] + ['svc:' + sv['slug'] for sv in SERVICES] + ['catalogue', 'realisations', 'contact', 'confidentialite', 'conditions', 'ecrire']
     def entree(cle, langue):
         alt = ''.join(f'<xhtml:link rel="alternate" hreflang="{h}" href="{BASE}{route_de(cle, l)}"/>' for h, l in (('fr-CA', 'fr'), ('en-CA', 'en'), ('x-default', 'fr')))
         return f'  <url><loc>{BASE}{route_de(cle, langue)}</loc><lastmod>{AUJ}</lastmod>{alt}</url>\n'
