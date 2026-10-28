@@ -1424,6 +1424,20 @@ def ecrire(rel, contenu):
     os.makedirs(os.path.dirname(f), exist_ok=True)
     io.open(f, 'w', encoding='utf-8').write(contenu)
 
+ANCIENNES_ADRESSES = {'/pages/contact': 'contact', '/pages/custom-apparel-services': 'services',
+                      '/policies/privacy-policy': 'confidentialite'}
+
+def redirection(cible):
+    """Page de redirection : canonical + refresh + JS + lien visible, hors sitemap."""
+    return f'''<!doctype html>
+<html lang="fr-CA"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Takedown Studio</title>
+<link rel="canonical" href="{cible}">
+<meta http-equiv="refresh" content="0;url={cible}">
+<script>location.replace({json.dumps(cible)});</script>
+</head><body style="font-family:sans-serif;padding:2rem"><p>Cette page a déménagé : <a href="{cible}">clique ici pour continuer</a>.</p></body></html>
+'''
+
 def construire():
     if os.path.isdir(SORTIE):
         shutil.rmtree(SORTIE)
@@ -1455,6 +1469,9 @@ def construire():
             pages[rel] = fonction(*args)
     L, PAGE_CLE = 'fr', None
     pages['404.html'] = introuvable()
+    # anciennes adresses Shopify encore indexées : pages de redirection (GitHub Pages n'a pas de redirection serveur)
+    for ancien, cible in ANCIENNES_ADRESSES.items():
+        pages[ancien.strip('/') + '/index.html'] = redirection(BASE + route_de(cible, 'fr'))
     for rel, html in pages.items():
         assert '—' not in html, f'tiret cadratin dans {rel}'
         ecrire(rel, html)
