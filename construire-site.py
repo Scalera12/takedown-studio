@@ -54,7 +54,8 @@ ROUTES = {'accueil': ('/', '/en/'), 'agence': ('/agence-branding', '/en/agency')
           'catalogue': ('/catalogue', '/en/catalogue'), 'realisations': ('/realisations', '/en/our-work'),
           'contact': ('/contact', '/en/contact'), 'merci': ('/merci', '/en/thank-you'),
           'confidentialite': ('/politique-de-confidentialite', '/en/privacy-policy'), 'conditions': ('/conditions-dutilisation', '/en/terms'),
-          'ecrire': ('/nous-ecrire', '/en/write-to-us')}
+          'ecrire': ('/nous-ecrire', '/en/write-to-us'),
+          'zones': ('/zones-desservies', '/en/areas-we-serve')}
 
 def route_de(cle, langue=None):
     langue = langue or L
@@ -473,7 +474,7 @@ def pied(court=False, lien_courriel=None):
           {appel}
           <div class="cols">
             <div><h4>Services</h4>{services}</div>
-            <div><h4>Studio</h4><a href="{url_p('agence')}">{tr('L’agence', 'About')}</a><a href="{url_p('catalogue')}">Catalogue</a><a href="{url_p('realisations')}">{tr('Réalisations', 'Our work')}</a><a href="{url_p('contact')}">Contact</a><a href="{cible}" hreflang="{autre}" lang="{autre}">{tr('English version', 'Version française')}</a>
+            <div><h4>Studio</h4><a href="{url_p('agence')}">{tr('L’agence', 'About')}</a><a href="{url_p('catalogue')}">Catalogue</a><a href="{url_p('realisations')}">{tr('Réalisations', 'Our work')}</a><a href="{url_p('contact')}">Contact</a><a href="{url_p('zones')}">{tr('Zones desservies', 'Areas we serve')}</a><a href="{cible}" hreflang="{autre}" lang="{autre}">{tr('English version', 'Version française')}</a>
               <h4 style="margin-top:22px">{tr('Nous joindre', 'Get in touch')}</h4><a href="tel:{ENTREPRISE['tel_intl']}">{ENTREPRISE['tel']}</a><a href="{lien_courriel or 'mailto:' + ENTREPRISE['courriel']}">{ENTREPRISE['courriel']}</a><a href="{INSTAGRAM}" target="_blank" rel="noopener">Instagram</a><a href="{FACEBOOK}" target="_blank" rel="noopener">Facebook</a></div>
           </div>
         </div>
@@ -611,7 +612,7 @@ def entreprise_ld():
                     'addressRegion': ENTREPRISE['region'], 'postalCode': ENTREPRISE['cp'], 'addressCountry': 'CA'},
         'geo': {'@type': 'GeoCoordinates', 'latitude': ENTREPRISE['geo'][0], 'longitude': ENTREPRISE['geo'][1]},
         'hasMap': 'https://www.google.com/maps/search/?api=1&query=' + 'Takedown+Studio+50+chemin+de+Gasp%C3%A9+Bromont',
-        'areaServed': [{'@type': 'City', 'name': 'Bromont'}, {'@type': 'AdministrativeArea', 'name': 'Estrie'}, {'@type': 'City', 'name': 'Granby'}, {'@type': 'City', 'name': 'Sherbrooke'}, {'@type': 'City', 'name': 'Magog'}, {'@type': 'City', 'name': 'Montréal'}],   # régions à confirmer (étape 20)
+        'areaServed': [{'@type': 'City', 'name': 'Bromont'}, {'@type': 'AdministrativeArea', 'name': 'Estrie'}, {'@type': 'City', 'name': 'Granby'}, {'@type': 'City', 'name': 'Sherbrooke'}, {'@type': 'City', 'name': 'Magog'}, {'@type': 'City', 'name': 'Montréal'}, {'@type': 'AdministrativeArea', 'name': 'Brome-Missisquoi'}],   # régions à confirmer (étape 20)
         **({'sameAs': ENTREPRISE['reseaux']} if ENTREPRISE['reseaux'] else {}),
         'knowsAbout': [s['nom'] for s in svcs()],
     }
@@ -683,11 +684,20 @@ def page(chemin_url, titre_seo, desc, corps, fil=None, extra_ld=None, js=True):
 '''
 
 # ---------------------------------------------------------------- pages
-def zones():
-    """SEO local : zones desservies (texte visible, sans changer la mise en page)."""
+def zones(riche=False):
+    """SEO local : zones desservies (texte visible, sans changer la mise en page). riche=True sur l'accueil."""
+    if riche:
+        p1 = tr('Takedown Studio est à Bromont, en Estrie. On peut accompagner des équipes, des entreprises, des clubs, des commerces et des organismes de la région, et aussi de plus loin : Granby, Sherbrooke, Magog, Montréal et partout au Québec.',
+                'Takedown Studio is based in Bromont, in the Eastern Townships (Estrie). We can support teams, businesses, clubs, shops and organizations from the region, and from farther away: Granby, Sherbrooke, Magog, Montréal and across Québec.')
+        p2 = tr('Que tu cherches des vêtements de travail, des hoodies pour ton équipe, des casquettes pour ta marque ou des autocollants pour un événement, dis-nous où tu es et ce que tu as en tête. On s’occupe du reste.',
+                'Whether you need work clothes, hoodies for your team, caps for your brand or stickers for an event, tell us where you are and what you have in mind. We take care of the rest.')
+        corps = f'<p class="note rv">{p1}</p><p class="note rv">{p2}</p>'
+    else:
+        corps = f'<p class="note rv">{tr("Takedown Studio est à Bromont. On sert l’Estrie, dont Granby, Sherbrooke et Magog, ainsi que Montréal et partout au Québec. Dis-nous où tu es, on s’occupe du reste.", "Takedown Studio is based in Bromont. We serve the Eastern Townships, including Granby, Sherbrooke and Magog, as well as Montréal and clients all across Québec. Tell us where you are and we will take care of the rest.")}</p>'
     return f'''<section class="sec wrap" aria-labelledby="t-zones">
-    <div class="head"><h2 class="h2 rv" id="t-zones">{tr('Zones desservies', 'Areas we serve')}</h2></div>
-    <p class="note rv">{tr('Takedown Studio est à Bromont. On sert l’Estrie, dont Granby, Sherbrooke et Magog, ainsi que Montréal et partout au Québec. Dis-nous où tu es, on s’occupe du reste.', 'Takedown Studio is based in Bromont. We serve the Eastern Townships, including Granby, Sherbrooke and Magog, as well as Montréal and clients all across Québec. Tell us where you are and we will take care of the rest.')}</p>
+    <div class="head"><h2 class="h2 rv" id="t-zones">{tr('Zones desservies', 'Areas we serve')}</h2>
+      <div class="links rv"><a href="{url_p('zones')}">{tr('Voir toutes les zones', 'See all areas')} <span class="arr">→</span></a></div></div>
+    {corps}
   </section>'''
 
 def accueil():
@@ -711,6 +721,8 @@ def accueil():
     <div class="grid">{tuiles}</div>
   </section>
 
+  {zones(True)}
+
   {casquettes_custom()}
 
   {etapes()}
@@ -726,7 +738,6 @@ def accueil():
       <a class="lien rv" href="{url_p('agence')}">{tr('Découvrir l’agence', 'Discover the agency')} <span class="arr">→</span></a>
     </div>
   </section>
-  {zones()}
 </main>
 {pied()}'''
     return page(url_p('accueil'), tr('Takedown Studio | Vêtements et produits personnalisés à Bromont', 'Takedown Studio | Custom apparel and products in Bromont'),
@@ -1196,6 +1207,52 @@ def mini_form():
 def lien_ecrire():
     return f'<p><a class="btn btn-w" href="{url_p("ecrire")}">{tr("Nous joindre", "Contact us")}</a></p>'
 
+
+VILLES = [
+    ('bromont', 'Bromont et Brome-Missisquoi', 'Bromont and Brome-Missisquoi',
+     'Notre atelier est à Bromont, alors c’est ici que ton projet commence et que le contact est le plus simple. La région vit beaucoup de plein air, de tourisme et d’événements : des commerces, des hébergements, des clubs sportifs et des organismes qui ont souvent besoin de vêtements à leur image. Dans Brome-Missisquoi, que tu sois à Sutton, à Cowansville ou au lac Brome, on peut t’aider à choisir le bon vêtement, la bonne technique et la bonne quantité pour ton équipe ou ta boutique. Passe nous voir en personne ou écris-nous : on discute de ton idée avant de rien produire.',
+     'Our workshop is in Bromont, so this is where your project starts and where getting in touch is easiest. The area lives on outdoor activities, tourism and events: shops, places to stay, sports clubs and organizations that often need clothing with their own look. In Brome-Missisquoi, whether you are in Sutton, Cowansville or Lac-Brome, we can help you pick the right garment, the right technique and the right quantity for your team or your shop. Come see us or write to us: we talk through your idea before anything goes into production.'),
+    ('granby', 'Vêtements personnalisés à Granby', 'Custom apparel for Granby',
+     'Granby est une ville active, avec des commerces de quartier, des entreprises de services, des écoles et beaucoup d’activités familiales et sportives. Une équipe de soccer ou de hockey mineur, une PME qui veut des uniformes de travail, un événement annuel qui revient chaque été : ce sont des projets qu’on peut prendre en charge du début à la fin. Tu nous envoies ton logo ou ton idée, on te propose des modèles et une technique selon ton budget, et on te guide pour la suite. Si tu as déjà un visuel, c’est parfait. Sinon, on peut partir d’une simple esquisse.',
+     'Granby is an active city, with neighbourhood shops, service companies, schools and plenty of family and sports activities. A minor soccer or hockey team, a small business that wants work uniforms, a yearly event that comes back every summer: these are projects we can handle from start to finish. You send us your logo or your idea, we suggest garments and a technique that fit your budget, and we guide you from there. If you already have artwork, great. If not, we can start from a simple sketch.'),
+    ('sherbrooke', 'Branding et vêtements pour Sherbrooke', 'Branding and apparel for Sherbrooke',
+     'Sherbrooke est le centre de l’Estrie, avec une grande communauté étudiante, des associations, des entreprises technologiques et des institutions. Ça veut dire des besoins variés : des chandails pour une association étudiante, des vêtements de marque pour une jeune entreprise, des cadeaux pour une équipe ou des casquettes pour un lancement. On aime les projets qui ont une identité claire, et on t’aide à la rendre visible sur les vêtements et les produits. Dis-nous ce que tu veux dire avec ta marque, on s’occupe de la traduire en broderie, en sérigraphie ou en impression numérique. Pour un petit groupe comme pour une plus grosse commande, on te conseille sur les modèles, les couleurs et le placement du logo.',
+     'Sherbrooke is the hub of the Eastern Townships, with a large student community, associations, tech companies and institutions. That means varied needs: shirts for a student association, branded clothing for a young company, gifts for a team or caps for a launch. We like projects with a clear identity, and we help you make it visible on clothing and products. Tell us what you want to say with your brand, and we turn it into embroidery, screen printing or digital printing. For a small group or a larger order, we advise you on garments, colours and logo placement.'),
+    ('magog', 'Produits personnalisés pour Magog', 'Custom products for Magog',
+     'Magog vit au rythme du lac Memphrémagog : restaurants, boutiques, auberges, activités nautiques et événements d’été. Pour ce genre d’entreprise, l’image compte beaucoup, et un vêtement ou un produit bien fait devient une belle façon de se faire voir. Pense aux tabliers et casquettes du personnel, aux t-shirts d’un festival, aux autocollants pour tes produits ou aux tuques pour la saison froide. On te conseille sur les quantités et sur les options qui tiennent bien dans le temps, même avec un usage quotidien. Si tu as une idée mais que tu ne sais pas par où commencer, explique-nous ton projet en quelques lignes : on te revient avec des suggestions simples et réalistes pour ton budget.',
+     'Magog lives to the rhythm of Lake Memphremagog: restaurants, shops, inns, water activities and summer events. For businesses like these, image matters a lot, and a well made garment or product is a great way to be seen. Think of staff aprons and caps, festival t-shirts, stickers for your products or beanies for the cold season. We advise you on quantities and on options that hold up over time, even with everyday use. If you have an idea but do not know where to start, describe your project in a few lines: we come back with simple, realistic suggestions for your budget.'),
+    ('montreal', 'Impression et broderie pour Montréal', 'Printing and embroidery for Montréal',
+     'À Montréal, la concurrence est forte et les marques doivent se démarquer. On peut accompagner des créateurs, des agences, des restaurants, des organisations et de jeunes marques de vêtements qui veulent un résultat soigné sans gérer toute la production. Tu nous envoies ton fichier et tes précisions par le formulaire, on te revient avec des options et on valide les détails avec toi avant de lancer quoi que ce soit. Pour savoir comment on organise la livraison ou le ramassage de ta commande, contacte-nous : on regarde ce qui fonctionne le mieux pour toi.',
+     'In Montréal, competition is tough and brands need to stand out. We can support creators, agencies, restaurants, organizations and young clothing brands that want a polished result without managing the whole production. You send us your file and your details through the form, we come back with options and we confirm the details with you before anything is launched. To find out how we organize delivery or pickup for your order, contact us: we look at what works best for you.'),
+]
+
+def zones_page():
+    """Page hub SEO local : une section par ville, texte unique."""
+    titre = tr('Zones desservies en Estrie', 'Areas we serve in the Eastern Townships (Estrie)')
+    intro = tr('Takedown Studio est à Bromont. On sert l’Estrie, Granby, Sherbrooke, Magog et Montréal.', 'Takedown Studio is based in Bromont. We serve the Eastern Townships (Estrie), Granby, Sherbrooke, Magog and Montréal.')
+    p1 = tr('Takedown Studio est une agence de branding qui met ta marque sur des vêtements et des produits : broderie, sérigraphie, impression DTF, casquettes, tuques, patches et autocollants. Notre atelier est à Bromont, en Estrie, et on peut accompagner des équipes, des entreprises, des commerces, des clubs et des organismes de la région.',
+            'Takedown Studio is a branding agency that puts your brand on apparel and products: embroidery, screen printing, DTF printing, caps, beanies, patches and stickers. Our workshop is in Bromont, in the Eastern Townships (Estrie), and we can support teams, businesses, shops, clubs and organizations in the region.')
+    p2 = tr('On ne s’arrête pas là. Que ton projet soit à Granby, à Sherbrooke, à Magog, à Montréal ou ailleurs au Québec, la démarche est la même : tu nous expliques ton idée, on te propose des options selon ton budget et ta quantité, puis on te guide jusqu’au résultat final. Voici comment on peut t’aider selon l’endroit où tu es.',
+            'We do not stop there. Whether your project is in Granby, Sherbrooke, Magog, Montréal or elsewhere in Québec, the process is the same: you explain your idea, we suggest options that fit your budget and quantity, then we guide you to the final result. Here is how we can help depending on where you are.')
+    secs = [(tr('Où on travaille', 'Where we work'), f'<p>{p1}</p><p>{p2}</p>')]
+    for cle, ftitre, etitre, ftexte, etexte in VILLES:
+        secs.append((tr(ftitre, etitre), f'<p>{tr(ftexte, etexte)}</p>'))
+    secs.append((tr('Parle-nous de ton projet', 'Tell us about your project'),
+                 f'<p>{tr("Dis-nous où tu es, ce que tu veux faire et pour quand. On te répond avec des options claires.", "Tell us where you are, what you want to make and by when. We answer with clear options.")}</p>'
+                 f'<p><a class="btn btn-w" href="{url_p("contact")}">{tr("Demander une soumission", "Request a quote")} <span class="arr">→</span></a></p>'))
+    corps_s = ''.join(f'<section class="pol-s"><h2>{t}</h2>{h}</section>' for t, h in secs)
+    corps = f'''{nav('')}
+<main id="contenu">
+  {phead([(url_p('zones'), titre)], titre, intro)}
+  <section class="sec wrap pol">
+    {corps_s}
+  </section>
+</main>
+{pied()}'''
+    return page(url_p('zones'), tr('Zones desservies : Estrie, Granby, Sherbrooke, Magog, Montréal | Takedown Studio', 'Areas we serve: Eastern Townships, Granby, Sherbrooke, Magog, Montréal | Takedown Studio'),
+                tr('Takedown Studio, agence de branding à Bromont, sert l’Estrie, Granby, Sherbrooke, Magog et Montréal : vêtements, casquettes, broderie, sérigraphie et autocollants personnalisés.', 'Takedown Studio, a branding agency in Bromont, serves the Eastern Townships, Granby, Sherbrooke, Magog and Montréal: custom apparel, caps, embroidery, screen printing and stickers.'),
+                corps, fil=[(url_p('zones'), titre)])
+
 def ecrire_page():
     """Page dédiée au mini formulaire (nom, courriel, message), liée depuis les pages légales."""
     titre = tr('Nous joindre', 'Contact us')
@@ -1465,7 +1522,7 @@ def construire():
     # comme les adresses du plan de contenu (/services/broderie).
     gabarit = [('accueil', accueil, ()), ('agence', agence, ()), ('services', services_index, ()), ('catalogue', catalogue, ()),
                ('realisations', realisations, ()), ('contact', contact, ()), ('merci', merci, ()),
-               ('confidentialite', confidentialite, ()), ('conditions', conditions, ()), ('ecrire', ecrire_page, ())]
+               ('confidentialite', confidentialite, ()), ('conditions', conditions, ()), ('ecrire', ecrire_page, ()), ('zones', zones_page, ())]
     for i, sv in enumerate(SERVICES):
         gabarit.append(('svc:' + sv['slug'], service, (sv, i)))
     global L, PAGE_CLE
@@ -1486,7 +1543,7 @@ def construire():
         assert '—' not in html, f'tiret cadratin dans {rel}'
         ecrire(rel, html)
 
-    cles = ['accueil', 'agence', 'services'] + ['svc:' + sv['slug'] for sv in SERVICES] + ['catalogue', 'realisations', 'contact', 'confidentialite', 'conditions', 'ecrire']
+    cles = ['accueil', 'agence', 'services'] + ['svc:' + sv['slug'] for sv in SERVICES] + ['catalogue', 'realisations', 'contact', 'zones', 'confidentialite', 'conditions', 'ecrire']
     def entree(cle, langue):
         alt = ''.join(f'<xhtml:link rel="alternate" hreflang="{h}" href="{BASE}{route_de(cle, l)}"/>' for h, l in (('fr-CA', 'fr'), ('en-CA', 'en'), ('x-default', 'fr')))
         return f'  <url><loc>{BASE}{route_de(cle, langue)}</loc><lastmod>{AUJ}</lastmod>{alt}</url>\n'
