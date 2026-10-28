@@ -35,7 +35,7 @@ ENTREPRISE = {
     'courriel': 'info@takedownstudio.com',
     'rue': '50, chemin de Gaspé, bloc C, local 5', 'ville': 'Bromont', 'region': 'QC', 'cp': 'J2L 2N8',
     'geo': (45.31643, -72.65788),   # 50 ch. de Gaspé (OpenStreetMap)
-    'reseaux': ['https://www.instagram.com/takedownstudio/'],   # sameAs
+    'reseaux': ['https://www.instagram.com/takedownstudio/', 'https://www.facebook.com/profile.php?id=61551481097411'],   # sameAs
 }
 
 # ---------------------------------------------------------------- langues
@@ -203,6 +203,7 @@ def lire_realisations():
     return rows
 REALISATIONS = lire_realisations()
 INSTAGRAM = 'https://www.instagram.com/takedownstudio/'
+FACEBOOK = 'https://www.facebook.com/profile.php?id=61551481097411'
 FILTRES = [('tous', 'Tous'), ('vetements', 'Vêtements'), ('broderie', 'Broderie'), ('serigraphie', 'Sérigraphie'),
            ('dtf', 'DTF'), ('casquettes-tuques', 'Casquettes et tuques'), ('patches', 'Patches'), ('autocollants', 'Autocollants'),
            ('accessoires', 'Accessoires et sacs')]
@@ -473,7 +474,7 @@ def pied(court=False, lien_courriel=None):
           <div class="cols">
             <div><h4>Services</h4>{services}</div>
             <div><h4>Studio</h4><a href="{url_p('agence')}">{tr('L’agence', 'About')}</a><a href="{url_p('catalogue')}">Catalogue</a><a href="{url_p('realisations')}">{tr('Réalisations', 'Our work')}</a><a href="{url_p('contact')}">Contact</a><a href="{cible}" hreflang="{autre}" lang="{autre}">{tr('English version', 'Version française')}</a>
-              <h4 style="margin-top:22px">{tr('Nous joindre', 'Get in touch')}</h4><a href="tel:{ENTREPRISE['tel_intl']}">{ENTREPRISE['tel']}</a><a href="{lien_courriel or 'mailto:' + ENTREPRISE['courriel']}">{ENTREPRISE['courriel']}</a><a href="{INSTAGRAM}" target="_blank" rel="noopener">Instagram</a></div>
+              <h4 style="margin-top:22px">{tr('Nous joindre', 'Get in touch')}</h4><a href="tel:{ENTREPRISE['tel_intl']}">{ENTREPRISE['tel']}</a><a href="{lien_courriel or 'mailto:' + ENTREPRISE['courriel']}">{ENTREPRISE['courriel']}</a><a href="{INSTAGRAM}" target="_blank" rel="noopener">Instagram</a><a href="{FACEBOOK}" target="_blank" rel="noopener">Facebook</a></div>
           </div>
         </div>
       </div>
