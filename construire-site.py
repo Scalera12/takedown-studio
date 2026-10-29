@@ -757,11 +757,10 @@ def agence():
     {plus_prevoir(tr('Un même contact pour ton projet, des conseils concrets et des produits qui vont bien ensemble.', 'One point of contact for your project, practical advice and products that work well together.'),
                   tr('Un projet qui regroupe plusieurs produits demande plus de préparation. Le budget et les délais dépendent des articles choisis.', 'A project that combines several products takes more preparation. Budget and timelines depend on the items you choose.'))}
   </section>
-  {mots(False)}
   {etapes()}
 </main>
 {hesite()}
-{pied()}'''
+{pied(court=True)}'''
     return page(url_p('agence'), tr('Agence de branding à Bromont | Takedown Studio', 'Branding agency in Bromont | Takedown Studio'),
                 tr('Takedown Studio t’aide à donner une image cohérente à tes vêtements et à tes produits : choix des produits, des couleurs, des placements, de la technique.',
                    'Takedown Studio helps you give your apparel and products a consistent image: choosing products, colours, placements and the technique.'),
