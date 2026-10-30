@@ -468,7 +468,8 @@ def pied(court=False, lien_courriel=None, insta=False):
     if insta and not court:
         # page Nos services : le bouton soumission passe à côté du titre, le bloc Instagram prend sa place en bas
         bouton = f'<a class="btn btn-w" href="{url_p("contact")}">{tr("Demander une soumission", "Request a quote")} <span class="arr">→</span></a>'
-        tete = f'<div class="tete-cta"><div>{tete}</div>{bouton}</div>'
+        dessin = '<img class="tete-dessin" src="/assets/img/dessins/chandail-loupe-blanc.png" alt="" width="1000" height="670" loading="lazy">'
+        tete = f'<div class="tete-cta"><div>{tete}</div>{dessin}{bouton}</div>'
         appel = (f'<div><div class="ig-ligne">{LOGO_INSTA.replace("__T__", "44")}<p>{tr("Nos derniers projets, tu les trouves sur Instagram.", "You can find our latest projects on Instagram.")}</p></div>'
                  f'<a class="btn btn-g" href="{INSTAGRAM}" target="_blank" rel="noopener">{LOGO_INSTA.replace("__T__", "18")} {tr("Voir nos réalisations sur Instagram", "See our work on Instagram")} <span class="arr">→</span></a></div>')
     return f'''<footer class="foot{' court' if court else ''}">
