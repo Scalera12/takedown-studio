@@ -933,7 +933,7 @@ def service(s, i):
   {assoc}
   {zones()}
 </main>
-{hesite()}
+{'' if s['slug'] == 'casquettes-100-personnalisees' else hesite()}
 {pied()}'''
     ld = [{'@type': 'Service', 'name': s['nom'], 'serviceType': s['nom'], 'description': s['texte'],
            'provider': {'@id': BASE + '/#entreprise'}, 'areaServed': {'@type': 'City', 'name': 'Bromont'},
