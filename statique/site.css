@@ -201,7 +201,7 @@ a:hover .arr{transform:translateX(5px)}
 .extra dd{font-size:15px;color:#c9c9cc}
 
 /* ---------- processus ---------- */
-.how{padding-block:clamp(50px,6vw,80px);border-bottom:1px solid var(--line)}
+.how{padding-block:clamp(50px,6vw,80px)}
 .how .top{display:grid;grid-template-columns:1fr auto;gap:30px;align-items:end}
 .how .top img{width:clamp(150px,18vw,250px)}
 .how .top p{color:var(--mute);margin-top:18px;max-width:50ch}
