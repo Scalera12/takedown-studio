@@ -754,3 +754,5 @@ html:not(.js) .words .line .mini{opacity:1;transform:none}
 /* 2026-10-30 (Alex Moite via Mathew) : page Agence, moins d'espace sous les 4 étapes avant la ligne aux gouttes */
 main>.how:last-child{padding-bottom:clamp(16px,2vw,28px)}
 main:has(>.how:last-child)+.hesite{margin-top:clamp(24px,3vw,40px)}
+/* 2026-10-30 (Alex Moite via Mathew) : page Agence, une seule ligne entre le bloc hesite et le pied de page */
+main:has(>.how:last-child)+.hesite{border-bottom:0}
