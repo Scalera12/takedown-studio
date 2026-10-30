@@ -201,7 +201,7 @@ a:hover .arr{transform:translateX(5px)}
 .extra dd{font-size:15px;color:#c9c9cc}
 
 /* ---------- processus ---------- */
-.how{padding-block:clamp(100px,12vw,160px);border-bottom:1px solid var(--line)}
+.how{padding-block:clamp(50px,6vw,80px);border-bottom:1px solid var(--line)}
 .how .top{display:grid;grid-template-columns:1fr auto;gap:30px;align-items:end}
 .how .top img{width:clamp(150px,18vw,250px)}
 .how .top p{color:var(--mute);margin-top:18px;max-width:50ch}
@@ -586,7 +586,8 @@ html:not(.js) .words .line .mini{opacity:1;transform:none}
 
 /* 2026-10-24 (Takedown via Alex) : même espace entre chaque bloc de l'accueil (services, casquettes, processus, techniques, agence) */
 .hero-dessins ~ .casq-custom{margin-top:clamp(80px,11vw,150px)}
-.hero-dessins ~ .how,.hero-dessins ~ .words{padding-block:clamp(80px,11vw,150px)}
+.hero-dessins ~ .how{padding-block:clamp(50px,6vw,80px)}
+.hero-dessins ~ .words{padding-block:clamp(80px,11vw,150px)}
 
 /* 2026-10-24 (Takedown via Alex) : même espace en haut (avant la file de bonhommes) et en bas (après le texte) de l'entête */
 .hero-dessins{padding-top:clamp(56px,8vh,96px)!important;padding-bottom:clamp(56px,8vh,96px)!important}
