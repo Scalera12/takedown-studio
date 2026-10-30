@@ -743,3 +743,9 @@ html:not(.js) .words .line .mini{opacity:1;transform:none}
 .legal .liens-legaux a{text-decoration:underline}
 .envoi .consent{flex-basis:100%}
 .envoi .consent a{text-decoration:underline}
+
+/* 2026-10-30 (demande d'Alex Moite via Mathew) : sur ordinateur, le texte de la section agence reste à gauche mais centré verticalement dans la photo */
+@media (min-width:821px){
+  .mission{align-items:center}
+  .mission .in{padding-block:clamp(40px,6vw,80px)}
+}
