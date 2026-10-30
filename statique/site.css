@@ -750,3 +750,6 @@ html:not(.js) .words .line .mini{opacity:1;transform:none}
   .mission{align-items:center}
   .mission .in{padding-block:clamp(40px,6vw,80px)}
 }
+
+/* 2026-10-30 (Alex Moite via Mathew) : page Agence, moins d'espace sous les 4 étapes avant la ligne aux gouttes */
+main>.how:last-child{padding-bottom:clamp(16px,2vw,28px)}
