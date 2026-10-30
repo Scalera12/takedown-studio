@@ -456,7 +456,7 @@ def nav(courant):
 def ville_cp():
     return tr(f"{ENTREPRISE['ville']} (Québec) {ENTREPRISE['cp']}", f"{ENTREPRISE['ville']}, Quebec {ENTREPRISE['cp']}")
 
-def pied(court=False, lien_courriel=None):
+def pied(court=False, lien_courriel=None, insta=False):
     services = ''.join(f'<a href="{url_s(s["slug"])}">{nom_court(s)}</a>' for s in svcs())
     cible, autre = lien_langue()
     tete = '' if court else f'''<p class="mono" style="color:var(--mute)">{tr('Demander une soumission', 'Request a quote')}</p>
@@ -465,6 +465,12 @@ def pied(court=False, lien_courriel=None):
             <p>{tr('Envoie-nous ton idée, ton logo et la quantité que tu as en tête. On va te guider pour la suite.', 'Send us your idea, your logo and the quantity you have in mind. We will guide you from there.')}</p>
             <a class="btn btn-w" href="{url_p('contact')}">{tr('Demander une soumission', 'Request a quote')} <span class="arr">→</span></a>
           </div>'''
+    if insta and not court:
+        # page Nos services : le bouton soumission passe à côté du titre, le bloc Instagram prend sa place en bas
+        bouton = f'<a class="btn btn-w" href="{url_p("contact")}">{tr("Demander une soumission", "Request a quote")} <span class="arr">→</span></a>'
+        tete = f'<div class="tete-cta"><div>{tete}</div>{bouton}</div>'
+        appel = (f'<div><div class="ig-ligne">{LOGO_INSTA.replace("__T__", "44")}<p>{tr("Nos derniers projets, tu les trouves sur Instagram.", "You can find our latest projects on Instagram.")}</p></div>'
+                 f'<a class="btn btn-g" href="{INSTAGRAM}" target="_blank" rel="noopener">{LOGO_INSTA.replace("__T__", "18")} {tr("Voir nos réalisations sur Instagram", "See our work on Instagram")} <span class="arr">→</span></a></div>')
     return f'''<footer class="foot{' court' if court else ''}">
   <div class="wrap">
     <div class="grid-f">
@@ -790,13 +796,8 @@ def services_index():
          f'<a class="btn btn-w" href="{url_p("contact")}?service=je-sais-pas">{tr("Je sais pas quelle technique choisir", "I don’t know which technique to pick")}</a>', 'illustration-pinceau')}
   <section class="sec">{blocs}</section>
   {extras}
-  <section class="wrap ig-section"><hr class="ig-sep">
-    <div class="ig-bloc"><div class="ig-txt">
-      <div class="ig-ligne rv">{LOGO_INSTA.replace('__T__', '44')}<p>{tr('Nos derniers projets, tu les trouves sur Instagram.', 'You can find our latest projects on Instagram.')}</p></div>
-      <p class="rv"><a class="btn btn-g" href="{INSTAGRAM}" target="_blank" rel="noopener">{LOGO_INSTA.replace('__T__', '18')} {tr('Voir nos réalisations sur Instagram', 'See our work on Instagram')} <span class="arr">→</span></a></p></div>
-      <img class="ig-dessin rv" src="/assets/img/dessins/chandail-loupe-blanc.png" sizes="(max-width:820px) 62vw, 380px" alt="" width="1000" height="670" loading="lazy"></div></section>
 </main>
-{pied()}'''
+{pied(insta=True)}'''
     ld = [{'@type': 'ItemList', 'name': tr('Nos services', 'Our services'), 'itemListElement': [
         {'@type': 'ListItem', 'position': i + 1, 'name': s['nom'], 'url': BASE + url_s(s['slug'])} for i, s in enumerate(svcs())]}]
     return page(url_p('services'), tr('Vêtements et produits personnalisés | Takedown Studio', 'Custom apparel and products | Takedown Studio'),

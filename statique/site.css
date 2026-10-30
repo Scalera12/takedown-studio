@@ -758,3 +758,7 @@ main:has(>.how:last-child)+.hesite{margin-top:clamp(24px,3vw,40px)}
 main:has(>.how:last-child)+.hesite{border-bottom:0}
 /* 2026-10-30 (Alex Moite via Mathew) : page Agence, bloc « Tu hésites » centré verticalement (même espace au-dessus et au-dessous du contenu) */
 main:has(>.how:last-child)+.hesite+.foot{padding-top:clamp(0px,3.6vw,58px)}
+
+/* 2026-10-30 (Alex Moite via Mathew) : page Nos services, bouton soumission à côté du titre du pied de page */
+.tete-cta{display:flex;justify-content:space-between;align-items:flex-end;gap:30px;flex-wrap:wrap}
+.tete-cta .btn{margin-bottom:clamp(8px,1.5vw,24px)}
