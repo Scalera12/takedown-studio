@@ -753,10 +753,6 @@ def agence():
             'At Takedown Studio, we help you give your apparel and products a consistent image. Whether it is for your business, your team, an event or your own brand, we take the time to understand what you are after. We guide you through the choice of products, colours, placements and the right customization method.'),
          f'<a class="btn btn-w" href="{url_p("contact")}">{tr("Parle-nous de ton projet", "Tell us about your project")}</a><a class="btn btn-g" href="{url_p("services")}">{tr("Nos services", "Our services")}</a>',
          'logo-complet-lutteurs')}
-  <section class="sec wrap">
-    {plus_prevoir(tr('Un même contact pour ton projet, des conseils concrets et des produits qui vont bien ensemble.', 'One point of contact for your project, practical advice and products that work well together.'),
-                  tr('Un projet qui regroupe plusieurs produits demande plus de préparation. Le budget et les délais dépendent des articles choisis.', 'A project that combines several products takes more preparation. Budget and timelines depend on the items you choose.'))}
-  </section>
   {etapes()}
 </main>
 {hesite()}
