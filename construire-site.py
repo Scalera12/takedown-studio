@@ -746,7 +746,7 @@ def accueil():
     </div>
   </section>
 </main>
-{pied()}'''
+{pied(insta=True)}'''
     return page(url_p('accueil'), tr('Takedown Studio | Vêtements et produits personnalisés à Bromont', 'Takedown Studio | Custom apparel and products in Bromont'),
                 tr('Agence de branding à Bromont, pour l’Estrie, Granby, Sherbrooke, Magog et Montréal. On met ta marque sur des vêtements et des produits : broderie, sérigraphie, DTF, casquettes, patches et autocollants.',
                    'Branding agency in Bromont, serving the Eastern Townships, Granby, Sherbrooke, Magog and Montréal. We put your brand on apparel and products: embroidery, screen printing, DTF, caps, patches and stickers.'),
