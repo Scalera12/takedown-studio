@@ -350,7 +350,7 @@ a:hover .arr{transform:translateX(5px)}
   .nav .lg{display:none}.nav .btn{padding:9px 12px}
   .rail{grid-auto-columns:84%}
   .steps{grid-template-columns:1fr}.steps div{border-right:0;margin-right:0;padding-right:0}
-  .steps div{display:grid;grid-template-columns:96px 1fr;column-gap:22px;align-items:center;padding-top:22px}
+  .steps div{display:grid;grid-template-columns:96px minmax(0,230px);justify-content:center;column-gap:22px;align-items:center;padding-top:22px}
   .steps .dessin{grid-row:1/3;height:96px;margin:0;justify-content:center}
   .steps .dessin img{max-width:96px}
   .steps b{font-size:34px;margin-bottom:6px;align-self:end}
