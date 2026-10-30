@@ -456,7 +456,7 @@ def nav(courant):
 def ville_cp():
     return tr(f"{ENTREPRISE['ville']} (Québec) {ENTREPRISE['cp']}", f"{ENTREPRISE['ville']}, Quebec {ENTREPRISE['cp']}")
 
-def pied(court=False, lien_courriel=None, insta=False):
+def pied(court=False, lien_courriel=None, insta=True):
     services = ''.join(f'<a href="{url_s(s["slug"])}">{nom_court(s)}</a>' for s in svcs())
     cible, autre = lien_langue()
     tete = '' if court else f'''<p class="mono" style="color:var(--mute)">{tr('Demander une soumission', 'Request a quote')}</p>
