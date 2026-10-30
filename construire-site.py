@@ -796,7 +796,6 @@ def services_index():
       <p class="rv"><a class="btn btn-g" href="{INSTAGRAM}" target="_blank" rel="noopener">{LOGO_INSTA.replace('__T__', '18')} {tr('Voir nos réalisations sur Instagram', 'See our work on Instagram')} <span class="arr">→</span></a></p></div>
       <img class="ig-dessin rv" src="/assets/img/dessins/chandail-loupe-blanc.png" sizes="(max-width:820px) 62vw, 380px" alt="" width="1000" height="670" loading="lazy"></div></section>
 </main>
-{hesite()}
 {pied()}'''
     ld = [{'@type': 'ItemList', 'name': tr('Nos services', 'Our services'), 'itemListElement': [
         {'@type': 'ListItem', 'position': i + 1, 'name': s['nom'], 'url': BASE + url_s(s['slug'])} for i, s in enumerate(svcs())]}]
