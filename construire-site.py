@@ -733,9 +733,9 @@ def accueil():
     {photo(4, tr('L’atelier de Takedown Studio à Bromont, avec les presses à chaleur et le séchoir de sérigraphie', 'The Takedown Studio workshop in Bromont, with the heat presses and the screen printing dryer'), pos='50% 62%')}
     <div class="wrap in">
       <h2 class="sr" id="t-presentation">{tr('L’agence', 'About')}</h2>
-      <p class="big rv">{tr('On t’aide à mettre ta marque sur des vêtements et des produits que les gens vont aimer utiliser.', 'We help you put your brand on apparel and products people will love to use.')}</p>
-      <p class="small rv">{tr('Du choix du modèle au placement de ton logo, on te conseille selon ton idée, ton budget et la quantité dont tu as besoin. Broderie, sérigraphie ou impression numérique : on trouve la bonne option pour ton projet.', 'From choosing the style to placing your logo, we advise you based on your idea, your budget and the quantity you need. Embroidery, screen printing or digital printing: we find the right option for your project.')}</p>
-      <a class="lien rv" href="{url_p('agence')}">{tr('Découvrir l’agence', 'Discover the agency')} <span class="arr">→</span></a>
+      <p class="big">{tr('On t’aide à mettre ta marque sur des vêtements et des produits que les gens vont aimer utiliser.', 'We help you put your brand on apparel and products people will love to use.')}</p>
+      <p class="small">{tr('Du choix du modèle au placement de ton logo, on te conseille selon ton idée, ton budget et la quantité dont tu as besoin. Broderie, sérigraphie ou impression numérique : on trouve la bonne option pour ton projet.', 'From choosing the style to placing your logo, we advise you based on your idea, your budget and the quantity you need. Embroidery, screen printing or digital printing: we find the right option for your project.')}</p>
+      <a class="lien" href="{url_p('agence')}">{tr('Découvrir l’agence', 'Discover the agency')} <span class="arr">→</span></a>
     </div>
   </section>
 </main>
