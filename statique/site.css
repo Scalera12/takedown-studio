@@ -281,7 +281,7 @@ a:hover .arr{transform:translateX(5px)}
 .foot{padding-block:clamp(70px,9vw,110px) 36px}
 .foot .grid-f{display:grid;grid-template-columns:1fr;gap:40px}
 .foot h2{font-size:clamp(34px,4.6vw,80px);margin-top:18px}
-.foot h2 .ind{padding-left:12%}
+.foot h2 .ind{padding-left:0}
 .foot .lead{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:56px;padding-top:28px;border-top:1px solid var(--line)}
 .foot.court .lead{margin-top:0}
 .foot .lead p{color:#c9c9cc;max-width:40ch}
