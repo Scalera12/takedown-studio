@@ -756,3 +756,5 @@ main>.how:last-child{padding-bottom:clamp(16px,2vw,28px)}
 main:has(>.how:last-child)+.hesite{margin-top:clamp(24px,3vw,40px)}
 /* 2026-10-30 (Alex Moite via Mathew) : page Agence, une seule ligne entre le bloc hesite et le pied de page */
 main:has(>.how:last-child)+.hesite{border-bottom:0}
+/* 2026-10-30 (Alex Moite via Mathew) : page Agence, bloc « Tu hésites » centré verticalement (même espace au-dessus et au-dessous du contenu) */
+main:has(>.how:last-child)+.hesite+.foot{padding-top:clamp(0px,1.8vw,30px)}
