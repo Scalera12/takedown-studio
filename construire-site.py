@@ -766,7 +766,7 @@ def agence():
   {etapes()}
 </main>
 {hesite()}
-{pied(court=True)}'''
+{pied(court=True, insta_court=True)}'''
     return page(url_p('agence'), tr('Agence de branding à Bromont | Takedown Studio', 'Branding agency in Bromont | Takedown Studio'),
                 tr('Takedown Studio t’aide à donner une image cohérente à tes vêtements et à tes produits : choix des produits, des couleurs, des placements, de la technique.',
                    'Takedown Studio helps you give your apparel and products a consistent image: choosing products, colours, placements and the technique.'),
