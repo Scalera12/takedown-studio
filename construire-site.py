@@ -456,7 +456,7 @@ def nav(courant):
 def ville_cp():
     return tr(f"{ENTREPRISE['ville']} (Québec) {ENTREPRISE['cp']}", f"{ENTREPRISE['ville']}, Quebec {ENTREPRISE['cp']}")
 
-def pied(court=False, lien_courriel=None, insta=True, tete_perso=None):
+def pied(court=False, lien_courriel=None, insta=True, tete_perso=None, insta_court=False):
     services = ''.join(f'<a href="{url_s(s["slug"])}">{nom_court(s)}</a>' for s in svcs())
     cible, autre = lien_langue()
     tete = '' if court else f'''<p class="mono" style="color:var(--mute)">{tr('Demander une soumission', 'Request a quote')}</p>
@@ -465,11 +465,12 @@ def pied(court=False, lien_courriel=None, insta=True, tete_perso=None):
             <p>{tr('Envoie-nous ton idée, ton logo et la quantité que tu as en tête. On va te guider pour la suite.', 'Send us your idea, your logo and the quantity you have in mind. We will guide you from there.')}</p>
             <a class="btn btn-w" href="{url_p('contact')}">{tr('Demander une soumission', 'Request a quote')} <span class="arr">→</span></a>
           </div>'''
-    if insta and not court:
+    if insta and (not court or insta_court):
         # page Nos services : le bouton soumission passe à côté du titre, le bloc Instagram prend sa place en bas
         bouton = f'<a class="btn btn-w" href="{url_p("contact")}">{tr("Demander une soumission", "Request a quote")} <span class="arr">→</span></a>'
         dessin = '<img class="tete-dessin" src="/assets/img/dessins/chandail-loupe-blanc.png" alt="" width="1000" height="670" loading="lazy">'
-        tete = f'<div class="tete-cta"><div>{tete}</div>{bouton}</div>'
+        if not court:
+            tete = f'<div class="tete-cta"><div>{tete}</div>{bouton}</div>'
         if tete_perso:
             tete = tete_perso
         appel = (f'<div><div class="ig-ligne">{LOGO_INSTA.replace("__T__", "44")}<p>{tr("Nos derniers projets, tu les trouves sur Instagram.", "You can find our latest projects on Instagram.")}</p></div>'
@@ -1170,7 +1171,7 @@ def contact():
     </aside>
   </section>
 </main>
-{pied(court=True)}'''
+{pied(court=True, insta_court=True)}'''
     return page(url_p('contact'), tr('Demander une soumission | Takedown Studio', 'Request a quote | Takedown Studio'),
                 tr('Envoie ton idée, ton logo et la quantité que tu as en tête. Takedown Studio te guide vers les bons produits et la bonne technique. Bromont.',
                    'Send your idea, your logo and the quantity you have in mind. Takedown Studio guides you to the right products and technique. Bromont.'),
