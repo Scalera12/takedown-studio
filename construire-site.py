@@ -456,7 +456,7 @@ def nav(courant):
 def ville_cp():
     return tr(f"{ENTREPRISE['ville']} (Québec) {ENTREPRISE['cp']}", f"{ENTREPRISE['ville']}, Quebec {ENTREPRISE['cp']}")
 
-def pied(court=False, lien_courriel=None, insta=True):
+def pied(court=False, lien_courriel=None, insta=True, tete_perso=None):
     services = ''.join(f'<a href="{url_s(s["slug"])}">{nom_court(s)}</a>' for s in svcs())
     cible, autre = lien_langue()
     tete = '' if court else f'''<p class="mono" style="color:var(--mute)">{tr('Demander une soumission', 'Request a quote')}</p>
@@ -470,6 +470,8 @@ def pied(court=False, lien_courriel=None, insta=True):
         bouton = f'<a class="btn btn-w" href="{url_p("contact")}">{tr("Demander une soumission", "Request a quote")} <span class="arr">→</span></a>'
         dessin = '<img class="tete-dessin" src="/assets/img/dessins/chandail-loupe-blanc.png" alt="" width="1000" height="670" loading="lazy">'
         tete = f'<div class="tete-cta"><div>{tete}</div>{bouton}</div>'
+        if tete_perso:
+            tete = tete_perso
         appel = (f'<div><div class="ig-ligne">{LOGO_INSTA.replace("__T__", "44")}<p>{tr("Nos derniers projets, tu les trouves sur Instagram.", "You can find our latest projects on Instagram.")}</p></div>'
                  f'<a class="btn btn-g" href="{INSTAGRAM}" target="_blank" rel="noopener">{LOGO_INSTA.replace("__T__", "18")} {tr("Voir nos réalisations sur Instagram", "See our work on Instagram")} <span class="arr">→</span></a></div>')
     return f'''<footer class="foot{' court' if court else ''}">
@@ -1051,6 +1053,10 @@ def carte_produit(x):
             f'<details><summary>{tr("Couleurs", "Colours")} ({e(t_nb(x["couleurs_nb"]))})</summary><p>{e(x["couleurs"])}.{plus}</p></details></div></article>')
 
 def catalogue():
+    cat_fin = (f'<div class="cat-fin"><h2 class="h2">{tr('Tu cherches autre chose?', 'Looking for something else?')}</h2>'
+               f'<p>{tr('Ces produits sont nos favoris, mais on en a beaucoup plus. Parle-nous de ton projet et on te trouve le bon produit.', 'These products are our favourites, but we have a lot more. Tell us about your project and we will find the right product.')}</p>'
+               f'<div class="ctas"><a class="btn btn-w" href="{url_p('contact')}">{tr('Demander une soumission', 'Request a quote')} <span class="arr">→</span></a>'
+               f'<a class="btn btn-g" href="{url_p('services')}">{tr('Nos services', 'Our services')}</a></div></div>')
     puces = ''.join(f'<button type="button" class="chip" data-cat="{k}" aria-pressed="{"true" if k == "tous" else "false"}">{tr(t, CAT_FILTRES_EN[k])}</button>' for k, t in CAT_FILTRES)
     def bloc(titre, liste):
         cartes = ''.join(carte_produit(x) for x in liste)
@@ -1071,7 +1077,7 @@ def catalogue():
     <div class="chips-cat" role="group" aria-label="{tr('Filtrer par catégorie', 'Filter by category')}">{puces}</div></section>
   {blocs}
 </main>
-{pied()}'''
+{pied(tete_perso=cat_fin)}'''
     return page(url_p('catalogue'), tr('Catalogue de vêtements et de produits personnalisés | Takedown Studio', 'Catalogue of custom apparel and products | Takedown Studio'),
                 tr('Les produits favoris de Takedown Studio : t-shirts, crewnecks, hoodies, casquettes, tuques, du promo au premium. On en a beaucoup plus. Demande ta soumission.',
                    'Takedown Studio favourites: T-shirts, crewnecks, hoodies, caps, beanies, from budget to premium. We have a lot more. Request your quote.'),
