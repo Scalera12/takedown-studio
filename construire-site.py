@@ -1111,7 +1111,6 @@ def realisations():
     <p style="margin-top:56px"><a class="btn btn-w" href="{url_p('contact')}">{tr('Parle-nous de ton projet', 'Tell us about your project')} <span class="arr">→</span></a></p>
   </section>
 </main>
-{hesite()}
 {pied()}'''
     return page(url_p('realisations'), tr('Nos réalisations | Takedown Studio', 'Our work | Takedown Studio'),
                 tr('Des projets de Takedown Studio : vêtements brodés, t-shirts en sérigraphie, impression DTF, casquettes, patches et autocollants personnalisés.',
