@@ -1054,7 +1054,7 @@ def carte_produit(x):
 
 def catalogue():
     cat_fin = (f'<div class="cat-fin"><h2 class="h2">{tr('Tu cherches autre chose?', 'Looking for something else?')}</h2>'
-               f'<p>{tr('Ces produits sont nos favoris, mais on en a beaucoup plus. Parle-nous de ton projet et on te trouve le bon produit.', 'These products are our favourites, but we have a lot more. Tell us about your project and we will find the right product.')}</p>'
+               f'<p>{tr('Ces produits sont nos favoris, mais on en a beaucoup plus. Parle-nous de ton projet et on te trouve le bon produit.', 'These products are our favourites, but we have a lot more. Tell us about your project and we will find you the right product.')}</p>'
                f'<div class="ctas"><a class="btn btn-w" href="{url_p('contact')}">{tr('Demander une soumission', 'Request a quote')} <span class="arr">→</span></a>'
                f'<a class="btn btn-g" href="{url_p('services')}">{tr('Nos services', 'Our services')}</a></div></div>')
     puces = ''.join(f'<button type="button" class="chip" data-cat="{k}" aria-pressed="{"true" if k == "tous" else "false"}">{tr(t, CAT_FILTRES_EN[k])}</button>' for k, t in CAT_FILTRES)
