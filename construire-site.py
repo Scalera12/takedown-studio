@@ -899,7 +899,7 @@ def service(s, i):
               f'<figcaption class="mono">{photos[0]["titre"]} · {photos[0]["tech"]}</figcaption></figure></section>') if photos else ''
     extras = ''
     if s['slug'] == 'vetements-personnalises' and AFFICHER_EXTRAS:
-        extras = f'<section class="sec wrap"><div class="head"><h2 class="h2 rv">{tr("Aussi possible", "Also possible")}</h2><p class="note rv">{tr("Avec nos partenaires, pour les projets qui sortent de l’ordinaire.", "With our partners, for projects that go beyond the ordinary.")}</p></div>' + ''.join(f'''
+        extras = f'<section class="sec wrap"><div class="head head-col"><h2 class="h2 rv">{tr("Aussi possible", "Also possible")}</h2><p class="note rv">{tr("Avec nos partenaires, pour les projets qui sortent de l’ordinaire.", "With our partners, for projects that go beyond the ordinary.")}</p></div>' + ''.join(f'''
       <article class="extra rv" id="{x['id']}">
         <div><span class="mono">{tr('Sur demande', 'On request')}</span><h3>{x['titre']}</h3></div>
         <div><p>{x['texte']}</p>
