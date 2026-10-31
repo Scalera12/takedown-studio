@@ -1070,11 +1070,7 @@ def catalogue():
   <section class="wrap cat-barre"><p class="rv">{tr('Livraison gratuite partout au Canada.', 'Free shipping anywhere in Canada.')}{pdf_lien}</p>
     <div class="chips-cat" role="group" aria-label="{tr('Filtrer par catégorie', 'Filter by category')}">{puces}</div></section>
   {blocs}
-  <section class="sec wrap"><div class="cat-fin rv"><h2 class="h2">{tr('Tu cherches autre chose?', 'Looking for something else?')}</h2>
-    <p>{tr('Ces produits sont nos favoris, mais on en a beaucoup plus. Parle-nous de ton projet et on te trouve le bon produit.', 'These products are our favourites, but we have a lot more. Tell us about your project and we will find you the right product.')}</p>
-    <div class="ctas"><a class="btn btn-w" href="{url_p('contact')}">{tr('Demander une soumission', 'Request a quote')} <span class="arr">→</span></a><a class="btn btn-g" href="{url_p('services')}">{tr('Nos services', 'Our services')}</a></div></div></section>
 </main>
-{hesite()}
 {pied()}'''
     return page(url_p('catalogue'), tr('Catalogue de vêtements et de produits personnalisés | Takedown Studio', 'Catalogue of custom apparel and products | Takedown Studio'),
                 tr('Les produits favoris de Takedown Studio : t-shirts, crewnecks, hoodies, casquettes, tuques, du promo au premium. On en a beaucoup plus. Demande ta soumission.',
