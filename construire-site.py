@@ -725,6 +725,7 @@ def bande_logos():
     groupe = '<ul class="groupe">' + items + '</ul>'
     copie = '<ul class="groupe" aria-hidden="true">' + items + '</ul>'
     return ('<section class="logos" aria-label="' + tr('Quelques-uns de nos clients', 'Some of our clients') + '">'
+            '<p class="etiq wrap">' + tr('Quelques-uns de nos clients', 'Some of our clients') + '</p>'
             '<div class="piste">' + groupe + copie + '</div></section>')
 
 def accueil():
