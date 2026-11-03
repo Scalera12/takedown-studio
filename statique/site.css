@@ -20,9 +20,13 @@
 :root[data-theme="light"] body::after{opacity:.035;mix-blend-mode:multiply}
 :root[data-theme="light"] .skip{background:#000;color:#fff}
 /* bouton clair / sombre : carré, moitié pleine, moitié vide */
-.theme-btn{width:36px;height:34px;border:1px solid var(--line);margin-right:4px;padding:0;display:inline-grid;place-items:center;color:var(--fg);transition:border-color .3s}
+.theme-btn{height:34px;border:1px solid var(--line);margin-right:4px;padding:0;display:inline-flex;color:var(--fg);transition:border-color .3s}
+.theme-btn span{width:30px;display:grid;place-items:center;color:var(--mute);transition:background .25s,color .25s}
+.theme-btn .m{background:var(--fg);color:var(--bg)}
+html[data-theme="light"] .theme-btn .m{background:none;color:var(--mute)}
+html[data-theme="light"] .theme-btn .s{background:var(--fg);color:var(--bg)}
 .theme-btn:hover{border-color:var(--mute)}
-.theme-btn svg{display:block;width:18px;height:18px}
+.theme-btn svg{display:block;width:16px;height:16px}
 @media (max-width:820px){.theme-btn{margin-right:0}}
 *{box-sizing:border-box;margin:0;padding:0;border-radius:0}
 html{scroll-behavior:smooth}
@@ -800,4 +804,4 @@ main:has(>.how:last-child)+.hesite+.foot{padding-top:clamp(0px,3.6vw,58px)}
 @media (prefers-reduced-motion: reduce){.logos .piste{animation:none}.logos{overflow-x:auto}}
 .logos .etiq{margin:0 auto clamp(18px,2.4vw,28px);font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--mute);line-height:1.5}
 
-@media (max-width:420px){.nav .right{gap:6px}.nav .lang{padding:9px 8px;margin-right:0}.theme-btn{width:32px;height:32px}}
+@media (max-width:420px){.nav .right{gap:6px}.nav .lang{padding:9px 8px;margin-right:0}.theme-btn{height:32px}.theme-btn span{width:27px}}

@@ -441,8 +441,9 @@ def nav(courant):
         liens += f'<li><a href="{href}"{actif}{rose}>{titre}</a></li>'
         mob += f'<a href="{href}"{rose}>{titre}</a>'
     bouton_theme = ('<button class="theme-btn" type="button" aria-pressed="false" aria-label="' + tr('Passer au mode clair', 'Switch to light mode') + '">'
-                    '<svg viewBox="0 0 18 18" aria-hidden="true" focusable="false"><rect x="1.75" y="1.75" width="14.5" height="14.5" fill="none" stroke="currentColor" stroke-width="1.5"/>'
-                    '<path d="M9 2.5h6.5v13H9z" fill="currentColor"/></svg></button>')
+                    '<span class="m"><svg viewBox="0 0 18 18" aria-hidden="true" focusable="false"><path d="M14.6 11.2A6.4 6.4 0 0 1 6.8 3.4a6.4 6.4 0 1 0 7.8 7.8z" fill="currentColor"/></svg></span>'
+                    '<span class="s"><svg viewBox="0 0 18 18" aria-hidden="true" focusable="false"><circle cx="9" cy="9" r="3.3" fill="currentColor"/>'
+                    '<path d="M9 1.5v2.2M9 14.3v2.2M1.5 9h2.2M14.3 9h2.2M3.7 3.7l1.6 1.6M12.7 12.7l1.6 1.6M3.7 14.3l1.6-1.6M12.7 5.3l1.6-1.6" stroke="currentColor" stroke-width="1.5" fill="none"/></svg></span></button>')
     cible, autre = lien_langue()
     sel_h = f'<a class="lang" href="{cible}" hreflang="{autre}" lang="{autre}" aria-label="{tr("English version", "Version française")}">{autre.upper()}</a>'
     sel_m = f'<a class="lang-m" href="{cible}" hreflang="{autre}" lang="{autre}">{tr("English", "Français")}</a>'
