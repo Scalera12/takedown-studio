@@ -721,7 +721,7 @@ def bande_logos():
     items = ''
     for n in LOGOS_CLIENTS:
         w, h = Image.open(os.path.join(ICI, 'statique', 'img', 'clients', n + '-blanc.png')).size
-        items += f'<li style="--ar:{w / h:.3f}"><img src="/assets/img/clients/{n}-blanc-800.webp" alt="{NOMS_CLIENTS[n]}" width="{w}" height="{h}" loading="lazy"></li>'
+        items += f'<li style="--ar:{w / h:.3f}"><img src="/assets/img/clients/{n}-blanc-800.webp" alt="{NOMS_CLIENTS[n]}" width="{w}" height="{h}"></li>'
     groupe = '<ul class="groupe">' + items + '</ul>'
     copie = '<ul class="groupe" aria-hidden="true">' + items + '</ul>'
     return ('<section class="logos" aria-label="' + tr('Quelques-uns de nos clients', 'Some of our clients') + '">'
