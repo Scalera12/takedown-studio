@@ -828,3 +828,7 @@ main:has(>.how:last-child)+.hesite+.foot{padding-top:clamp(0px,3.6vw,58px)}
 :root[data-theme="light"] .svc.rose .ph.art img{filter:none}
 :root[data-theme="light"] .rail-g .carte-casq:hover{color:#fff}
 :root[data-theme="light"] .rail-g .carte-casq:hover p{color:#e3e3ff}
+
+/* l'intro est toujours la même, en mode clair comme en mode sombre (Mathew, 2026-11-03) */
+.splash{--bg:#000;--s1:#0f0f10;--s2:#1a1a1b;--ink:#F4F4F2;--mute:#8a8a8d;--line:#262628;--fg:#fff;--fg-soft:#c9c9cc;--edge:rgba(255,255,255,.45);--glow:#1c1c1e;--glow2:#18181a;--dim:#2a2a2c;--line2:#333336;color:#F4F4F2}
+:root[data-theme="light"] .splash img{filter:none}
