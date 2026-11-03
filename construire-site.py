@@ -710,6 +710,23 @@ def zones(riche=False):
     {corps}
   </section>'''
 
+LOGOS_CLIENTS = ['alice-brohm', 'apollo', 'du-fleuve', 'fox-and-oak', 'le-bicar', 'les-chevres-de-montagne',
+                 'logo-a', 'mifigue', 'presse-cafe', 'rouge-tomate', 'salomon', 'stem']
+NOMS_CLIENTS = {'alice-brohm': 'alice + BROHM', 'apollo': 'Apollo', 'du-fleuve': 'Du Fleuve', 'fox-and-oak': 'Fox & Oak',
+                'le-bicar': 'Le Bicar', 'les-chevres-de-montagne': 'Les Chèvres de Montagne', 'logo-a': '', 'mifigue': 'Mifigue',
+                'presse-cafe': 'Presse Café', 'rouge-tomate': 'Rouge Tomate', 'salomon': 'Salomon', 'stem': 'Stem'}
+
+def bande_logos():
+    # bande de logos de clients qui défile en continu (la liste est doublée pour une boucle sans saut)
+    items = ''
+    for n in LOGOS_CLIENTS:
+        w, h = Image.open(os.path.join(ICI, 'statique', 'img', 'clients', n + '-blanc.png')).size
+        items += f'<li style="--ar:{w / h:.3f}"><img src="/assets/img/clients/{n}-blanc.png" alt="{NOMS_CLIENTS[n]}" width="{w}" height="{h}" loading="lazy"></li>'
+    groupe = '<ul class="groupe">' + items + '</ul>'
+    copie = '<ul class="groupe" aria-hidden="true">' + items + '</ul>'
+    return ('<section class="logos" aria-label="' + tr('Quelques-uns de nos clients', 'Some of our clients') + '">'
+            '<div class="piste">' + groupe + copie + '</div></section>')
+
 def accueil():
     tuiles = ''.join(tuile(s) for s in SERVICES)
     corps = f'''{nav('/')}
@@ -738,6 +755,8 @@ def accueil():
   {etapes()}
 
   {mots()}
+
+  {bande_logos()}
 
   <section class="mission" aria-labelledby="t-presentation">
     {photo(4, tr('L’atelier de Takedown Studio à Bromont, avec les presses à chaleur et le séchoir de sérigraphie', 'The Takedown Studio workshop in Bromont, with the heat presses and the screen printing dryer'), pos='50% 62%')}

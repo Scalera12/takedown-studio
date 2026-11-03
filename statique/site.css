@@ -769,3 +769,13 @@ main:has(>.how:last-child)+.hesite+.foot{padding-top:clamp(0px,3.6vw,58px)}
 
 .head.head-col{flex-direction:column;align-items:flex-start;flex-wrap:nowrap;gap:10px}
 .head.head-col p.note{margin:0}
+
+/* bande de logos de clients (accueil) */
+.logos{overflow:hidden;padding:clamp(40px,6vw,80px) 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.logos .piste{display:flex;width:max-content;animation:defile-logos 45s linear infinite}
+.logos .groupe{display:flex;align-items:center;gap:clamp(48px,6vw,110px);padding-right:clamp(48px,6vw,110px);margin:0;list-style:none}
+.logos li{flex:none;display:flex;align-items:center}
+.logos img{display:block;width:auto;max-width:none;height:min(clamp(44px,5vw,66px),calc(clamp(150px,16vw,220px) / var(--ar)))}
+@keyframes defile-logos{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@media (max-width:700px){.logos .piste{animation-duration:32s}.logos .groupe{gap:44px;padding-right:44px}}
+@media (prefers-reduced-motion: reduce){.logos .piste{animation:none}.logos{overflow-x:auto}}
