@@ -5,6 +5,23 @@
 
   var calme=matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  /* mode clair / sombre : sombre par défaut, le choix est gardé dans le navigateur (le script du <head> l'applique avant l'affichage) */
+  qsa('.theme-btn').forEach(function(b){
+    var maj=function(){
+      var clair=d.documentElement.getAttribute('data-theme')==='light';
+      b.setAttribute('aria-pressed',clair?'true':'false');
+      b.setAttribute('aria-label',clair?T('Passer au mode sombre','Switch to dark mode'):T('Passer au mode clair','Switch to light mode'));
+      var m=d.querySelector('meta[name="theme-color"]'); if(m) m.setAttribute('content',clair?'#F4F4F2':'#000000');
+    };
+    maj();
+    b.addEventListener('click',function(){
+      var clair=d.documentElement.getAttribute('data-theme')==='light';
+      if(clair) d.documentElement.removeAttribute('data-theme'); else d.documentElement.setAttribute('data-theme','light');
+      try{localStorage.setItem('theme',clair?'dark':'light')}catch(x){}
+      maj();
+    });
+  });
+
   /* sélecteur FR / EN : on retient le choix du visiteur, la détection automatique de la langue (page d'accueil française) ne le dérange plus */
   d.addEventListener('click',function(ev){
     var a=ev.target.closest&&ev.target.closest('a[hreflang]');

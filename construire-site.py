@@ -440,6 +440,9 @@ def nav(courant):
         titre = tr(t_fr, t_en)
         liens += f'<li><a href="{href}"{actif}{rose}>{titre}</a></li>'
         mob += f'<a href="{href}"{rose}>{titre}</a>'
+    bouton_theme = ('<button class="theme-btn" type="button" aria-pressed="false" aria-label="' + tr('Passer au mode clair', 'Switch to light mode') + '">'
+                    '<svg viewBox="0 0 18 18" aria-hidden="true" focusable="false"><rect x="1.75" y="1.75" width="14.5" height="14.5" fill="none" stroke="currentColor" stroke-width="1.5"/>'
+                    '<path d="M9 2.5h6.5v13H9z" fill="currentColor"/></svg></button>')
     cible, autre = lien_langue()
     sel_h = f'<a class="lang" href="{cible}" hreflang="{autre}" lang="{autre}" aria-label="{tr("English version", "Version française")}">{autre.upper()}</a>'
     sel_m = f'<a class="lang-m" href="{cible}" hreflang="{autre}" lang="{autre}">{tr("English", "Français")}</a>'
@@ -448,7 +451,7 @@ def nav(courant):
   <div class="wrap">
     <a class="logo" href="{url_p('accueil')}" aria-label="{tr('Takedown Studio, accueil', 'Takedown Studio, home')}"><img src="/assets/img/logo-texte-blanc.png" alt="Takedown Studio" width="130" height="17"></a>
     <nav aria-label="{tr('Menu principal', 'Main menu')}"><ul>{liens}</ul></nav>
-    <div class="right">{sel_h}<a class="btn btn-w" href="{url_p('contact')}"><span class="lg">{tr('Demander une&nbsp;', 'Request a&nbsp;')}</span>{tr('soumission', 'quote')}</a><button class="burger" aria-label="{tr('Ouvrir le menu', 'Open the menu')}" aria-expanded="false" aria-controls="menu-m"><span></span><span></span></button></div>
+    <div class="right">{bouton_theme}{sel_h}<a class="btn btn-w" href="{url_p('contact')}"><span class="lg">{tr('Demander une&nbsp;', 'Request a&nbsp;')}</span>{tr('soumission', 'quote')}</a><button class="burger" aria-label="{tr('Ouvrir le menu', 'Open the menu')}" aria-expanded="false" aria-controls="menu-m"><span></span><span></span></button></div>
   </div>
 </header>
 <nav class="menu-m" id="menu-m" aria-label="{tr('Menu cellulaire', 'Mobile menu')}">{mob}{sel_m}<a class="btn btn-w" href="{url_p('contact')}">{tr('Demander une soumission', 'Request a quote')}</a></nav>'''
@@ -681,6 +684,7 @@ def page(chemin_url, titre_seo, desc, corps, fil=None, extra_ld=None, js=True):
 <link rel="icon" href="/assets/img/icone-192.png" type="image/png" sizes="192x192">
 <link rel="apple-touch-icon" href="/assets/img/icone-180.png">
 <link rel="preload" href="/assets/polices/archivo-400-800.woff2" as="font" type="font/woff2" crossorigin>
+<script>try{{if(localStorage.getItem('theme')==='light')document.documentElement.setAttribute('data-theme','light')}}catch(e){{}}</script>
 <style>{CSS}</style>
 <script>if(!location.search.includes('apercu'))document.documentElement.classList.add('js')</script>
 {detection}
@@ -1162,7 +1166,7 @@ def contact():
         <div class="champ full"><label for="service">{tr('Service recherché', 'Service needed')}</label>
           <select id="service" name="service" required aria-required="true"><option value="">{tr('Choisis un service', 'Choose a service')}</option>{options}</select>
           <span class="msg">{tr('Choisis un service, ou coche la case en dessous.', 'Choose a service, or tick the box below.')}</span>
-          <label class="coche" style="margin-top:12px;text-transform:none;letter-spacing:0;font-family:inherit;font-size:15px;color:#d6d6d9"><input type="checkbox" id="sais-pas"> {tr('Je ne sais pas quelle technique choisir', 'I don’t know which technique to pick')}</label>
+          <label class="coche" style="margin-top:12px;text-transform:none;letter-spacing:0;font-family:inherit;font-size:15px;color:var(--fg-soft)"><input type="checkbox" id="sais-pas"> {tr('Je ne sais pas quelle technique choisir', 'I don’t know which technique to pick')}</label>
         </div>
         {champ('produit', tr('Produit recherché', 'Product you want'), ph_=tr('Ex. hoodies, casquettes, autocollants', 'e.g. hoodies, caps, stickers'))}
         {champ('quantite', tr('Quantité approximative', 'Approximate quantity'), ph_=tr('Ex. 50 morceaux', 'e.g. 50 pieces'), extra=' inputmode="numeric"')}
