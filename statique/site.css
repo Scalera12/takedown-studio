@@ -805,3 +805,26 @@ main:has(>.how:last-child)+.hesite+.foot{padding-top:clamp(0px,3.6vw,58px)}
 .logos .etiq{margin:0 auto clamp(18px,2.4vw,28px);font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--mute);line-height:1.5}
 
 @media (max-width:420px){.nav .right{gap:6px}.nav .lang{padding:9px 8px;margin-right:0}.theme-btn{height:32px}.theme-btn span{width:27px}}
+
+/* cell : le switch sombre / clair quitte la barre du haut et passe dans le menu (Mathew, 2026-11-03) */
+.mode-m{display:none}
+@media (max-width:820px){
+  .nav .right > .theme-btn{display:none}
+  .menu-m .mode-m{display:flex;align-items:center;justify-content:space-between;padding:20px 0 0;border-bottom:0}
+  .menu-m .mode-m .mono{color:var(--mute);font-size:13px}
+  .menu-m .mode-m .theme-btn{height:40px;margin:0}
+  .menu-m .mode-m .theme-btn span{width:40px}
+  .menu-m .mode-m .theme-btn svg{width:20px;height:20px}
+}
+/* mode clair : les détails roses passent en bleu néon (Anthony, 2026-11-03), texte et dessins blancs sur les aplats bleus */
+:root[data-theme="light"]{--rose:#2323FF}
+:root[data-theme="light"] .tile.dessin.casq{color:#fff}
+:root[data-theme="light"] .tile.dessin.casq:hover{border-color:#fff}
+:root[data-theme="light"] .tile.dessin.casq .art img{filter:none}
+:root[data-theme="light"] .tile.dessin.casq p{color:#e3e3ff}
+:root[data-theme="light"] .tile.dessin.casq .go{border-color:#fff;color:#fff}
+:root[data-theme="light"] .tile.dessin.casq:hover .go{background:#fff;color:#2323FF}
+:root[data-theme="light"] .btn-rose{color:#fff}
+:root[data-theme="light"] .svc.rose .ph.art img{filter:none}
+:root[data-theme="light"] .rail-g .carte-casq:hover{color:#fff}
+:root[data-theme="light"] .rail-g .carte-casq:hover p{color:#e3e3ff}

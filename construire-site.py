@@ -455,7 +455,7 @@ def nav(courant):
     <div class="right">{bouton_theme}{sel_h}<a class="btn btn-w" href="{url_p('contact')}"><span class="lg">{tr('Demander une&nbsp;', 'Request a&nbsp;')}</span>{tr('soumission', 'quote')}</a><button class="burger" aria-label="{tr('Ouvrir le menu', 'Open the menu')}" aria-expanded="false" aria-controls="menu-m"><span></span><span></span></button></div>
   </div>
 </header>
-<nav class="menu-m" id="menu-m" aria-label="{tr('Menu cellulaire', 'Mobile menu')}">{mob}{sel_m}<a class="btn btn-w" href="{url_p('contact')}">{tr('Demander une soumission', 'Request a quote')}</a></nav>'''
+<nav class="menu-m" id="menu-m" aria-label="{tr('Menu cellulaire', 'Mobile menu')}">{mob}<div class="mode-m"><span class="mono">{tr('Affichage', 'Display')}</span>{bouton_theme}</div>{sel_m}<a class="btn btn-w" href="{url_p('contact')}">{tr('Demander une soumission', 'Request a quote')}</a></nav>'''
 
 def ville_cp():
     return tr(f"{ENTREPRISE['ville']} (Québec) {ENTREPRISE['cp']}", f"{ENTREPRISE['ville']}, Quebec {ENTREPRISE['cp']}")
